@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Creator - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .creator-panel {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .slide-editor {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            min-height: 400px;
+        }
+        
+        .slide-preview {
+            border: 2px dashed #e9ecef;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .slide-preview h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .slide-preview p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            font-family: 'Lexend', sans-serif;
+        }
+        
+        .control-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .control-btn.primary {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-color: #28a745;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: 'Lexend', sans-serif;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .slides-list {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .slide-item {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .slide-item:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .slide-item.active {
+            background: rgba(255,255,255,0.4);
+            border: 2px solid #ffc107;
+        }
+        
+        .slide-item h4 {
+            margin-bottom: 5px;
+        }
+        
+        .slide-item p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </button>
+            <div class="header-text">
+                <h1><i class="fas fa-video"></i> Video Creator</h1>
+                <p>Create science presentations and share your discoveries!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="creator-panel">
+            <div class="controls">
+                <button class="control-btn primary" onclick="addSlide()">
+                    <i class="fas fa-plus"></i> Add Slide
+                </button>
+                <button class="control-btn" onclick="playPresentation()">
+                    <i class="fas fa-play"></i> Play Presentation
+                </button>
+                <button class="control-btn" onclick="exportPresentation()">
+                    <i class="fas fa-download"></i> Export
+                </button>
+                <button class="control-btn" onclick="clearPresentation()">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+        </div>
+
+        <div class="slide-editor">
+            <div class="form-group">
+                <label for="slideTitle">Slide Title</label>
+                <input type="text" id="slideTitle" placeholder="Enter slide title..." oninput="updatePreview()">
+            </div>
+            
+            <div class="form-group">
+                <label for="slideContent">Slide Content</label>
+                <textarea id="slideContent" placeholder="Enter slide content..." oninput="updatePreview()"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="videoUpload">Upload Video (Optional)</label>
+                <input type="file" id="videoUpload" accept="video/*" onchange="handleVideoUpload(event)">
+                <div id="videoPreview" style="display: none; margin-top: 10px;">
+                    <video id="videoPreview" controls style="max-width: 300px; max-height: 200px; border-radius: 10px;">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div id="videoUploadProgress" style="display: none; width: 100%; height: 4px; background: #f0f0f0; border-radius: 2px; margin-top: 10px;">
+                    <div style="width: 0%; height: 100%; background: #28a745; border-radius: 2px; transition: width 0.3s ease;"></div>
+                </div>
+            </div>
+            
+            <div class="slide-preview" id="slidePreview">
+                <h2>Your Slide Title</h2>
+                <p>Your slide content will appear here...</p>
+            </div>
+            
+            <div class="controls" style="margin-top: 20px;">
+                <button class="control-btn primary" onclick="saveSlide()">
+                    <i class="fas fa-save"></i> Save Slide
+                </button>
+                <button class="control-btn" onclick="deleteSlide()">
+                    <i class="fas fa-trash"></i> Delete Slide
+                </button>
+            </div>
+        </div>
+
+        <div class="slides-list">
+            <h3 style="color: white; margin-bottom: 15px;">Your Presentation Slides</h3>
+            <div id="slidesList">
+                <div style="color: white; text-align: center; padding: 40px; opacity: 0.7;">
+                    <i class="fas fa-plus-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                    <p>Add your first slide to start creating your presentation!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let slides = JSON.parse(localStorage.getItem('videoPresentation')) || [];
+        let currentSlideIndex = -1;
+
+        function goBack() {
+            window.location.href = 'student-portal.html';
+        }
+
+        function addSlide() {
+            const title = document.getElementById('slideTitle').value || 'New Slide';
+            const content = document.getElementById('slideContent').value || 'Add your content here...';
+            const videoFile = window.selectedVideoFile;
+            
+            if (videoFile) {
+                // Upload video first
+                uploadVideoToServer(videoFile, function(serverPath) {
+                    const slide = {
+                        id: Date.now(),
+                        title: title,
+                        content: content,
+                        video: serverPath
+                    };
+                    
+                    slides.push(slide);
+                    localStorage.setItem('videoPresentation', JSON.stringify(slides));
+                    renderSlidesList();
+                    selectSlide(slides.length - 1);
+                    
+                    // Clear form
+                    document.getElementById('slideTitle').value = '';
+                    document.getElementById('slideContent').value = '';
+                    document.getElementById('videoUpload').value = '';
+                    document.getElementById('videoPreview').style.display = 'none';
+                    window.selectedVideoFile = null;
+                });
+            } else {
+                // Add slide without video
+                const slide = {
+                    id: Date.now(),
+                    title: title,
+                    content: content
+                };
+                
+                slides.push(slide);
+                localStorage.setItem('videoPresentation', JSON.stringify(slides));
+                renderSlidesList();
+                selectSlide(slides.length - 1);
+                
+                // Clear form
+                document.getElementById('slideTitle').value = '';
+                document.getElementById('slideContent').value = '';
+            }
+        }
+
+        function saveSlide() {
+            if (currentSlideIndex >= 0) {
+                slides[currentSlideIndex].title = document.getElementById('slideTitle').value;
+                slides[currentSlideIndex].content = document.getElementById('slideContent').value;
+                localStorage.setItem('videoPresentation', JSON.stringify(slides));
+                renderSlidesList();
+            }
+        }
+
+        function deleteSlide() {
+            if (currentSlideIndex >= 0 && confirm('Delete this slide?')) {
+                slides.splice(currentSlideIndex, 1);
+                localStorage.setItem('videoPresentation', JSON.stringify(slides));
+                renderSlidesList();
+                currentSlideIndex = -1;
+                document.getElementById('slideTitle').value = '';
+                document.getElementById('slideContent').value = '';
+                updatePreview();
+            }
+        }
+
+        function selectSlide(index) {
+            currentSlideIndex = index;
+            if (index >= 0 && slides[index]) {
+                document.getElementById('slideTitle').value = slides[index].title;
+                document.getElementById('slideContent').value = slides[index].content;
+                updatePreview();
+            }
+            renderSlidesList();
+        }
+
+        function updatePreview() {
+            const title = document.getElementById('slideTitle').value || 'Your Slide Title';
+            const content = document.getElementById('slideContent').value || 'Your slide content will appear here...';
+            
+            document.getElementById('slidePreview').innerHTML = `
+                <h2>${title}</h2>
+                <p>${content}</p>
+            `;
+        }
+
+        function renderSlidesList() {
+            const list = document.getElementById('slidesList');
+            
+            if (slides.length === 0) {
+                list.innerHTML = `
+                    <div style="color: white; text-align: center; padding: 40px; opacity: 0.7;">
+                        <i class="fas fa-plus-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>Add your first slide to start creating your presentation!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.innerHTML = slides.map((slide, index) => `
+                <div class="slide-item ${index === currentSlideIndex ? 'active' : ''}" onclick="selectSlide(${index})">
+                    <h4>${slide.title}</h4>
+                    <p>${slide.content.substring(0, 100)}${slide.content.length > 100 ? '...' : ''}</p>
+                </div>
+            `).join('');
+        }
+
+        function playPresentation() {
+            if (slides.length === 0) {
+                alert('No slides to play! Add some slides first.');
+                return;
+            }
+            
+            // Simple presentation mode
+            let currentIndex = 0;
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #000;
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-family: 'Lexend', sans-serif;
+            `;
+            
+            modal.innerHTML = `
+                <div style="text-align: center; max-width: 800px; padding: 40px;">
+                    <h1 style="font-size: 3rem; margin-bottom: 30px;">${slides[currentIndex].title}</h1>
+                    <p style="font-size: 1.5rem; line-height: 1.6; margin-bottom: 40px;">${slides[currentIndex].content}</p>
+                    <div style="display: flex; gap: 20px; justify-content: center;">
+                        <button onclick="previousSlide()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Previous</button>
+                        <span style="padding: 10px 20px;">${currentIndex + 1} / ${slides.length}</span>
+                        <button onclick="nextSlide()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Next</button>
+                    </div>
+                    <button onclick="closePresentation()" style="position: absolute; top: 20px; right: 20px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">×</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            window.nextSlide = function() {
+                if (currentIndex < slides.length - 1) {
+                    currentIndex++;
+                    modal.innerHTML = `
+                        <div style="text-align: center; max-width: 800px; padding: 40px;">
+                            <h1 style="font-size: 3rem; margin-bottom: 30px;">${slides[currentIndex].title}</h1>
+                            <p style="font-size: 1.5rem; line-height: 1.6; margin-bottom: 40px;">${slides[currentIndex].content}</p>
+                            <div style="display: flex; gap: 20px; justify-content: center;">
+                                <button onclick="previousSlide()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Previous</button>
+                                <span style="padding: 10px 20px;">${currentIndex + 1} / ${slides.length}</span>
+                                <button onclick="nextSlide()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Next</button>
+                            </div>
+                            <button onclick="closePresentation()" style="position: absolute; top: 20px; right: 20px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">×</button>
+                        </div>
+                    `;
+                }
+            };
+            
+            window.previousSlide = function() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    modal.innerHTML = `
+                        <div style="text-align: center; max-width: 800px; padding: 40px;">
+                            <h1 style="font-size: 3rem; margin-bottom: 30px;">${slides[currentIndex].title}</h1>
+                            <p style="font-size: 1.5rem; line-height: 1.6; margin-bottom: 40px;">${slides[currentIndex].content}</p>
+                            <div style="display: flex; gap: 20px; justify-content: center;">
+                                <button onclick="previousSlide()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Previous</button>
+                                <span style="padding: 10px 20px;">${currentIndex + 1} / ${slides.length}</span>
+                                <button onclick="nextSlide()" style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Next</button>
+                            </div>
+                            <button onclick="closePresentation()" style="position: absolute; top: 20px; right: 20px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">×</button>
+                        </div>
+                    `;
+                }
+            };
+            
+            window.closePresentation = function() {
+                document.body.removeChild(modal);
+            };
+        }
+
+        // Video upload functionality
+        function handleVideoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validate file type
+            if (!file.type.startsWith('video/')) {
+                alert('Please select a video file (MP4, AVI, MOV, etc.)');
+                return;
+            }
+            
+            // Validate file size (max 50MB)
+            if (file.size > 50 * 1024 * 1024) {
+                alert('Video file size must be less than 50MB');
+                return;
+            }
+            
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const videoPreview = document.getElementById('videoPreview');
+                videoPreview.src = e.target.result;
+                videoPreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+            
+            // Store file for upload
+            window.selectedVideoFile = file;
+        }
+
+        // Upload video to server (simulated)
+        function uploadVideoToServer(file, callback) {
+            const progressBar = document.getElementById('videoUploadProgress');
+            progressBar.style.display = 'block';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Generate unique filename
+                    const timestamp = Date.now();
+                    const extension = file.name.split('.').pop();
+                    const filename = `video_${timestamp}.${extension}`;
+                    
+                    // In real implementation, this would be the server response
+                    const serverPath = `/uploads/student-videos/${filename}`;
+                    
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        progressBar.style.width = '0%';
+                        callback(serverPath);
+                    }, 1000);
+                }
+            }, 100);
+        }
+
+        function exportPresentation() {
+            if (slides.length === 0) {
+                alert('No slides to export!');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(slides, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'presentation.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearPresentation() {
+            if (confirm('Are you sure you want to clear all slides?')) {
+                slides = [];
+                localStorage.setItem('videoPresentation', JSON.stringify(slides));
+                renderSlidesList();
+                currentSlideIndex = -1;
+                document.getElementById('slideTitle').value = '';
+                document.getElementById('slideContent').value = '';
+                updatePreview();
+            }
+        }
+
+        // Initialize
+        renderSlidesList();
+    </script>
+</body>
+</html>

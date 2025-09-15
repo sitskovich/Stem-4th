@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Collaboration Tools - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .tool-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .tool-icon.planning {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .tool-icon.brainstorming {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        .tool-icon.notes {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+        }
+        
+        .tool-icon.tasks {
+            background: linear-gradient(135deg, #dc3545, #e83e8c);
+        }
+        
+        .tool-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .tool-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .tool-content {
+            min-height: 200px;
+        }
+        
+        .project-planner {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .project-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .project-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .project-details {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .project-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        .brainstorming-board {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 300px;
+        }
+        
+        .idea-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .idea-input input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: 'Lexend', sans-serif;
+        }
+        
+        .idea-input input:focus {
+            outline: none;
+            border-color: #28a745;
+        }
+        
+        .ideas-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .idea-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .idea-item:hover {
+            border-color: #28a745;
+            transform: scale(1.05);
+        }
+        
+        .idea-item.selected {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .idea-item .delete-btn {
+            display: none; /* Students cannot delete ideas */
+        }
+        
+        .notes-editor {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .notes-toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .notes-content {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 200px;
+            font-family: 'Lexend', sans-serif;
+            line-height: 1.6;
+        }
+        
+        .notes-content:focus {
+            outline: none;
+            border-color: #ffc107;
+        }
+        
+        .task-manager {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .task-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .task-item.completed {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .task-text {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .task-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .task-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            transition: background 0.3s ease;
+        }
+        
+        .task-btn:hover {
+            background: #e9ecef;
+        }
+        
+        .task-btn.edit {
+            color: #ffc107;
+        }
+        
+        .task-btn.delete {
+            display: none; /* Students cannot delete tasks */
+        }
+        
+        .collaboration-stats {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .export-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .export-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        .export-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Lexend', sans-serif;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        .student-notice {
+            background: rgba(255, 193, 7, 0.2);
+            border: 2px solid rgba(255, 193, 7, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: white;
+            text-align: center;
+        }
+        
+        .student-notice i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </button>
+            <div class="header-text">
+                <h1><i class="fas fa-users"></i> Student Collaboration Tools</h1>
+                <p>View and contribute to group projects (Read-Only Mode)</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="student-notice">
+            <i class="fas fa-info-circle"></i>
+            <strong>Student Mode:</strong> You can view and add to projects, but cannot delete or modify existing content.
+        </div>
+        
+        <div class="tools-grid">
+            <!-- Project Viewer -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon planning">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="tool-title">Project Viewer</div>
+                </div>
+                <div class="tool-description">
+                    View your group projects and their details. You can see objectives, timelines, and team members.
+                </div>
+                <div class="tool-content">
+                    <div class="project-planner">
+                        <div id="projectsList">
+                            <!-- Projects will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Brainstorming Board -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon brainstorming">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="tool-title">Brainstorming Board</div>
+                </div>
+                <div class="tool-description">
+                    View existing ideas and add your own. You cannot delete ideas, but you can select the best ones.
+                </div>
+                <div class="tool-content">
+                    <div class="brainstorming-board">
+                        <div class="idea-input">
+                            <input type="text" id="ideaInput" placeholder="Add your idea...">
+                            <button class="btn btn-success" onclick="addIdea()">Add Idea</button>
+                        </div>
+                        <div class="ideas-container" id="ideasContainer">
+                            <!-- Ideas will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Collaborative Notes -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon notes">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <div class="tool-title">Collaborative Notes</div>
+                </div>
+                <div class="tool-description">
+                    Read and add to team notes. You can contribute but cannot delete existing content.
+                </div>
+                <div class="tool-content">
+                    <div class="notes-editor">
+                        <div class="notes-toolbar">
+                            <button class="btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                            <button class="btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                            <button class="btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                            <button class="btn" onclick="insertBullet()"><i class="fas fa-list-ul"></i></button>
+                            <button class="btn" onclick="insertNumber()"><i class="fas fa-list-ol"></i></button>
+                        </div>
+                        <div class="notes-content" id="notesContent" contenteditable="true" placeholder="Add your notes here...">
+                            <p>Welcome to collaborative notes! You can add your thoughts and ideas here...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Task Viewer -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon tasks">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="tool-title">Task Viewer</div>
+                </div>
+                <div class="tool-description">
+                    View assigned tasks and mark your completed work. You cannot delete or modify task assignments.
+                </div>
+                <div class="tool-content">
+                    <div class="task-manager">
+                        <div class="task-list" id="taskList">
+                            <!-- Tasks will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Collaboration Stats -->
+        <div class="collaboration-stats">
+            <h3>Team Progress</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalProjects">0</div>
+                    <div class="stat-label">Projects</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalIdeas">0</div>
+                    <div class="stat-label">Ideas Generated</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalTasks">0</div>
+                    <div class="stat-label">Tasks Assigned</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="completedTasks">0</div>
+                    <div class="stat-label">Tasks Completed</div>
+                </div>
+            </div>
+            
+            <div class="export-options">
+                <button class="export-btn" onclick="exportData()">
+                    <i class="fas fa-download"></i> Export My Data
+                </button>
+                <button class="export-btn" onclick="shareProgress()">
+                    <i class="fas fa-share"></i> Share Progress
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let ideas = [];
+        let tasks = [];
+        let projects = [];
+        
+        // Load sample data
+        function loadSampleData() {
+            projects = [
+                {
+                    title: "Ecosystem Model Project",
+                    description: "Create a 3D model of a local ecosystem showing food chains and energy flow.",
+                    teamMembers: ["Alex", "Sam", "Jordan", "Casey"],
+                    dueDate: "2025-12-15",
+                    subjectArea: "life-science"
+                },
+                {
+                    title: "Weather Station Design",
+                    description: "Design and build a simple weather monitoring station.",
+                    teamMembers: ["Taylor", "Morgan", "Riley"],
+                    dueDate: "2025-11-30",
+                    subjectArea: "earth-science"
+                }
+            ];
+            
+            ideas = [
+                { text: "Use recycled materials for the model", selected: true, createdAt: new Date().toISOString() },
+                { text: "Include at least 5 different organisms", selected: false, createdAt: new Date().toISOString() },
+                { text: "Add labels and descriptions", selected: true, createdAt: new Date().toISOString() },
+                { text: "Create a presentation to explain the ecosystem", selected: false, createdAt: new Date().toISOString() }
+            ];
+            
+            tasks = [
+                { id: 1, text: "Research local ecosystem organisms", completed: true, createdAt: new Date().toISOString() },
+                { id: 2, text: "Create initial project timeline", completed: false, createdAt: new Date().toISOString() },
+                { id: 3, text: "Design the 3D model structure", completed: false, createdAt: new Date().toISOString() },
+                { id: 4, text: "Build the physical model", completed: false, createdAt: new Date().toISOString() },
+                { id: 5, text: "Prepare presentation materials", completed: false, createdAt: new Date().toISOString() }
+            ];
+            
+            renderProjects();
+            renderIdeas();
+            renderTasks();
+            updateStats();
+        }
+        
+        // Project Functions
+        function renderProjects() {
+            const container = document.getElementById('projectsList');
+            container.innerHTML = '';
+            
+            projects.forEach(project => {
+                const projectElement = document.createElement('div');
+                projectElement.className = 'project-item';
+                projectElement.innerHTML = `
+                    <div class="project-title">${project.title}</div>
+                    <div class="project-details">${project.description}</div>
+                    <div class="project-meta">
+                        <span><i class="fas fa-users"></i> ${project.teamMembers.join(', ')}</span>
+                        <span><i class="fas fa-calendar"></i> Due: ${new Date(project.dueDate).toLocaleDateString()}</span>
+                        <span><i class="fas fa-book"></i> ${project.subjectArea.replace('-', ' ')}</span>
+                    </div>
+                `;
+                container.appendChild(projectElement);
+            });
+        }
+        
+        // Brainstorming Functions
+        function addIdea() {
+            const input = document.getElementById('ideaInput');
+            const idea = input.value.trim();
+            
+            if (idea) {
+                ideas.push({
+                    text: idea,
+                    selected: false,
+                    createdAt: new Date().toISOString()
+                });
+                
+                renderIdeas();
+                input.value = '';
+                updateStats();
+            }
+        }
+        
+        function renderIdeas() {
+            const container = document.getElementById('ideasContainer');
+            container.innerHTML = '';
+            
+            ideas.forEach((idea, index) => {
+                const ideaElement = document.createElement('div');
+                ideaElement.className = `idea-item ${idea.selected ? 'selected' : ''}`;
+                ideaElement.innerHTML = `
+                    ${idea.text}
+                `;
+                
+                ideaElement.addEventListener('click', () => {
+                    idea.selected = !idea.selected;
+                    ideaElement.classList.toggle('selected');
+                });
+                
+                container.appendChild(ideaElement);
+            });
+        }
+        
+        // Notes Functions
+        function formatText(command) {
+            document.execCommand(command, false, null);
+            document.getElementById('notesContent').focus();
+        }
+        
+        function insertBullet() {
+            document.execCommand('insertUnorderedList', false, null);
+            document.getElementById('notesContent').focus();
+        }
+        
+        function insertNumber() {
+            document.execCommand('insertOrderedList', false, null);
+            document.getElementById('notesContent').focus();
+        }
+        
+        // Task Functions
+        function renderTasks() {
+            const container = document.getElementById('taskList');
+            container.innerHTML = '';
+            
+            tasks.forEach(task => {
+                const taskElement = document.createElement('div');
+                taskElement.className = `task-item ${task.completed ? 'completed' : ''}`;
+                taskElement.innerHTML = `
+                    <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} 
+                           onchange="toggleTask(${task.id})">
+                    <span class="task-text">${task.text}</span>
+                    <div class="task-actions">
+                        <button class="task-btn edit" onclick="editTask(${task.id})" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(taskElement);
+            });
+        }
+        
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                renderTasks();
+                updateStats();
+            }
+        }
+        
+        function editTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                const newText = prompt('Edit task:', task.text);
+                if (newText !== null && newText.trim()) {
+                    task.text = newText.trim();
+                    renderTasks();
+                }
+            }
+        }
+        
+        // Stats Functions
+        function updateStats() {
+            document.getElementById('totalProjects').textContent = projects.length;
+            document.getElementById('totalIdeas').textContent = ideas.length;
+            document.getElementById('totalTasks').textContent = tasks.length;
+            document.getElementById('completedTasks').textContent = tasks.filter(t => t.completed).length;
+        }
+        
+        function exportData() {
+            const data = {
+                projects: projects,
+                ideas: ideas,
+                tasks: tasks,
+                myContributions: {
+                    ideasAdded: ideas.filter(i => i.createdAt > new Date(Date.now() - 7*24*60*60*1000)).length,
+                    tasksCompleted: tasks.filter(t => t.completed).length
+                },
+                exportedAt: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my-collaboration-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function shareProgress() {
+            const myIdeas = ideas.filter(i => i.createdAt > new Date(Date.now() - 7*24*60*60*1000)).length;
+            const myCompletedTasks = tasks.filter(t => t.completed).length;
+            
+            const shareText = `Check out my STEM project progress!\n\nIdeas I added this week: ${myIdeas}\nTasks I completed: ${myCompletedTasks}\nTotal team ideas: ${ideas.length}\nTotal team tasks: ${tasks.length}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My STEM Project Progress',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('My progress summary copied to clipboard!');
+                });
+            }
+        }
+        
+        // Initialize
+        loadSampleData();
+        
+        // Back button function
+        function goBack() {
+            window.location.href = 'student-portal.html';
+        }
+    </script>
+</body>
+</html>

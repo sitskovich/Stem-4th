@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.6);
+            transform: translateY(-2px);
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+        
+        .signout-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .signout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .admin-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .admin-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab:hover {
+            background: #5a6fd8;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .student-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .student-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .student-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .student-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .student-info p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .student-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #218838;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            opacity: 0.9;
+        }
+        
+        .file-manager {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .file-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .file-item:hover {
+            border-color: #667eea;
+        }
+        
+        .file-icon {
+            font-size: 1.5rem;
+            color: #667eea;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-info h4 {
+            margin-bottom: 5px;
+        }
+        
+        .file-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </button>
+            <div class="header-text">
+                <h1><i class="fas fa-shield-alt"></i> Admin Panel</h1>
+                <p>Manage students, files, and system settings</p>
+            </div>
+            <div class="admin-info">
+                <div id="g_id_onload"
+                     data-client_id="REPLACE_WITH_YOUR_GOOGLE_CLIENT_ID"
+                     data-callback="handleCredentialResponse">
+                </div>
+                <div class="g_id_signin" data-type="standard"></div>
+                <div id="user-info" class="user-info" style="display: none;">
+                    <span id="user-name"></span>
+                    <button onclick="signOut()" class="signout-btn">Sign Out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Statistics Overview -->
+        <div class="admin-section">
+            <h2><i class="fas fa-chart-bar"></i> System Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalStudents">0</h3>
+                    <p>Total Students</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalPhotos">0</h3>
+                    <p>Photos Uploaded</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalVideos">0</h3>
+                    <p>Videos Created</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="activeClasses">3</h3>
+                    <p>Active Classes</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Admin Tabs -->
+        <div class="admin-section">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('students')">Student Management</button>
+                <button class="tab" onclick="showTab('files')">File Management</button>
+                <button class="tab" onclick="showTab('classes')">Class Management</button>
+                <button class="tab" onclick="showTab('settings')">Settings</button>
+            </div>
+            
+            <!-- Student Management Tab -->
+            <div id="students-tab" class="tab-content active">
+                <h2><i class="fas fa-users"></i> Student Management</h2>
+                <div class="form-group">
+                    <label for="studentSearch">Search Students</label>
+                    <input type="text" id="studentSearch" placeholder="Search by name or email..." oninput="searchStudents()">
+                </div>
+                <div class="student-grid" id="studentGrid">
+                    <!-- Students will be populated here -->
+                </div>
+            </div>
+            
+            <!-- File Management Tab -->
+            <div id="files-tab" class="tab-content">
+                <h2><i class="fas fa-folder"></i> File Management</h2>
+                <div class="file-manager" id="fileManager">
+                    <!-- Files will be populated here -->
+                </div>
+            </div>
+            
+            <!-- Class Management Tab -->
+            <div id="classes-tab" class="tab-content">
+                <h2><i class="fas fa-chalkboard-teacher"></i> Class Management</h2>
+                <div class="form-group">
+                    <label for="className">Class Name</label>
+                    <input type="text" id="className" placeholder="Enter class name...">
+                </div>
+                <div class="form-group">
+                    <label for="classTeacher">Teacher</label>
+                    <select id="classTeacher">
+                        <option value="duncan">STEM DUNCAN</option>
+                        <option value="hilton">STEM HILTON</option>
+                        <option value="owens">STEM OWENS</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="createClass()">Create Class</button>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content">
+                <h2><i class="fas fa-cog"></i> System Settings</h2>
+                <div class="form-group">
+                    <label for="maxFileSize">Max File Size (MB)</label>
+                    <input type="number" id="maxFileSize" value="50">
+                </div>
+                <div class="form-group">
+                    <label for="allowedFileTypes">Allowed File Types</label>
+                    <input type="text" id="allowedFileTypes" value="jpg,jpeg,png,gif,mp4,avi,mov">
+                </div>
+                <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Admin functionality
+        let currentUser = null;
+        let students = [];
+        let files = [];
+        
+        // Google Sign-In functionality
+        function handleCredentialResponse(response) {
+            const responsePayload = decodeJwtResponse(response.credential);
+            
+            // Check if user is admin
+            if (!isAdmin(responsePayload.email)) {
+                alert('Access denied. Admin privileges required.');
+                return;
+            }
+            
+            currentUser = responsePayload;
+            document.getElementById('user-name').textContent = responsePayload.name;
+            document.getElementById('user-info').style.display = 'flex';
+            document.querySelector('.g_id_signin').style.display = 'none';
+            
+            // Load admin data
+            loadAdminData();
+        }
+        
+        function decodeJwtResponse(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+        
+        function isAdmin(email) {
+            const adminEmails = [
+                'admin@school.edu',
+                'duncan@school.edu',
+                'hilton@school.edu',
+                'owens@school.edu'
+            ];
+            return adminEmails.includes(email);
+        }
+        
+        function signOut() {
+            google.accounts.id.disableAutoSelect();
+            document.getElementById('user-info').style.display = 'none';
+            document.querySelector('.g_id_signin').style.display = 'block';
+            currentUser = null;
+        }
+        
+        function goBack() {
+            window.location.href = 'teacher-portal.html';
+        }
+        
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Load admin data
+        function loadAdminData() {
+            loadStudents();
+            loadFiles();
+            updateStats();
+        }
+        
+        // Student management
+        function loadStudents() {
+            // Simulate loading students from server
+            students = [
+                { id: 1, name: 'Alice Johnson', email: 'alice@student.edu', class: 'STEM DUNCAN', team: 'Team Alpha', status: 'active' },
+                { id: 2, name: 'Bob Smith', email: 'bob@student.edu', class: 'STEM DUNCAN', team: 'Team Beta', status: 'active' },
+                { id: 3, name: 'Carol Davis', email: 'carol@student.edu', class: 'STEM HILTON', team: 'Team Alpha', status: 'active' },
+                { id: 4, name: 'David Wilson', email: 'david@student.edu', class: 'STEM HILTON', team: 'Team Gamma', status: 'inactive' },
+                { id: 5, name: 'Eva Brown', email: 'eva@student.edu', class: 'STEM OWENS', team: 'Team Delta', status: 'active' }
+            ];
+            
+            renderStudents();
+        }
+        
+        function renderStudents() {
+            const grid = document.getElementById('studentGrid');
+            grid.innerHTML = students.map(student => `
+                <div class="student-card">
+                    <div class="student-info">
+                        <h3>${student.name}</h3>
+                        <p><strong>Email:</strong> ${student.email}</p>
+                        <p><strong>Class:</strong> ${student.class}</p>
+                        <p><strong>Team:</strong> ${student.team}</p>
+                        <p><strong>Status:</strong> <span style="color: ${student.status === 'active' ? '#28a745' : '#dc3545'}">${student.status}</span></p>
+                    </div>
+                    <div class="student-actions">
+                        <button class="btn btn-primary btn-sm" onclick="editStudent(${student.id})">Edit</button>
+                        <button class="btn btn-warning btn-sm" onclick="toggleStudentStatus(${student.id})">${student.status === 'active' ? 'Deactivate' : 'Activate'}</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteStudent(${student.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function searchStudents() {
+            const searchTerm = document.getElementById('studentSearch').value.toLowerCase();
+            const filteredStudents = students.filter(student => 
+                student.name.toLowerCase().includes(searchTerm) || 
+                student.email.toLowerCase().includes(searchTerm)
+            );
+            
+            const grid = document.getElementById('studentGrid');
+            grid.innerHTML = filteredStudents.map(student => `
+                <div class="student-card">
+                    <div class="student-info">
+                        <h3>${student.name}</h3>
+                        <p><strong>Email:</strong> ${student.email}</p>
+                        <p><strong>Class:</strong> ${student.class}</p>
+                        <p><strong>Team:</strong> ${student.team}</p>
+                        <p><strong>Status:</strong> <span style="color: ${student.status === 'active' ? '#28a745' : '#dc3545'}">${student.status}</span></p>
+                    </div>
+                    <div class="student-actions">
+                        <button class="btn btn-primary btn-sm" onclick="editStudent(${student.id})">Edit</button>
+                        <button class="btn btn-warning btn-sm" onclick="toggleStudentStatus(${student.id})">${student.status === 'active' ? 'Deactivate' : 'Activate'}</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteStudent(${student.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function editStudent(id) {
+            const student = students.find(s => s.id === id);
+            if (student) {
+                const newName = prompt('Enter new name:', student.name);
+                const newEmail = prompt('Enter new email:', student.email);
+                const newClass = prompt('Enter new class:', student.class);
+                const newTeam = prompt('Enter new team:', student.team);
+                
+                if (newName && newEmail && newClass && newTeam) {
+                    student.name = newName;
+                    student.email = newEmail;
+                    student.class = newClass;
+                    student.team = newTeam;
+                    renderStudents();
+                }
+            }
+        }
+        
+        function toggleStudentStatus(id) {
+            const student = students.find(s => s.id === id);
+            if (student) {
+                student.status = student.status === 'active' ? 'inactive' : 'active';
+                renderStudents();
+            }
+        }
+        
+        function deleteStudent(id) {
+            if (confirm('Are you sure you want to delete this student? This action cannot be undone.')) {
+                students = students.filter(s => s.id !== id);
+                renderStudents();
+                updateStats();
+            }
+        }
+        
+        // File management
+        function loadFiles() {
+            // Simulate loading files from server
+            files = [
+                { id: 1, name: 'photo_1234567890.jpg', type: 'image', size: '2.3 MB', student: 'Alice Johnson', date: '2024-01-15', path: '/uploads/student-photos/photo_1234567890.jpg' },
+                { id: 2, name: 'video_1234567891.mp4', type: 'video', size: '15.7 MB', student: 'Bob Smith', date: '2024-01-14', path: '/uploads/student-videos/video_1234567891.mp4' },
+                { id: 3, name: 'photo_1234567892.png', type: 'image', size: '1.8 MB', student: 'Carol Davis', date: '2024-01-13', path: '/uploads/student-photos/photo_1234567892.png' }
+            ];
+            
+            renderFiles();
+        }
+        
+        function renderFiles() {
+            const manager = document.getElementById('fileManager');
+            manager.innerHTML = files.map(file => `
+                <div class="file-item">
+                    <div class="file-icon">
+                        <i class="fas fa-${file.type === 'image' ? 'image' : 'video'}"></i>
+                    </div>
+                    <div class="file-info">
+                        <h4>${file.name}</h4>
+                        <p>${file.size} • ${file.student} • ${file.date}</p>
+                    </div>
+                    <div class="file-actions">
+                        <button class="btn btn-primary btn-sm" onclick="downloadFile('${file.path}')">Download</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteFile(${file.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function downloadFile(path) {
+            // Simulate file download
+            alert(`Downloading file: ${path}`);
+        }
+        
+        function deleteFile(id) {
+            if (confirm('Are you sure you want to delete this file? This action cannot be undone.')) {
+                files = files.filter(f => f.id !== id);
+                renderFiles();
+                updateStats();
+            }
+        }
+        
+        // Class management
+        function createClass() {
+            const className = document.getElementById('className').value;
+            const teacher = document.getElementById('classTeacher').value;
+            
+            if (className) {
+                alert(`Class "${className}" created for ${teacher}`);
+                document.getElementById('className').value = '';
+            }
+        }
+        
+        // Settings
+        function saveSettings() {
+            const maxFileSize = document.getElementById('maxFileSize').value;
+            const allowedFileTypes = document.getElementById('allowedFileTypes').value;
+            
+            alert('Settings saved successfully!');
+        }
+        
+        // Update statistics
+        function updateStats() {
+            document.getElementById('totalStudents').textContent = students.length;
+            document.getElementById('totalPhotos').textContent = files.filter(f => f.type === 'image').length;
+            document.getElementById('totalVideos').textContent = files.filter(f => f.type === 'video').length;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already signed in
+            const savedUser = localStorage.getItem('adminUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                document.getElementById('user-name').textContent = currentUser.name;
+                document.getElementById('user-info').style.display = 'flex';
+                document.querySelector('.g_id_signin').style.display = 'none';
+                loadAdminData();
+            }
+        });
+    </script>
+</body>
+</html>

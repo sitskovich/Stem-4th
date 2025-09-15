@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bundle Video Resources & Worksheets - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .bundle-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .bundle-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .bundle-btn:hover, .bundle-btn.active {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.6);
+            transform: translateY(-2px);
+        }
+
+        .bundle-content {
+            display: none;
+        }
+
+        .bundle-content.active {
+            display: block;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .video-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .video-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .video-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .video-embed {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .video-duration {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .worksheet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .worksheet-card {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .worksheet-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .worksheet-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .worksheet-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .worksheet-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .graphic-organizer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .organizer-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .organizer-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .organizer-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .organizer-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .organizer-preview {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .download-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .download-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .worksheet-content {
+            line-height: 1.6;
+        }
+
+        .worksheet-content h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .worksheet-content p {
+            margin-bottom: 15px;
+        }
+
+        .worksheet-content ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        .worksheet-content li {
+            margin-bottom: 5px;
+        }
+
+        .highlight-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="teacher-portal.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </a>
+            <div class="header-text">
+                <h1><i class="fas fa-video"></i> Bundle Video Resources & Worksheets</h1>
+                <p>Educational videos, worksheets, and graphic organizers for each bundle</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="bundle-selector">
+            <button class="bundle-btn active" onclick="showBundle('bundle1')">
+                <i class="fas fa-seedling"></i> Bundle 1: Organism Structures
+            </button>
+            <button class="bundle-btn" onclick="showBundle('bundle2')">
+                <i class="fas fa-mountain"></i> Bundle 2: Earth's Surface
+            </button>
+        </div>
+
+        <!-- Bundle 1 Content -->
+        <div id="bundle1" class="bundle-content active">
+            <!-- Videos Section -->
+            <div class="section">
+                <h2><i class="fas fa-play-circle"></i> Educational Videos</h2>
+                <div class="video-grid">
+                    <div class="video-card">
+                        <div class="video-title">Plant Structures and Functions</div>
+                        <div class="video-description">Learn about roots, stems, leaves, and flowers and how they help plants survive and grow.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/8Y5BRMCo-00" title="Plant Structures" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">4:32</div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-title">Animal Adaptations</div>
+                        <div class="video-description">Discover how animals adapt to their environments with special structures and behaviors.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/fRX2JtKFUzk" title="Animal Adaptations" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">3:45</div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-title">Food Chains and Food Webs</div>
+                        <div class="video-description">Understand how energy flows through ecosystems from producers to consumers.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/hLq2datPo5M" title="Food Chains" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">5:12</div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-title">Photosynthesis for Kids</div>
+                        <div class="video-description">Learn how plants make their own food using sunlight, water, and air.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/uixA8ZXx0KU" title="Photosynthesis" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">4:18</div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-title">Life Cycles of Plants and Animals</div>
+                        <div class="video-description">Explore how living things grow and change throughout their lives.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/3CCOWHa-qfc" title="Life Cycles" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">6:25</div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-title">Ecosystems and Habitats</div>
+                        <div class="video-description">Discover different ecosystems and how organisms interact with their environment.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/SNF8b7KKJ2I" title="Ecosystems" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">5:40</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Worksheets Section -->
+            <div class="section">
+                <h2><i class="fas fa-file-alt"></i> Teacher Worksheets</h2>
+                <div class="worksheet-grid">
+                    <div class="worksheet-card" onclick="openWorksheet('plant-structures')">
+                        <div class="worksheet-icon">🌱</div>
+                        <div class="worksheet-title">Plant Structures Worksheet</div>
+                        <div class="worksheet-description">Label and identify plant parts and their functions</div>
+                    </div>
+
+                    <div class="worksheet-card" onclick="openWorksheet('animal-adaptations')">
+                        <div class="worksheet-icon">🦋</div>
+                        <div class="worksheet-title">Animal Adaptations Activity</div>
+                        <div class="worksheet-description">Match animals to their adaptations and habitats</div>
+                    </div>
+
+                    <div class="worksheet-card" onclick="openWorksheet('food-chain')">
+                        <div class="worksheet-icon">🔗</div>
+                        <div class="worksheet-title">Food Chain Builder</div>
+                        <div class="worksheet-description">Create and analyze food chains in different ecosystems</div>
+                    </div>
+
+                    <div class="worksheet-card" onclick="openWorksheet('photosynthesis')">
+                        <div class="worksheet-icon">☀️</div>
+                        <div class="worksheet-title">Photosynthesis Process</div>
+                        <div class="worksheet-description">Diagram and explain how plants make food</div>
+                    </div>
+
+                    <div class="worksheet-card" onclick="openWorksheet('life-cycles')">
+                        <div class="worksheet-icon">🔄</div>
+                        <div class="worksheet-title">Life Cycle Diagrams</div>
+                        <div class="worksheet-description">Compare and contrast plant and animal life cycles</div>
+                    </div>
+
+                    <div class="worksheet-card" onclick="openWorksheet('ecosystem-vocab')">
+                        <div class="worksheet-icon">📚</div>
+                        <div class="worksheet-title">Ecosystem Vocabulary</div>
+                        <div class="worksheet-description">Define and use key ecosystem terms</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graphic Organizers Section -->
+            <div class="section">
+                <h2><i class="fas fa-sitemap"></i> Graphic Organizers</h2>
+                <div class="graphic-organizer-grid">
+                    <div class="organizer-card" onclick="openOrganizer('structure-function')">
+                        <div class="organizer-title">Structure-Function Chart</div>
+                        <div class="organizer-description">Organize information about organism structures and their functions</div>
+                        <div class="organizer-preview">
+                            <i class="fas fa-table" style="font-size: 2rem; color: #667eea;"></i>
+                        </div>
+                        <button class="download-btn">Download PDF</button>
+                    </div>
+
+                    <div class="organizer-card" onclick="openOrganizer('food-web')">
+                        <div class="organizer-title">Food Web Diagram</div>
+                        <div class="organizer-description">Visual representation of energy flow in ecosystems</div>
+                        <div class="organizer-preview">
+                            <i class="fas fa-project-diagram" style="font-size: 2rem; color: #667eea;"></i>
+                        </div>
+                        <button class="download-btn">Download PDF</button>
+                    </div>
+
+                    <div class="organizer-card" onclick="openOrganizer('adaptation-venn')">
+                        <div class="organizer-title">Adaptation Venn Diagram</div>
+                        <div class="organizer-description">Compare plant and animal adaptations</div>
+                        <div class="organizer-preview">
+                            <i class="fas fa-circle" style="font-size: 2rem; color: #667eea;"></i>
+                        </div>
+                        <button class="download-btn">Download PDF</button>
+                    </div>
+
+                    <div class="organizer-card" onclick="openOrganizer('life-cycle-flow')">
+                        <div class="organizer-title">Life Cycle Flow Chart</div>
+                        <div class="organizer-description">Track the stages of organism development</div>
+                        <div class="organizer-preview">
+                            <i class="fas fa-route" style="font-size: 2rem; color: #667eea;"></i>
+                        </div>
+                        <button class="download-btn">Download PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bundle 2 Content -->
+        <div id="bundle2" class="bundle-content">
+            <!-- Videos Section -->
+            <div class="section">
+                <h2><i class="fas fa-play-circle"></i> Educational Videos</h2>
+                <div class="video-grid">
+                    <div class="video-card">
+                        <div class="video-title">Rocks and Minerals</div>
+                        <div class="video-description">Learn about different types of rocks and how they form.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/rmIsBu3XOco" title="Rocks and Minerals" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">4:15</div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-title">Weathering and Erosion</div>
+                        <div class="video-description">Discover how wind, water, and ice change Earth's surface.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/R-Iak3Wvh9c" title="Weathering and Erosion" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">5:30</div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-title">Natural Disasters</div>
+                        <div class="video-description">Understand earthquakes, volcanoes, and other natural hazards.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/5WwGeF8P1FU" title="Natural Disasters" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">6:45</div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-title">The Rock Cycle</div>
+                        <div class="video-description">See how rocks change from one type to another over time.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/53lMdHzvGCQ" title="Rock Cycle" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">4:50</div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-title">Earth's Layers</div>
+                        <div class="video-description">Explore the structure of our planet from crust to core.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/Q9j1xGaxYzY" title="Earth's Layers" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">5:20</div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-title">Fossils and Earth's History</div>
+                        <div class="video-description">Learn how fossils tell us about Earth's past.</div>
+                        <iframe class="video-embed" src="https://www.youtube.com/embed/3rkGu0BItKM" title="Fossils" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="video-duration">4:35</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Worksheets Section -->
+            <div class="section">
+                <h2><i class="fas fa-file-alt"></i> Teacher Worksheets</h2>
+                <div class="worksheet-grid">
+                    <div class="worksheet-card" onclick="openWorksheet('rock-types')">
+                        <div class="worksheet-icon">🪨</div>
+                        <div class="worksheet-title">Rock Types Classification</div>
+                        <div class="worksheet-description">Identify and classify igneous, sedimentary, and metamorphic rocks</div>
+                    </div>
+
+                    <div class="worksheet-card" onclick="openWorksheet('weathering-erosion')">
+                        <div class="worksheet-icon">🌊</div>
+                        <div class="worksheet-title">Weathering vs Erosion</div>
+                        <div class="worksheet-description">Compare and contrast weathering and erosion processes</div>
+                    </div>
+
+                    <div class="worksheet-card" onclick="openWorksheet('natural-disasters')">
+                        <div class="worksheet-icon">🌋</div>
+                        <div class="worksheet-title">Natural Disaster Safety</div>
+                        <div class="worksheet-description">Learn about disaster preparedness and safety measures</div>
+                    </div>
+
+                    <div class="worksheet-card" onclick="openWorksheet('rock-cycle')">
+                        <div class="worksheet-icon">🔄</div>
+                        <div class="worksheet-title">Rock Cycle Diagram</div>
+                        <div class="worksheet-description">Trace the transformation of rocks through the cycle</div>
+                    </div>
+
+                    <div class="worksheet-card" onclick="openWorksheet('earth-layers')">
+                        <div class="worksheet-icon">🌍</div>
+                        <div class="worksheet-title">Earth's Structure</div>
+                        <div class="worksheet-description">Label and describe Earth's layers and composition</div>
+                    </div>
+
+                    <div class="worksheet-card" onclick="openWorksheet('fossil-formation')">
+                        <div class="worksheet-icon">🦴</div>
+                        <div class="worksheet-title">Fossil Formation Process</div>
+                        <div class="worksheet-description">Understand how fossils form and what they tell us</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graphic Organizers Section -->
+            <div class="section">
+                <h2><i class="fas fa-sitemap"></i> Graphic Organizers</h2>
+                <div class="graphic-organizer-grid">
+                    <div class="organizer-card" onclick="openOrganizer('rock-cycle-diagram')">
+                        <div class="organizer-title">Rock Cycle Flow Chart</div>
+                        <div class="organizer-description">Visual representation of how rocks transform</div>
+                        <div class="organizer-preview">
+                            <i class="fas fa-sync-alt" style="font-size: 2rem; color: #667eea;"></i>
+                        </div>
+                        <button class="download-btn">Download PDF</button>
+                    </div>
+
+                    <div class="organizer-card" onclick="openOrganizer('earth-layers-diagram')">
+                        <div class="organizer-title">Earth's Layers Diagram</div>
+                        <div class="organizer-description">Cross-section showing Earth's internal structure</div>
+                        <div class="organizer-preview">
+                            <i class="fas fa-circle" style="font-size: 2rem; color: #667eea;"></i>
+                        </div>
+                        <button class="download-btn">Download PDF</button>
+                    </div>
+
+                    <div class="organizer-card" onclick="openOrganizer('weathering-types')">
+                        <div class="organizer-title">Types of Weathering Chart</div>
+                        <div class="organizer-description">Compare mechanical and chemical weathering</div>
+                        <div class="organizer-preview">
+                            <i class="fas fa-table" style="font-size: 2rem; color: #667eea;"></i>
+                        </div>
+                        <button class="download-btn">Download PDF</button>
+                    </div>
+
+                    <div class="organizer-card" onclick="openOrganizer('disaster-timeline')">
+                        <div class="organizer-title">Natural Disaster Timeline</div>
+                        <div class="organizer-description">Sequence events during different natural disasters</div>
+                        <div class="organizer-preview">
+                            <i class="fas fa-clock" style="font-size: 2rem; color: #667eea;"></i>
+                        </div>
+                        <button class="download-btn">Download PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Worksheets -->
+    <div id="worksheetModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div id="worksheetContent" class="worksheet-content"></div>
+        </div>
+    </div>
+
+    <script>
+        function showBundle(bundleId) {
+            // Hide all bundle content
+            document.querySelectorAll('.bundle-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.bundle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected bundle content
+            document.getElementById(bundleId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function openWorksheet(worksheetType) {
+            const modal = document.getElementById('worksheetModal');
+            const content = document.getElementById('worksheetContent');
+            
+            const worksheets = {
+                'plant-structures': {
+                    title: 'Plant Structures and Functions Worksheet',
+                    content: `
+                        <h3>Plant Structures and Functions</h3>
+                        <p><strong>Objective:</strong> Students will identify and describe the functions of different plant structures.</p>
+                        
+                        <div class="highlight-box">
+                            <strong>Materials Needed:</strong> Plant diagram, colored pencils, worksheet
+                        </div>
+                        
+                        <h4>Part 1: Label the Plant</h4>
+                        <p>Label the following parts on the plant diagram:</p>
+                        <ul>
+                            <li>Roots</li>
+                            <li>Stem</li>
+                            <li>Leaves</li>
+                            <li>Flower</li>
+                            <li>Fruit</li>
+                        </ul>
+                        
+                        <h4>Part 2: Match Functions</h4>
+                        <p>Match each plant part with its function:</p>
+                        <ul>
+                            <li>Roots - Absorb water and nutrients from soil</li>
+                            <li>Stem - Support the plant and transport materials</li>
+                            <li>Leaves - Make food through photosynthesis</li>
+                            <li>Flower - Produce seeds for reproduction</li>
+                            <li>Fruit - Protect and disperse seeds</li>
+                        </ul>
+                        
+                        <h4>Part 3: Critical Thinking</h4>
+                        <p>Answer the following questions:</p>
+                        <ol>
+                            <li>What would happen to a plant if it had no roots?</li>
+                            <li>Why do you think leaves are usually green?</li>
+                            <li>How do flowers help plants reproduce?</li>
+                        </ol>
+                        
+                        <h4>Extension Activity</h4>
+                        <p>Draw your own plant and label all the structures. Write a short story about how each part helps the plant survive.</p>
+                    `
+                },
+                'animal-adaptations': {
+                    title: 'Animal Adaptations Activity',
+                    content: `
+                        <h3>Animal Adaptations and Habitats</h3>
+                        <p><strong>Objective:</strong> Students will understand how animals adapt to their environments.</p>
+                        
+                        <div class="highlight-box">
+                            <strong>Materials Needed:</strong> Animal cards, habitat pictures, worksheet
+                        </div>
+                        
+                        <h4>Part 1: Animal Matching</h4>
+                        <p>Match each animal with its adaptation:</p>
+                        <ul>
+                            <li>Polar Bear - Thick fur and fat for warmth</li>
+                            <li>Giraffe - Long neck to reach leaves</li>
+                            <li>Chameleon - Color-changing skin for camouflage</li>
+                            <li>Duck - Webbed feet for swimming</li>
+                            <li>Eagle - Sharp talons for catching prey</li>
+                        </ul>
+                        
+                        <h4>Part 2: Habitat Investigation</h4>
+                        <p>For each habitat, list 3 animals that live there and their adaptations:</p>
+                        <ul>
+                            <li>Desert: _________________________________</li>
+                            <li>Ocean: _________________________________</li>
+                            <li>Forest: _________________________________</li>
+                            <li>Arctic: _________________________________</li>
+                        </ul>
+                        
+                        <h4>Part 3: Design Your Own Animal</h4>
+                        <p>Create an imaginary animal for a specific habitat. Include:</p>
+                        <ol>
+                            <li>Name of your animal</li>
+                            <li>Habitat it lives in</li>
+                            <li>3 adaptations that help it survive</li>
+                            <li>Drawing of your animal</li>
+                        </ol>
+                        
+                        <h4>Assessment Questions</h4>
+                        <p>Answer in complete sentences:</p>
+                        <ol>
+                            <li>What is an adaptation?</li>
+                            <li>Why do animals need adaptations?</li>
+                            <li>Give an example of a behavioral adaptation.</li>
+                        </ol>
+                    `
+                },
+                'food-chain': {
+                    title: 'Food Chain Builder Activity',
+                    content: `
+                        <h3>Food Chain and Food Web Builder</h3>
+                        <p><strong>Objective:</strong> Students will create and analyze food chains in different ecosystems.</p>
+                        
+                        <div class="highlight-box">
+                            <strong>Materials Needed:</strong> Organism cards, arrows, ecosystem pictures
+                        </div>
+                        
+                        <h4>Part 1: Simple Food Chain</h4>
+                        <p>Create a food chain using these organisms:</p>
+                        <ul>
+                            <li>Grass → Rabbit → Fox</li>
+                            <li>Algae → Fish → Shark</li>
+                            <li>Leaves → Caterpillar → Bird</li>
+                        </ul>
+                        
+                        <h4>Part 2: Food Web Challenge</h4>
+                        <p>Create a food web for a forest ecosystem including:</p>
+                        <ul>
+                            <li>Producers: Trees, grass, berries</li>
+                            <li>Primary Consumers: Deer, rabbits, insects</li>
+                            <li>Secondary Consumers: Foxes, owls, snakes</li>
+                            <li>Decomposers: Mushrooms, bacteria</li>
+                        </ul>
+                        
+                        <h4>Part 3: Energy Flow Analysis</h4>
+                        <p>Answer these questions about your food web:</p>
+                        <ol>
+                            <li>Where does all energy in the food web start?</li>
+                            <li>What happens to energy as it moves up the food chain?</li>
+                            <li>What role do decomposers play?</li>
+                            <li>What would happen if all the producers disappeared?</li>
+                        </ol>
+                        
+                        <h4>Part 4: Ecosystem Comparison</h4>
+                        <p>Compare food chains from different ecosystems:</p>
+                        <ul>
+                            <li>Ocean vs. Forest</li>
+                            <li>Desert vs. Grassland</li>
+                            <li>What similarities and differences do you notice?</li>
+                        </ul>
+                    `
+                }
+            };
+            
+            if (worksheets[worksheetType]) {
+                content.innerHTML = `
+                    <h2>${worksheets[worksheetType].title}</h2>
+                    ${worksheets[worksheetType].content}
+                `;
+                modal.classList.add('active');
+            }
+        }
+
+        function openOrganizer(organizerType) {
+            alert(`Opening ${organizerType} graphic organizer. This would download a PDF file.`);
+        }
+
+        function closeModal() {
+            document.getElementById('worksheetModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('worksheetModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

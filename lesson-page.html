@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Lesson - STEM Learning Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .lesson-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .lesson-header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .lesson-header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .lesson-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .lesson-section {
+            margin-bottom: 30px;
+        }
+
+        .lesson-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .interactive-element {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-element:hover {
+            border-color: #667eea;
+            background: #e3f2fd;
+        }
+
+        .interactive-element h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .interactive-element p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .interactive-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .quiz-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .quiz-question {
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+
+        .quiz-option.selected {
+            border-color: #667eea;
+            background: #e3f2fd;
+        }
+
+        .lesson-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .back-btn {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #e9ecef;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <button class="back-btn" onclick="goBack()">← Back to Portal</button>
+        
+        <div class="lesson-header">
+            <h1 id="lessonTitle">Energy Transfer in Living Systems</h1>
+            <div class="lesson-meta">
+                <span>📚 Grade 4 Science</span>
+                <span>⏱️ 45 minutes</span>
+                <span>🎯 5 objectives</span>
+                <span>📊 Interactive</span>
+            </div>
+        </div>
+
+        <div class="lesson-content">
+            <div class="lesson-section">
+                <h2>🎯 Learning Objectives</h2>
+                <p>By the end of this lesson, students will be able to:</p>
+                <ul>
+                    <li>Identify the primary source of energy for living systems</li>
+                    <li>Explain how energy flows through food chains</li>
+                    <li>Describe the role of producers, consumers, and decomposers</li>
+                    <li>Create a simple food web diagram</li>
+                    <li>Understand the concept of energy pyramids</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>📖 Introduction</h2>
+                <p>All living things need energy to survive. But where does this energy come from? In this lesson, we'll explore how energy flows through living systems, from the sun to plants and animals.</p>
+                
+                <div class="interactive-element" onclick="startInteractive('energy-flow')">
+                    <h3>🌞 Interactive: Energy Flow Animation</h3>
+                    <p>Click to see how energy flows from the sun through different living things.</p>
+                    <button class="interactive-btn">Start Animation</button>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🔬 Key Concepts</h2>
+                
+                <div class="interactive-element" onclick="startInteractive('producers')">
+                    <h3>🌱 Producers</h3>
+                    <p>Plants and other organisms that make their own food using sunlight.</p>
+                    <button class="interactive-btn">Learn More</button>
+                </div>
+
+                <div class="interactive-element" onclick="startInteractive('consumers')">
+                    <h3>🦁 Consumers</h3>
+                    <p>Animals that eat other organisms to get energy.</p>
+                    <button class="interactive-btn">Learn More</button>
+                </div>
+
+                <div class="interactive-element" onclick="startInteractive('decomposers')">
+                    <h3>🍄 Decomposers</h3>
+                    <p>Organisms that break down dead matter and recycle nutrients.</p>
+                    <button class="interactive-btn">Learn More</button>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🧪 Interactive Activity</h2>
+                <div class="interactive-element" onclick="startInteractive('food-chain-builder')">
+                    <h3>🔗 Food Chain Builder</h3>
+                    <p>Drag and drop organisms to build your own food chain!</p>
+                    <button class="interactive-btn">Start Building</button>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>📝 Quick Quiz</h2>
+                <div class="quiz-section">
+                    <div class="quiz-question">
+                        <h3>Question 1: What is the primary source of energy for most living things?</h3>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, 'A')">A) Water</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, 'B')">B) Sunlight</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, 'C')">C) Soil</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, 'D')">D) Air</div>
+                        </div>
+                    </div>
+                    <button class="interactive-btn" onclick="checkAnswer()">Check Answer</button>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🎨 Creative Challenge</h2>
+                <div class="interactive-element" onclick="startInteractive('drawing-tool')">
+                    <h3>🎨 Draw Your Own Food Web</h3>
+                    <p>Use our drawing tool to create a food web showing energy flow in an ecosystem.</p>
+                    <button class="interactive-btn">Start Drawing</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="lesson-navigation">
+            <button class="nav-btn" id="prevBtn" onclick="previousSection()" disabled>← Previous</button>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <button class="nav-btn" id="nextBtn" onclick="nextSection()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        const totalSections = 6;
+        let selectedAnswer = null;
+
+        function goBack() {
+            // Try to go back in history, if that fails, open the teacher portal
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'teacher-portal.html';
+            }
+        }
+
+        function startInteractive(type) {
+            switch(type) {
+                case 'energy-flow':
+                    showInteractiveModal('Energy Flow Animation', 'This would show an animated diagram of energy flowing from the sun through plants to animals.');
+                    break;
+                case 'producers':
+                    showInteractiveModal('Producers', 'Plants use sunlight, water, and carbon dioxide to make their own food through photosynthesis.');
+                    break;
+                case 'consumers':
+                    showInteractiveModal('Consumers', 'Animals cannot make their own food, so they must eat other organisms to get energy.');
+                    break;
+                case 'decomposers':
+                    showInteractiveModal('Decomposers', 'Fungi and bacteria break down dead organisms and return nutrients to the soil.');
+                    break;
+                case 'food-chain-builder':
+                    showInteractiveModal('Food Chain Builder', 'This would be a drag-and-drop tool to build food chains.');
+                    break;
+                case 'drawing-tool':
+                    showInteractiveModal('Drawing Tool', 'This would open a canvas for students to draw their own food webs.');
+                    break;
+            }
+        }
+
+        function showInteractiveModal(title, content) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 15px;
+                    padding: 30px;
+                    max-width: 500px;
+                    width: 90%;
+                    text-align: center;
+                ">
+                    <h2 style="color: #667eea; margin-bottom: 15px;">${title}</h2>
+                    <p style="margin-bottom: 20px; line-height: 1.6;">${content}</p>
+                    <button onclick="this.closest('div').parentElement.remove()" style="
+                        background: #667eea;
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 20px;
+                        cursor: pointer;
+                        font-weight: bold;
+                    ">Close</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function selectAnswer(element, answer) {
+            document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedAnswer = answer;
+        }
+
+        function checkAnswer() {
+            if (!selectedAnswer) {
+                alert('Please select an answer first!');
+                return;
+            }
+            
+            if (selectedAnswer === 'B') {
+                alert('Correct! The sun is the primary source of energy for most living things.');
+            } else {
+                alert('Not quite right. The correct answer is B) Sunlight. The sun provides the energy that powers most life on Earth.');
+            }
+        }
+
+        function nextSection() {
+            if (currentSection < totalSections - 1) {
+                currentSection++;
+                updateProgress();
+                updateNavigation();
+            }
+        }
+
+        function previousSection() {
+            if (currentSection > 0) {
+                currentSection--;
+                updateProgress();
+                updateNavigation();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentSection + 1) / totalSections) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentSection === 0;
+            nextBtn.textContent = currentSection === totalSections - 1 ? 'Complete →' : 'Next →';
+        }
+
+        // Get lesson title from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const title = urlParams.get('title');
+        if (title) {
+            document.getElementById('lessonTitle').textContent = decodeURIComponent(title);
+        }
+
+        // Initialize
+        updateProgress();
+        updateNavigation();
+    </script>
+</body>
+</html>

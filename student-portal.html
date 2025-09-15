@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - 4th Grade STEM Curriculum</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .welcome-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .welcome-section h1 {
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .welcome-section p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .quick-links {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .quick-links h2 {
+            color: #28a745;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .link-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            border-color: #28a745;
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.2);
+        }
+
+        .link-card i {
+            font-size: 2.5rem;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .link-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .link-card p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .link-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .link-btn:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+
+        .learning-resources {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .learning-resources h2 {
+            color: #28a745;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .student-ai-section {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .student-ai-section h2 {
+            color: white;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .student-ai-section p {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .student-ai-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .ai-categories h3 {
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .category-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .category-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-2px);
+        }
+
+        .category-btn.active {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        .category-btn i {
+            font-size: 1.2rem;
+        }
+
+        .student-chat {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .chat-messages {
+            height: 250px;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .bot-message {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 15px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 15px;
+            border-bottom-right-radius: 5px;
+            margin-left: auto;
+            max-width: 70%;
+        }
+
+        .message i {
+            margin-top: 2px;
+            font-size: 1.1rem;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .chat-input input:focus {
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        .chat-input button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .resource-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .resource-item i {
+            font-size: 2rem;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .resource-item h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .resource-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .tools-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .tools-section h2 {
+            color: #28a745;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .tool-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            background: #e9ecef;
+        }
+
+        .tool-card i {
+            font-size: 2rem;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .tool-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .tool-card p {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .calendar-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .calendar-section h2 {
+            color: #28a745;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .calendar-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #28a745;
+        }
+
+        .calendar-item h4 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .calendar-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Progress Dashboard Styles */
+        .progress-dashboard {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .progress-dashboard h2 {
+            color: #28a745;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .progress-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .progress-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .card-header h3 {
+            color: #333;
+            margin: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-value {
+            background: #28a745;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .progress-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-label {
+            min-width: 120px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .stat-percentage {
+            min-width: 40px;
+            text-align: right;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #333;
+        }
+
+        .goals-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .goal-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .goal-item.completed {
+            color: #28a745;
+        }
+
+        .goal-item.pending {
+            color: #ffc107;
+        }
+
+        .trend-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: end;
+            gap: 8px;
+            height: 80px;
+            padding: 10px 0;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, #28a745, #20c997);
+            border-radius: 4px 4px 0 0;
+            min-height: 10px;
+            transition: height 0.3s ease;
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        /* Student Gamification Styles */
+        .gamification-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .gamification-section h2 {
+            color: #28a745;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .gamification-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .points-card, .challenges-card, .rewards-card, .streaks-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .points-card:hover, .challenges-card:hover, .rewards-card:hover, .streaks-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .points-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .points-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+
+        .points-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .points-value {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .challenges-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .challenge-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .challenge-icon {
+            font-size: 2rem;
+        }
+
+        .challenge-info {
+            flex: 1;
+        }
+
+        .challenge-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .challenge-desc {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .challenge-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .challenge-progress .progress-bar {
+            flex: 1;
+            height: 6px;
+        }
+
+        .challenge-progress span {
+            font-size: 0.7rem;
+            color: #666;
+            min-width: 80px;
+        }
+
+        .challenge-reward {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .reward-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.2s ease;
+            position: relative;
+        }
+
+        .reward-item.affordable {
+            border-color: #28a745;
+        }
+
+        .reward-item.locked {
+            opacity: 0.6;
+            border-color: #e9ecef;
+        }
+
+        .reward-item:hover {
+            transform: scale(1.05);
+        }
+
+        .reward-icon {
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .reward-info {
+            text-align: center;
+        }
+
+        .reward-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .reward-cost {
+            font-size: 0.8rem;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .claim-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .claim-btn:hover:not(:disabled) {
+            background: #218838;
+        }
+
+        .claim-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .streak-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .streak-icon {
+            font-size: 2.5rem;
+        }
+
+        .streak-info {
+            flex: 1;
+        }
+
+        .streak-days {
+            font-weight: bold;
+            color: #ff6b6b;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .streak-desc {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .streak-milestones {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .milestone {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .milestone.completed {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .milestone.pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        /* Student Assessment System Styles */
+        .assessment-system {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .assessment-system h2 {
+            color: #28a745;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .upcoming-quizzes-card, .recent-scores-card, .practice-mode-card, .feedback-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .upcoming-quizzes-card:hover, .recent-scores-card:hover, .practice-mode-card:hover, .feedback-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .quiz-list, .scores-list, .practice-options, .feedback-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .quiz-item, .score-item, .practice-item, .feedback-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .quiz-info, .score-info, .practice-info {
+            flex: 1;
+        }
+
+        .quiz-title, .score-title, .practice-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .quiz-details, .score-date, .practice-desc {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .status-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.in-progress {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .score-value {
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        .score-value.excellent {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .score-value.good {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .practice-icon {
+            font-size: 2rem;
+        }
+
+        .practice-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .practice-btn:hover {
+            background: #218838;
+        }
+
+        .feedback-icon {
+            font-size: 1.5rem;
+        }
+
+        .feedback-text {
+            flex: 1;
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .feedback-desc {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tools-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Main Hub
+            </a>
+            <h1><i class="fas fa-graduation-cap"></i> Student Portal</h1>
+            <div></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Welcome to Your Learning Hub!</h1>
+            <p>Access all your learning tools, resources, and important links in one place. Everything you need for success in 4th grade STEM is right here!</p>
+        </div>
+
+        <!-- Student Progress Dashboard -->
+        <div class="progress-dashboard">
+            <h2><i class="fas fa-chart-line"></i> My Learning Progress</h2>
+            <div class="dashboard-grid">
+                <div class="progress-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user-graduate"></i> My Stats</h3>
+                        <span class="card-value">Level 3</span>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Lessons Completed</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                            <span class="stat-percentage">65%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Quiz Average</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 88%"></div>
+                            </div>
+                            <span class="stat-percentage">88%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Streak Days</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                            <span class="stat-percentage">7</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-trophy"></i> My Achievements</h3>
+                        <span class="card-value">12 Earned</span>
+                    </div>
+                    <div class="achievement-grid">
+                        <div class="achievement-item">
+                            <i class="fas fa-medal" style="color: #FFD700;"></i>
+                            <span>Science Explorer</span>
+                        </div>
+                        <div class="achievement-item">
+                            <i class="fas fa-star" style="color: #FF6B6B;"></i>
+                            <span>Problem Solver</span>
+                        </div>
+                        <div class="achievement-item">
+                            <i class="fas fa-rocket" style="color: #4ECDC4;"></i>
+                            <span>Innovation Master</span>
+                        </div>
+                        <div class="achievement-item">
+                            <i class="fas fa-brain" style="color: #45B7D1;"></i>
+                            <span>Critical Thinker</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-target"></i> This Week's Goals</h3>
+                        <span class="card-value">3/4 Complete</span>
+                    </div>
+                    <div class="goals-list">
+                        <div class="goal-item completed">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Complete Energy Lesson</span>
+                        </div>
+                        <div class="goal-item completed">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Take Forces Quiz</span>
+                        </div>
+                        <div class="goal-item completed">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Submit Lab Report</span>
+                        </div>
+                        <div class="goal-item pending">
+                            <i class="fas fa-clock"></i>
+                            <span>Start Motion Project</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> My Progress</h3>
+                        <span class="card-value">+15% This Week</span>
+                    </div>
+                    <div class="trend-chart">
+                        <div class="chart-bars">
+                            <div class="bar" style="height: 45%"></div>
+                            <div class="bar" style="height: 55%"></div>
+                            <div class="bar" style="height: 65%"></div>
+                            <div class="bar" style="height: 70%"></div>
+                            <div class="bar" style="height: 65%"></div>
+                        </div>
+                        <div class="chart-labels">
+                            <span>Mon</span>
+                            <span>Tue</span>
+                            <span>Wed</span>
+                            <span>Thu</span>
+                            <span>Fri</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Gamification Section -->
+        <div class="gamification-section">
+            <h2><i class="fas fa-gamepad"></i> My Gamification Hub</h2>
+            <div class="gamification-grid">
+                <div class="points-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-coins"></i> My Points</h3>
+                        <span class="card-value">1,850 pts</span>
+                    </div>
+                    <div class="points-breakdown">
+                        <div class="points-item">
+                            <span class="points-label">This Week</span>
+                            <span class="points-value">+320 pts</span>
+                        </div>
+                        <div class="points-item">
+                            <span class="points-label">This Month</span>
+                            <span class="points-value">+1,200 pts</span>
+                        </div>
+                        <div class="points-item">
+                            <span class="points-label">Total Earned</span>
+                            <span class="points-value">1,850 pts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="challenges-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-target"></i> My Challenges</h3>
+                        <span class="card-value">2 Active</span>
+                    </div>
+                    <div class="challenges-list">
+                        <div class="challenge-item">
+                            <div class="challenge-icon">🧪</div>
+                            <div class="challenge-info">
+                                <div class="challenge-title">Lab Master</div>
+                                <div class="challenge-desc">Complete 3 more lab activities</div>
+                                <div class="challenge-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 40%"></div>
+                                    </div>
+                                    <span>2/5 Complete</span>
+                                </div>
+                            </div>
+                            <div class="challenge-reward">+200 pts</div>
+                        </div>
+                        <div class="challenge-item">
+                            <div class="challenge-icon">📚</div>
+                            <div class="challenge-info">
+                                <div class="challenge-title">Knowledge Seeker</div>
+                                <div class="challenge-desc">Read 2 more science articles</div>
+                                <div class="challenge-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 80%"></div>
+                                    </div>
+                                    <span>8/10 Complete</span>
+                                </div>
+                            </div>
+                            <div class="challenge-reward">+150 pts</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rewards-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-gift"></i> Available Rewards</h3>
+                        <span class="card-value">3 Can Afford</span>
+                    </div>
+                    <div class="rewards-grid">
+                        <div class="reward-item affordable">
+                            <div class="reward-icon">🎮</div>
+                            <div class="reward-info">
+                                <div class="reward-title">Extra Recess</div>
+                                <div class="reward-cost">500 pts</div>
+                            </div>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                        <div class="reward-item affordable">
+                            <div class="reward-icon">📱</div>
+                            <div class="reward-info">
+                                <div class="reward-title">Tech Time</div>
+                                <div class="reward-cost">750 pts</div>
+                            </div>
+                            <button class="claim-btn">Claim</button>
+                        </div>
+                        <div class="reward-item locked">
+                            <div class="reward-icon">🍕</div>
+                            <div class="reward-info">
+                                <div class="reward-title">Pizza Party</div>
+                                <div class="reward-cost">1000 pts</div>
+                            </div>
+                            <button class="claim-btn" disabled>Need 150 pts</button>
+                        </div>
+                        <div class="reward-item locked">
+                            <div class="reward-icon">🏆</div>
+                            <div class="reward-info">
+                                <div class="reward-title">Class Trophy</div>
+                                <div class="reward-cost">2000 pts</div>
+                            </div>
+                            <button class="claim-btn" disabled>Need 1150 pts</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="streaks-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-fire"></i> My Streak</h3>
+                        <span class="card-value">7 days</span>
+                    </div>
+                    <div class="streak-display">
+                        <div class="streak-icon">🔥</div>
+                        <div class="streak-info">
+                            <div class="streak-days">7 Day Streak!</div>
+                            <div class="streak-desc">Keep it up! You're on fire!</div>
+                        </div>
+                    </div>
+                    <div class="streak-milestones">
+                        <div class="milestone completed">3 days ✓</div>
+                        <div class="milestone completed">7 days ✓</div>
+                        <div class="milestone pending">14 days (7 more)</div>
+                        <div class="milestone pending">30 days (23 more)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Assessment System -->
+        <div class="assessment-system">
+            <h2><i class="fas fa-clipboard-check"></i> My Assessments</h2>
+            <div class="assessment-grid">
+                <div class="upcoming-quizzes-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Upcoming Quizzes</h3>
+                        <span class="card-value">2 This Week</span>
+                    </div>
+                    <div class="quiz-list">
+                        <div class="quiz-item">
+                            <div class="quiz-info">
+                                <div class="quiz-title">Energy & Motion Quiz</div>
+                                <div class="quiz-details">Due: Tomorrow • 15 questions</div>
+                            </div>
+                            <div class="quiz-status">
+                                <span class="status-badge pending">Not Started</span>
+                            </div>
+                        </div>
+                        <div class="quiz-item">
+                            <div class="quiz-info">
+                                <div class="quiz-title">Forces Lab Report</div>
+                                <div class="quiz-details">Due: Friday • Lab Assessment</div>
+                            </div>
+                            <div class="quiz-status">
+                                <span class="status-badge in-progress">In Progress</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-scores-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line"></i> Recent Scores</h3>
+                        <span class="card-value">Avg: 88%</span>
+                    </div>
+                    <div class="scores-list">
+                        <div class="score-item">
+                            <div class="score-info">
+                                <div class="score-title">Waves & Sound Test</div>
+                                <div class="score-date">1 week ago</div>
+                            </div>
+                            <div class="score-value excellent">92%</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-info">
+                                <div class="score-title">Light & Color Quiz</div>
+                                <div class="score-date">2 weeks ago</div>
+                            </div>
+                            <div class="score-value good">85%</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-info">
+                                <div class="score-title">Matter & Properties</div>
+                                <div class="score-date">3 weeks ago</div>
+                            </div>
+                            <div class="score-value excellent">94%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practice-mode-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-dumbbell"></i> Practice Mode</h3>
+                        <span class="card-value">Available 24/7</span>
+                    </div>
+                    <div class="practice-options">
+                        <div class="practice-item">
+                            <div class="practice-icon">🎯</div>
+                            <div class="practice-info">
+                                <div class="practice-title">Quick Review</div>
+                                <div class="practice-desc">5 random questions</div>
+                            </div>
+                            <button class="practice-btn">Start</button>
+                        </div>
+                        <div class="practice-item">
+                            <div class="practice-icon">📚</div>
+                            <div class="practice-info">
+                                <div class="practice-title">Topic Practice</div>
+                                <div class="practice-desc">Choose specific topics</div>
+                            </div>
+                            <button class="practice-btn">Start</button>
+                        </div>
+                        <div class="practice-item">
+                            <div class="practice-icon">🧠</div>
+                            <div class="practice-info">
+                                <div class="practice-title">Challenge Mode</div>
+                                <div class="practice-desc">Harder questions</div>
+                            </div>
+                            <button class="practice-btn">Start</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feedback-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-comments"></i> My Feedback</h3>
+                        <span class="card-value">Latest</span>
+                    </div>
+                    <div class="feedback-list">
+                        <div class="feedback-item">
+                            <div class="feedback-icon">✅</div>
+                            <div class="feedback-text">
+                                <div class="feedback-title">Great Job!</div>
+                                <div class="feedback-desc">You scored 92% on the Waves test. Keep up the excellent work!</div>
+                            </div>
+                        </div>
+                        <div class="feedback-item">
+                            <div class="feedback-icon">💡</div>
+                            <div class="feedback-text">
+                                <div class="feedback-title">Study Tip</div>
+                                <div class="feedback-desc">Review the energy conversion examples for better understanding.</div>
+                            </div>
+                        </div>
+                        <div class="feedback-item">
+                            <div class="feedback-icon">🏆</div>
+                            <div class="feedback-text">
+                                <div class="feedback-title">Achievement Unlocked!</div>
+                                <div class="feedback-desc">You've completed 10 quizzes in a row with 80%+ scores!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h2><i class="fas fa-external-link-alt"></i> Quick Access Links</h2>
+            <div class="links-grid">
+                <div class="link-card">
+                    <i class="fas fa-chalkboard"></i>
+                    <h3>Veracross</h3>
+                    <p>Access your grades, assignments, and school information</p>
+                    <a href="https://veracross.com" target="_blank" class="link-btn">Go to Veracross</a>
+                </div>
+
+                <div class="link-card">
+                    <i class="fas fa-bell"></i>
+                    <h3>ClassDojo</h3>
+                    <p>Stay connected with your teachers and classmates</p>
+                    <a href="https://classdojo.com" target="_blank" class="link-btn">Go to ClassDojo</a>
+                </div>
+
+                <div class="link-card">
+                    <i class="fas fa-cloud"></i>
+                    <h3>Google Drive</h3>
+                    <p>Access and share your documents and projects</p>
+                    <a href="https://drive.google.com" target="_blank" class="link-btn">Go to Google Drive</a>
+                </div>
+
+                <div class="link-card">
+                    <i class="fas fa-robot"></i>
+                    <h3>Google Gemini</h3>
+                    <p>Get help with research and learning questions</p>
+                    <a href="https://gemini.google.com" target="_blank" class="link-btn">Go to Gemini</a>
+                </div>
+
+                <div class="link-card">
+                    <i class="fas fa-search"></i>
+                    <h3>Google Search</h3>
+                    <p>Research topics and find information</p>
+                    <a href="https://google.com" target="_blank" class="link-btn">Search Google</a>
+                </div>
+
+                <div class="link-card">
+                    <i class="fas fa-video"></i>
+                    <h3>YouTube</h3>
+                    <p>Watch educational videos and tutorials</p>
+                    <a href="https://youtube.com" target="_blank" class="link-btn">Go to YouTube</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="learning-resources">
+            <h2><i class="fas fa-book-open"></i> Learning Resources</h2>
+            <div class="resources-grid">
+                <div class="resource-item" onclick="window.open('https://phet.colorado.edu/', '_blank')">
+                    <i class="fas fa-atom"></i>
+                    <h4>STEM Activities</h4>
+                    <p>Interactive science experiments and projects</p>
+                </div>
+
+                <div class="resource-item" onclick="window.open('https://www.desmos.com/', '_blank')">
+                    <i class="fas fa-calculator"></i>
+                    <h4>Math Tools</h4>
+                    <p>Calculators, graphs, and problem-solving aids</p>
+                </div>
+
+                <div class="resource-item" onclick="window.open('https://www.brainpop.com/science/', '_blank')">
+                    <i class="fas fa-microscope"></i>
+                    <h4>Virtual Labs</h4>
+                    <p>Online science experiments and simulations</p>
+                </div>
+
+
+                <div class="resource-item" onclick="window.open('brain-teasers.html', '_blank')">
+                    <i class="fas fa-puzzle-piece"></i>
+                    <h4>Brain Teasers</h4>
+                    <p>Interactive logic puzzles and critical thinking games</p>
+                </div>
+
+                <div class="resource-item" onclick="window.open('https://www.nationalgeographic.com/kids/', '_blank')">
+                    <i class="fas fa-globe"></i>
+                    <h4>World Explorer</h4>
+                    <p>Geography and cultural learning resources</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student AI Assistant Section -->
+        <div class="student-ai-section">
+            <h2><i class="fas fa-robot"></i> Science Helper</h2>
+            <p>Ask questions about what you're learning in science class!</p>
+            
+            <div class="student-ai-container">
+                <div class="ai-categories">
+                    <h3>What are you learning about?</h3>
+                    <div class="category-buttons">
+                        <button class="category-btn" onclick="selectStudentCategory('vocabulary')">
+                            <i class="fas fa-book"></i> Vocabulary
+                        </button>
+                        <button class="category-btn" onclick="selectStudentCategory('animals')">
+                            <i class="fas fa-paw"></i> Animals
+                        </button>
+                        <button class="category-btn" onclick="selectStudentCategory('plants')">
+                            <i class="fas fa-seedling"></i> Plants
+                        </button>
+                        <button class="category-btn" onclick="selectStudentCategory('earth')">
+                            <i class="fas fa-globe"></i> Earth Science
+                        </button>
+                        <button class="category-btn" onclick="selectStudentCategory('energy')">
+                            <i class="fas fa-bolt"></i> Energy & Forces
+                        </button>
+                        <button class="category-btn" onclick="selectStudentCategory('engineering')">
+                            <i class="fas fa-cogs"></i> Engineering
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="student-chat">
+                    <div id="student-messages" class="chat-messages">
+                        <div class="message bot-message">
+                            <i class="fas fa-robot"></i>
+                            <span>Hi! I'm your Science Helper. Choose a topic above to ask questions about what you're learning!</span>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="student-input" placeholder="Ask about science..." maxlength="200">
+                        <button id="student-send" onclick="sendStudentMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tools-section">
+            <h2><i class="fas fa-tools"></i> Digital Tools</h2>
+            <div class="tools-grid">
+                <div class="tool-card" onclick="window.open('vocabulary-cards.html', '_blank')">
+                    <i class="fas fa-credit-card"></i>
+                    <h4>Vocabulary Cards</h4>
+                    <p>Study key terms and definitions</p>
+                </div>
+
+                <div class="tool-card" onclick="window.open('food-chain-builder.html', '_blank')">
+                    <i class="fas fa-link"></i>
+                    <h4>Food Chain Builder</h4>
+                    <p>Create ecosystem relationships</p>
+                </div>
+
+                <div class="tool-card" onclick="window.open('interactive-charts.html', '_blank')">
+                    <i class="fas fa-chart-bar"></i>
+                    <h4>Chart Maker</h4>
+                    <p>Create graphs and visualizations</p>
+                </div>
+
+                <div class="tool-card" onclick="window.open('photo-journal.html', '_blank')">
+                    <i class="fas fa-camera"></i>
+                    <h4>Photo Journal</h4>
+                    <p>Document your science discoveries</p>
+                </div>
+
+                <div class="tool-card" onclick="window.open('video-creator.html', '_blank')">
+                    <i class="fas fa-video"></i>
+                    <h4>Video Creator</h4>
+                    <p>Make science presentations</p>
+                </div>
+
+                <div class="tool-card" onclick="window.open('student-collaboration-tools.html', '_blank')">
+                    <i class="fas fa-users"></i>
+                    <h4>Collaboration Tools</h4>
+                    <p>View projects, add ideas, track tasks</p>
+                </div>
+                
+                <div class="tool-card" onclick="window.open('student-progress-tracker.html', '_blank')">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Progress Tracker</h4>
+                    <p>Track your learning journey and achievements</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="calendar-section">
+            <h2><i class="fas fa-calendar-alt"></i> Important Dates</h2>
+            <div class="calendar-grid">
+                <div class="calendar-item">
+                    <h4>Bundle 1</h4>
+                    <p>Sept-Oct 2025</p>
+                    <p>Organism Structures</p>
+                </div>
+
+                <div class="calendar-item">
+                    <h4>Bundle 2</h4>
+                    <p>Nov-Dec 2025</p>
+                    <p>Earth's Surface</p>
+                </div>
+
+                <div class="calendar-item">
+                    <h4>Bundle 3</h4>
+                    <p>Jan-Feb 2026</p>
+                    <p>Energy & Forces</p>
+                </div>
+
+                <div class="calendar-item">
+                    <h4>Bundle 4</h4>
+                    <p>Mar-May 2026</p>
+                    <p>Engineering Design</p>
+                </div>
+
+                <div class="calendar-item">
+                    <h4>School Year Ends</h4>
+                    <p>May 29, 2026</p>
+                    <p>Final Day</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Student AI functionality
+        let currentStudentCategory = null;
+        let studentPrompts = {
+            vocabulary: [
+                "What does adaptation mean?",
+                "What is an ecosystem?",
+                "What is photosynthesis?",
+                "What is a food chain?",
+                "What does structure mean?",
+                "What does function mean?"
+            ],
+            animals: [
+                "How do animals adapt?",
+                "What is camouflage?",
+                "How do animals survive winter?",
+                "What is migration?",
+                "How do animals communicate?",
+                "What are predator and prey?"
+            ],
+            plants: [
+                "How do plants make food?",
+                "What are plant parts?",
+                "How do plants grow?",
+                "What is pollination?",
+                "What do plants need?",
+                "How do seeds grow?"
+            ],
+            earth: [
+                "How do rocks form?",
+                "What is the water cycle?",
+                "What causes weather?",
+                "What causes seasons?",
+                "What are natural resources?",
+                "How does erosion work?"
+            ],
+            energy: [
+                "What are forms of energy?",
+                "How do simple machines work?",
+                "What is electricity?",
+                "What is magnetism?",
+                "How does light work?",
+                "What causes sound?"
+            ],
+            engineering: [
+                "What is the design process?",
+                "How do engineers solve problems?",
+                "What is a prototype?",
+                "What are materials?",
+                "How do you test designs?",
+                "What is innovation?"
+            ]
+        };
+
+        function selectStudentCategory(category) {
+            currentStudentCategory = category;
+            
+            // Update category buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show category-specific prompts
+            const messages = document.getElementById('student-messages');
+            const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+            
+            messages.innerHTML = `
+                <div class="message bot-message">
+                    <i class="fas fa-robot"></i>
+                    <span>Great! You chose <strong>${categoryName}</strong>. Here are some questions you can ask:</span>
+                </div>
+            `;
+            
+            studentPrompts[category].forEach(prompt => {
+                const promptDiv = document.createElement('div');
+                promptDiv.className = 'message bot-message';
+                promptDiv.style.cursor = 'pointer';
+                promptDiv.style.marginBottom = '10px';
+                promptDiv.innerHTML = `
+                    <i class="fas fa-lightbulb"></i>
+                    <span onclick="askStudentPrompt('${prompt}')" style="text-decoration: underline;">${prompt}</span>
+                `;
+                messages.appendChild(promptDiv);
+            });
+            
+            // Update input placeholder
+            document.getElementById('student-input').placeholder = `Ask about ${categoryName}...`;
+            
+            // Scroll to bottom
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function askStudentPrompt(prompt) {
+            document.getElementById('student-input').value = prompt;
+            sendStudentMessage();
+        }
+
+        function sendStudentMessage() {
+            const input = document.getElementById('student-input');
+            const messages = document.getElementById('student-messages');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Check if question is curriculum-related
+            if (!isCurriculumQuestion(message)) {
+                const warningMessage = document.createElement('div');
+                warningMessage.className = 'message bot-message';
+                warningMessage.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>I can only help with science questions from your curriculum. Please ask about vocabulary, animals, plants, earth science, energy, or engineering!</span>
+                `;
+                messages.appendChild(warningMessage);
+                messages.scrollTop = messages.scrollHeight;
+                return;
+            }
+            
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.innerHTML = `<i class="fas fa-user"></i><span>${message}</span>`;
+            messages.appendChild(userMessage);
+            
+            // Clear input
+            input.value = '';
+            
+            // Scroll to bottom
+            messages.scrollTop = messages.scrollHeight;
+            
+            // Generate AI response based on category
+            setTimeout(() => {
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot-message';
+                botMessage.innerHTML = `<i class="fas fa-robot"></i><span>${getStudentResponse(message, currentStudentCategory)}</span>`;
+                messages.appendChild(botMessage);
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+        }
+
+        function isCurriculumQuestion(message) {
+            // Comprehensive science keywords covering ALL science areas
+            const scienceKeywords = [
+                // General Science
+                'science', 'scientific', 'experiment', 'hypothesis', 'theory', 'law', 'observation', 'data', 'research',
+                
+                // Biology & Life Science
+                'biology', 'life', 'living', 'organism', 'organisms', 'cell', 'cells', 'tissue', 'organ', 'system',
+                'animal', 'animals', 'plant', 'plants', 'tree', 'trees', 'flower', 'flowers', 'leaf', 'leaves',
+                'root', 'roots', 'stem', 'stems', 'seed', 'seeds', 'fruit', 'fruits', 'vegetable', 'vegetables',
+                'mammal', 'mammals', 'bird', 'birds', 'fish', 'reptile', 'reptiles', 'amphibian', 'amphibians',
+                'insect', 'insects', 'spider', 'spiders', 'butterfly', 'butterflies', 'bee', 'bees',
+                'dog', 'cat', 'lion', 'tiger', 'elephant', 'giraffe', 'zebra', 'bear', 'wolf', 'fox',
+                'rabbit', 'mouse', 'rat', 'hamster', 'squirrel', 'deer', 'moose', 'elk', 'buffalo',
+                'whale', 'dolphin', 'shark', 'octopus', 'jellyfish', 'crab', 'lobster', 'shrimp',
+                'snake', 'lizard', 'turtle', 'tortoise', 'frog', 'toad', 'salamander', 'newt',
+                'eagle', 'hawk', 'owl', 'parrot', 'penguin', 'flamingo', 'peacock', 'chicken', 'duck',
+                
+                // Plant Science
+                'photosynthesis', 'chlorophyll', 'oxygen', 'carbon dioxide', 'glucose', 'starch',
+                'pollination', 'pollen', 'nectar', 'honey', 'bees', 'butterflies', 'birds',
+                'germination', 'sprout', 'seedling', 'mature', 'flowering', 'fruiting',
+                'deciduous', 'evergreen', 'coniferous', 'broadleaf', 'needle', 'bark', 'wood',
+                'forest', 'jungle', 'grassland', 'prairie', 'savanna', 'tundra', 'desert',
+                
+                // Earth Science
+                'earth', 'planet', 'world', 'globe', 'geography', 'geology', 'geological',
+                'rock', 'rocks', 'stone', 'stones', 'mineral', 'minerals', 'crystal', 'crystals',
+                'igneous', 'sedimentary', 'metamorphic', 'granite', 'limestone', 'marble', 'quartz',
+                'fossil', 'fossils', 'dinosaur', 'dinosaurs', 'prehistoric', 'ancient',
+                'volcano', 'volcanoes', 'volcanic', 'lava', 'magma', 'eruption', 'ash',
+                'earthquake', 'earthquakes', 'seismic', 'tectonic', 'plate', 'plates',
+                'mountain', 'mountains', 'hill', 'hills', 'valley', 'valleys', 'canyon', 'canyons',
+                'ocean', 'oceans', 'sea', 'seas', 'lake', 'lakes', 'river', 'rivers', 'stream', 'streams',
+                'glacier', 'glaciers', 'ice', 'snow', 'rain', 'snow', 'hail', 'sleet',
+                'weather', 'climate', 'temperature', 'humidity', 'pressure', 'wind', 'storm', 'storms',
+                'hurricane', 'hurricanes', 'tornado', 'tornadoes', 'typhoon', 'typhoons',
+                'cloud', 'clouds', 'fog', 'mist', 'dew', 'frost', 'thunder', 'lightning',
+                'season', 'seasons', 'spring', 'summer', 'autumn', 'fall', 'winter',
+                'day', 'night', 'sunrise', 'sunset', 'moon', 'moonlight', 'stars', 'constellation',
+                
+                // Physical Science & Energy
+                'physics', 'physical', 'matter', 'mass', 'weight', 'volume', 'density',
+                'solid', 'liquid', 'gas', 'plasma', 'state', 'states', 'change', 'changes',
+                'melting', 'freezing', 'boiling', 'evaporation', 'condensation', 'sublimation',
+                'energy', 'energies', 'kinetic', 'potential', 'thermal', 'heat', 'cold',
+                'light', 'sound', 'electricity', 'electrical', 'magnetic', 'magnetism',
+                'force', 'forces', 'gravity', 'gravitational', 'friction', 'inertia',
+                'motion', 'movement', 'speed', 'velocity', 'acceleration', 'momentum',
+                'machine', 'machines', 'simple', 'complex', 'lever', 'pulley', 'wheel', 'axle',
+                'inclined', 'plane', 'wedge', 'screw', 'gear', 'gears', 'spring', 'springs',
+                'work', 'power', 'efficiency', 'mechanical', 'advantage',
+                
+                // Chemistry
+                'chemistry', 'chemical', 'reaction', 'reactions', 'element', 'elements',
+                'atom', 'atoms', 'molecule', 'molecules', 'compound', 'compounds',
+                'periodic', 'table', 'hydrogen', 'oxygen', 'nitrogen', 'carbon',
+                'iron', 'gold', 'silver', 'copper', 'aluminum', 'zinc', 'lead',
+                'acid', 'acids', 'base', 'bases', 'salt', 'salts', 'solution', 'solutions',
+                'mixture', 'mixtures', 'pure', 'substance', 'substances',
+                
+                // Space & Astronomy
+                'space', 'universe', 'galaxy', 'galaxies', 'star', 'stars', 'sun', 'solar',
+                'planet', 'planets', 'mercury', 'venus', 'mars', 'jupiter', 'saturn',
+                'uranus', 'neptune', 'pluto', 'asteroid', 'asteroids', 'comet', 'comets',
+                'meteor', 'meteors', 'meteorite', 'meteorites', 'satellite', 'satellites',
+                'orbit', 'orbits', 'orbital', 'rotation', 'revolution', 'axis', 'tilt',
+                'moon', 'moons', 'lunar', 'eclipse', 'eclipses', 'telescope', 'telescopes',
+                
+                // Engineering & Technology
+                'engineering', 'engineer', 'engineers', 'design', 'designs', 'build', 'building',
+                'construction', 'structure', 'structures', 'bridge', 'bridges', 'building', 'buildings',
+                'robot', 'robots', 'robotics', 'computer', 'computers', 'technology', 'technologies',
+                'invention', 'inventions', 'innovation', 'innovations', 'prototype', 'prototypes',
+                'material', 'materials', 'metal', 'metals', 'plastic', 'plastics', 'wood', 'concrete',
+                'steel', 'aluminum', 'titanium', 'fiberglass', 'carbon', 'fiber',
+                
+                // Environmental Science
+                'environment', 'environmental', 'ecology', 'ecosystem', 'ecosystems',
+                'habitat', 'habitats', 'biodiversity', 'conservation', 'preservation',
+                'pollution', 'contamination', 'waste', 'recycling', 'renewable', 'sustainable',
+                'green', 'energy', 'solar', 'wind', 'hydroelectric', 'geothermal',
+                'global', 'warming', 'climate', 'change', 'greenhouse', 'effect',
+                'deforestation', 'extinction', 'endangered', 'species', 'wildlife',
+                'national', 'park', 'parks', 'reserve', 'reserves', 'sanctuary', 'sanctuaries',
+                
+                // Health & Human Body
+                'health', 'healthy', 'body', 'human', 'person', 'people', 'child', 'children',
+                'brain', 'heart', 'lungs', 'liver', 'kidney', 'kidneys', 'stomach', 'intestine',
+                'muscle', 'muscles', 'bone', 'bones', 'skeleton', 'skull', 'spine', 'ribs',
+                'blood', 'circulation', 'breathing', 'respiration', 'digestion', 'nervous',
+                'immune', 'system', 'disease', 'diseases', 'virus', 'viruses', 'bacteria',
+                'medicine', 'medical', 'doctor', 'nurse', 'hospital', 'clinic',
+                'exercise', 'fitness', 'nutrition', 'vitamin', 'vitamins', 'mineral', 'minerals',
+                
+                // Scientific Method & Process
+                'hypothesis', 'hypotheses', 'experiment', 'experiments', 'observation', 'observations',
+                'data', 'results', 'conclusion', 'conclusions', 'analysis', 'analyze',
+                'measurement', 'measurements', 'unit', 'units', 'metric', 'imperial',
+                'scale', 'scales', 'balance', 'thermometer', 'ruler', 'ruler', 'stopwatch',
+                'microscope', 'microscopes', 'telescope', 'telescopes', 'magnifying', 'glass',
+                'lab', 'laboratory', 'scientist', 'scientists', 'researcher', 'researchers',
+                
+                // Common Science Questions
+                'what', 'how', 'why', 'when', 'where', 'which', 'who', 'explain', 'describe',
+                'define', 'definition', 'meaning', 'mean', 'means', 'is', 'are', 'was', 'were',
+                'does', 'do', 'did', 'can', 'could', 'would', 'should', 'will', 'might',
+                'difference', 'between', 'compare', 'contrast', 'similar', 'different',
+                'example', 'examples', 'types', 'kinds', 'sorts', 'categories'
+            ];
+            
+            const lowerMessage = message.toLowerCase();
+            return scienceKeywords.some(keyword => lowerMessage.includes(keyword));
+        }
+
+        function getStudentResponse(userMessage, category) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            // Comprehensive bee knowledge
+            if (lowerMessage.includes('bee') || lowerMessage.includes('bees')) {
+                if (lowerMessage.includes('structure') || lowerMessage.includes('structures') || lowerMessage.includes('body') || lowerMessage.includes('parts')) {
+                    return "Bees have amazing structures! 🐝 They have 6 legs, 2 pairs of wings, compound eyes with thousands of tiny lenses, antennae for smelling and touching, a proboscis (tongue) for drinking nectar, pollen baskets on their back legs, and a stinger for protection. Their body has 3 main parts: head, thorax, and abdomen. Each structure has a specific function to help bees survive and help plants!";
+                } else if (lowerMessage.includes('wings') || lowerMessage.includes('fly') || lowerMessage.includes('flying')) {
+                    return "Bees have 4 wings total - 2 pairs! The front wings are larger than the back wings. When flying, they hook together to work as one unit. Bees can beat their wings 200 times per second! This creates the buzzing sound we hear. Their wings help them fly from flower to flower collecting nectar and pollen.";
+                } else if (lowerMessage.includes('eyes') || lowerMessage.includes('see') || lowerMessage.includes('vision')) {
+                    return "Bees have amazing eyes! They have 5 eyes total: 2 large compound eyes and 3 small simple eyes. The compound eyes have thousands of tiny lenses that help them see movement very well and detect ultraviolet light that humans can't see. This helps them find flowers!";
+                } else if (lowerMessage.includes('legs') || lowerMessage.includes('pollen') || lowerMessage.includes('basket')) {
+                    return "Bees have 6 legs with special structures! Their back legs have pollen baskets (corbiculae) where they store pollen. They also have combs and brushes on their legs to collect pollen from their bodies. The middle legs help clean the front legs, and the front legs clean the antennae!";
+                } else if (lowerMessage.includes('stinger') || lowerMessage.includes('sting') || lowerMessage.includes('defend')) {
+                    return "Bees have a stinger for protection! Only female bees (workers and queens) have stingers. When a bee stings, it usually dies because the stinger gets stuck and pulls out part of their body. The stinger has venom that causes pain and swelling. Bees only sting when they feel threatened!";
+                } else if (lowerMessage.includes('antennae') || lowerMessage.includes('smell') || lowerMessage.includes('touch')) {
+                    return "Bees have antennae that are super sensitive! They use them to smell flowers from far away, touch things, taste, and even hear vibrations. The antennae help bees communicate with each other and find their way around. They're like super-powered sensors!";
+                } else if (lowerMessage.includes('tongue') || lowerMessage.includes('proboscis') || lowerMessage.includes('nectar')) {
+                    return "Bees have a long tongue called a proboscis! It's like a straw that they use to drink nectar from flowers. When not in use, it curls up under their head. The proboscis can be different lengths in different bee species - some are short for shallow flowers, others are long for deep flowers!";
+                } else {
+                    return "Bees are incredible insects! 🐝 They have amazing body structures that help them survive and help plants grow. Ask me about their wings, eyes, legs, antennae, stinger, or tongue to learn more about their specific structures!";
+                }
+            }
+            
+            if (category === 'vocabulary') {
+                if (lowerMessage.includes('adaptation')) {
+                    return "An adaptation is a special trait that helps a living thing survive in its environment. Like how a giraffe's long neck helps it reach leaves high in trees!";
+                } else if (lowerMessage.includes('ecosystem')) {
+                    return "An ecosystem is a community where living things (plants, animals) and non-living things (water, soil, air) all work together in one place.";
+                } else if (lowerMessage.includes('photosynthesis')) {
+                    return "Photosynthesis is how plants make their own food! They use sunlight, water, and air to create sugar and release oxygen that we breathe.";
+                } else if (lowerMessage.includes('structure')) {
+                    return "A structure is a part of an organism that has a specific function. For example, a bird's wing helps it fly, a plant's root helps it get water from soil, and a fish's fin helps it swim!";
+                } else if (lowerMessage.includes('function')) {
+                    return "Function is the job or purpose that a structure serves. Like how the function of a leaf is to make food for the plant, or the function of a heart is to pump blood through the body!";
+                } else if (lowerMessage.includes('organism')) {
+                    return "An organism is any living thing! This includes plants, animals, fungi, and even tiny bacteria. All organisms need food, water, air, and a place to live to survive.";
+                } else if (lowerMessage.includes('habitat')) {
+                    return "A habitat is the natural environment where an organism lives. It provides everything the organism needs to survive - food, water, shelter, and space. Like how a forest is a habitat for many animals!";
+                } else if (lowerMessage.includes('species')) {
+                    return "A species is a group of similar organisms that can reproduce and have offspring. For example, all dogs are the same species, but dogs and cats are different species!";
+                } else if (lowerMessage.includes('biodiversity')) {
+                    return "Biodiversity means having many different types of living things in one place. The more biodiversity, the healthier the ecosystem! It's like having lots of different tools in a toolbox.";
+                } else if (lowerMessage.includes('food chain')) {
+                    return "A food chain shows how energy flows from one organism to another. It starts with plants (producers) that make their own food, then animals that eat plants (consumers), and finally animals that eat other animals!";
+                } else if (lowerMessage.includes('producer')) {
+                    return "A producer is an organism that makes its own food using sunlight. Plants are producers because they use photosynthesis to make sugar from sunlight, water, and carbon dioxide!";
+                } else if (lowerMessage.includes('consumer')) {
+                    return "A consumer is an organism that eats other organisms for energy. Animals are consumers because they can't make their own food like plants do!";
+                } else if (lowerMessage.includes('decomposer')) {
+                    return "A decomposer is an organism that breaks down dead material and returns nutrients to the soil. Examples include bacteria, fungi, and earthworms!";
+                } else if (lowerMessage.includes('predator')) {
+                    return "A predator is an animal that hunts and eats other animals. Examples include lions, eagles, and sharks!";
+                } else if (lowerMessage.includes('prey')) {
+                    return "Prey is an animal that is hunted and eaten by other animals. Examples include rabbits (prey for foxes), fish (prey for sharks), and mice (prey for owls)!";
+                } else if (lowerMessage.includes('competition')) {
+                    return "Competition happens when organisms compete for the same resources like food, water, or space. This helps keep populations balanced in nature!";
+                } else if (lowerMessage.includes('population')) {
+                    return "A population is all the members of the same species living in one area. For example, all the rabbits in a forest make up the rabbit population!";
+                } else if (lowerMessage.includes('community')) {
+                    return "A community is all the different living things in an ecosystem. It includes all the plants, animals, and other organisms that live together in one place!";
+                } else if (lowerMessage.includes('environment')) {
+                    return "An environment is all the living and non-living things around an organism. It includes the air, water, soil, plants, animals, and everything else in that place!";
+                } else if (lowerMessage.includes('chlorophyll')) {
+                    return "Chlorophyll is the green pigment in plants that captures sunlight for photosynthesis. It's what makes leaves green! Without chlorophyll, plants couldn't make their own food.";
+                } else if (lowerMessage.includes('respiration')) {
+                    return "Respiration is the process of breathing in living things. Plants and animals both need to breathe to get oxygen and release carbon dioxide!";
+                } else if (lowerMessage.includes('reproduction')) {
+                    return "Reproduction is how living things make new organisms of their own kind. Plants make seeds, animals have babies, and this keeps the species alive!";
+                } else if (lowerMessage.includes('life cycle')) {
+                    return "A life cycle shows all the stages an organism goes through during its life. For example: egg → caterpillar → chrysalis → butterfly!";
+                } else if (lowerMessage.includes('metamorphosis')) {
+                    return "Metamorphosis is a dramatic change in body form during development. Butterflies, frogs, and many insects go through metamorphosis!";
+                } else if (lowerMessage.includes('natural selection')) {
+                    return "Natural selection is how organisms with helpful traits survive and reproduce more than those without those traits. Over time, this changes how species look and behave!";
+                } else if (lowerMessage.includes('evolution')) {
+                    return "Evolution is how species change over very long periods of time. It happens through natural selection and helps organisms adapt to their environment!";
+                } else if (lowerMessage.includes('camouflage')) {
+                    return "Camouflage is when an organism blends in with its surroundings to hide from predators or sneak up on prey. Like how a chameleon changes color!";
+                } else if (lowerMessage.includes('mimicry')) {
+                    return "Mimicry is when one organism looks like another organism to trick predators or prey. Like how some harmless butterflies look like poisonous ones!";
+                } else if (lowerMessage.includes('migration')) {
+                    return "Migration is when animals travel long distances to find food, water, or a better place to live. Many birds migrate south for winter!";
+                } else if (lowerMessage.includes('hibernation')) {
+                    return "Hibernation is when animals sleep through the winter to save energy when food is scarce. Bears, bats, and groundhogs hibernate!";
+                } else if (lowerMessage.includes('germination')) {
+                    return "Germination is when a seed starts to grow into a new plant. It needs water, warmth, and sometimes light to begin growing!";
+                } else if (lowerMessage.includes('pollination')) {
+                    return "Pollination is when pollen moves from one flower to another, helping plants make seeds. Bees, butterflies, and wind help with pollination!";
+                }
+            } else if (category === 'animals') {
+                if (lowerMessage.includes('adapt')) {
+                    return "Animals adapt in amazing ways! Some have thick fur for cold weather, others have sharp claws for hunting, and some can change colors to hide!";
+                } else if (lowerMessage.includes('camouflage')) {
+                    return "Camouflage helps animals hide! Chameleons change colors, arctic foxes turn white in winter, and stick insects look just like twigs!";
+                } else if (lowerMessage.includes('migration')) {
+                    return "Migration is when animals travel long distances to find food or better weather. Birds fly south for winter, and monarch butterflies travel thousands of miles!";
+                }
+            } else if (category === 'plants') {
+                if (lowerMessage.includes('food') || lowerMessage.includes('photosynthesis')) {
+                    return "Plants make their own food through photosynthesis! They use sunlight, water from their roots, and air to create sugar and give us oxygen to breathe!";
+                } else if (lowerMessage.includes('parts')) {
+                    return "Plants have four main parts: roots (drink water), stems (hold up the plant), leaves (make food), and flowers (make seeds for new plants)!";
+                } else if (lowerMessage.includes('grow')) {
+                    return "Plants grow from seeds! The seed germinates (starts growing), becomes a seedling, then grows into a big plant that makes flowers and new seeds!";
+                }
+            } else if (category === 'earth') {
+                if (lowerMessage.includes('gravity')) {
+                    return "Gravity is the invisible force that pulls objects toward each other. Earth's gravity pulls everything down, which is why we don't float away! The more mass something has, the stronger its gravity. That's why the Moon orbits Earth, and Earth orbits the Sun!";
+                } else if (lowerMessage.includes('rock')) {
+                    return "Rocks form in three ways: igneous rocks from hot lava cooling, sedimentary rocks from layers of sand and mud, and metamorphic rocks from heat and pressure!";
+                } else if (lowerMessage.includes('water cycle')) {
+                    return "The water cycle shows how water moves around Earth: evaporation (water becomes vapor), condensation (vapor becomes clouds), and precipitation (rain falls)!";
+                } else if (lowerMessage.includes('weather')) {
+                    return "Weather happens when the sun heats Earth's surface! This creates wind, clouds, and rain. Temperature, humidity, and air pressure all affect the weather!";
+                }
+            } else if (category === 'energy') {
+                if (lowerMessage.includes('energy')) {
+                    return "Energy comes in many forms: kinetic (motion), potential (stored), heat, light, sound, and electrical. Energy can change from one form to another!";
+                } else if (lowerMessage.includes('simple machine')) {
+                    return "Simple machines make work easier! There are six types: lever, pulley, wheel and axle, inclined plane, wedge, and screw. They help us lift and move things!";
+                } else if (lowerMessage.includes('electricity')) {
+                    return "Electricity is the flow of electrons through wires. A circuit needs a battery (power source), wires, and something to use the electricity (like a light bulb)!";
+                }
+            } else if (category === 'engineering') {
+                if (lowerMessage.includes('design process')) {
+                    return "The engineering design process has steps: 1) Ask (what's the problem?), 2) Imagine (brainstorm ideas), 3) Plan (choose best idea), 4) Create (build it), 5) Test, 6) Improve!";
+                } else if (lowerMessage.includes('prototype')) {
+                    return "A prototype is a first model of a design. Engineers build prototypes to test their ideas and see what works before making the final product!";
+                } else if (lowerMessage.includes('material')) {
+                    return "Materials have different properties! Some are strong, some are flexible, some conduct electricity, and some are good insulators. Engineers choose materials based on what they need!";
+                }
+            }
+            
+            // Default response
+            return "That's a great science question! In our STEMscopes curriculum, we learn about this through fun experiments and hands-on activities. Keep asking questions - that's how scientists learn!";
+        }
+
+        // Add interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            const linkCards = document.querySelectorAll('.link-card');
+            
+            linkCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Add click tracking for analytics (optional)
+            const links = document.querySelectorAll('.link-btn');
+            links.forEach(link => {
+                link.addEventListener('click', function() {
+                    console.log('Link clicked:', this.textContent);
+                });
+            });
+
+            // Student AI Enter key support
+            const input = document.getElementById('student-input');
+            if (input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendStudentMessage();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

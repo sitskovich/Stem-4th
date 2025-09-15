@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Learning Portal - Teacher Dashboard</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .portal-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h3 {
+            color: #667eea;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-value {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(248, 249, 250, 0.8);
+            color: #333;
+            border: 1px solid rgba(233, 236, 239, 0.5);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(233, 236, 239, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .bundle-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .bundle-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .bundle-header h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bundle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .bundle-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bundle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .bundle-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .bundle-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .bundle-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .bundle-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .bundle-description {
+            color: #666;
+            text-align: center;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .bundle-progress {
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: rgba(233, 236, 239, 0.5);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+        }
+
+        .bundle-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .bundle-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Bundle Data with Complete Content
+        const bundleData = {
+            bundle1: {
+                id: 'bundle1',
+                title: 'Bundle 1: Organism Structures and Behavior',
+                icon: '🧬',
+                description: 'Explore how organisms have internal and external structures that function to support survival, growth, behavior, and reproduction.',
+                progress: 0,
+                totalLessons: 12,
+                completedLessons: 0,
+                lessons: [
+                    {
+                        id: 'lesson1-1',
+                        title: 'Internal and External Structures',
+                        description: 'Identify and describe internal and external structures of plants and animals.',
+                        duration: '45 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-2',
+                        title: 'Structure and Function',
+                        description: 'Explain how structures support survival, growth, and reproduction.',
+                        duration: '50 min',
+                        type: 'lab',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-3',
+                        title: 'Plant Structures',
+                        description: 'Investigate how plants use roots, stems, and leaves for survival.',
+                        duration: '40 min',
+                        type: 'simulation',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-4',
+                        title: 'Animal Structures',
+                        description: 'Compare structures of different animals and their functions.',
+                        duration: '45 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-5',
+                        title: 'Behavior and Survival',
+                        description: 'Analyze how animal behaviors help them survive and reproduce.',
+                        duration: '50 min',
+                        type: 'video',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-6',
+                        title: 'Migration Patterns',
+                        description: 'Study how animals migrate and why this behavior is important.',
+                        duration: '40 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-7',
+                        title: 'Hibernation and Adaptation',
+                        description: 'Explore how animals adapt to seasonal changes.',
+                        duration: '45 min',
+                        type: 'simulation',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-8',
+                        title: 'Plant Responses',
+                        description: 'Investigate how plants respond to light, water, and gravity.',
+                        duration: '50 min',
+                        type: 'lab',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-9',
+                        title: 'Ecosystem Interactions',
+                        description: 'Study how organisms interact within ecosystems.',
+                        duration: '45 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-10',
+                        title: 'Food Chains and Webs',
+                        description: 'Build and analyze food chains and food webs.',
+                        duration: '40 min',
+                        type: 'simulation',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-11',
+                        title: 'Assessment: Structures and Behavior',
+                        description: 'Comprehensive assessment of organism structures and behaviors.',
+                        duration: '60 min',
+                        type: 'assessment',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson1-12',
+                        title: 'Project: Design a Super Organism',
+                        description: 'Create and present a super organism with unique structures and behaviors.',
+                        duration: '90 min',
+                        type: 'project',
+                        status: 'locked'
+                    }
+                ]
+            },
+            bundle2: {
+                id: 'bundle2',
+                title: 'Bundle 2: Changes Over Time to Earth\'s Surface and Resources',
+                icon: '🌍',
+                description: 'Investigate how Earth\'s surface changes over time through weathering, erosion, and deposition, and how humans use Earth\'s resources.',
+                progress: 0,
+                totalLessons: 10,
+                completedLessons: 0,
+                lessons: [
+                    {
+                        id: 'lesson2-1',
+                        title: 'Earth\'s Changing Surface',
+                        description: 'Identify and describe processes that change Earth\'s surface.',
+                        duration: '45 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson2-2',
+                        title: 'Weathering and Erosion',
+                        description: 'Compare and contrast weathering and erosion processes.',
+                        duration: '50 min',
+                        type: 'lab',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson2-3',
+                        title: 'Rock Cycle',
+                        description: 'Explore how rocks change through the rock cycle.',
+                        duration: '45 min',
+                        type: 'simulation',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson2-4',
+                        title: 'Fossils and Earth\'s History',
+                        description: 'Use fossils to understand Earth\'s history and changes over time.',
+                        duration: '50 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson2-5',
+                        title: 'Natural Resources',
+                        description: 'Identify and classify renewable and non-renewable resources.',
+                        duration: '40 min',
+                        type: 'video',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson2-6',
+                        title: 'Human Impact on Earth',
+                        description: 'Analyze how human activities affect Earth\'s surface and resources.',
+                        duration: '45 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson2-7',
+                        title: 'Conservation and Sustainability',
+                        description: 'Explore ways to conserve and sustainably use Earth\'s resources.',
+                        duration: '50 min',
+                        type: 'simulation',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson2-8',
+                        title: 'Natural Disasters',
+                        description: 'Study how natural disasters change Earth\'s surface.',
+                        duration: '45 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson2-9',
+                        title: 'Assessment: Earth\'s Changes',
+                        description: 'Comprehensive assessment of Earth\'s surface changes and resources.',
+                        duration: '60 min',
+                        type: 'assessment',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson2-10',
+                        title: 'Project: Earth\'s Future',
+                        description: 'Design solutions for sustainable resource use and environmental protection.',
+                        duration: '90 min',
+                        type: 'project',
+                        status: 'locked'
+                    }
+                ]
+            },
+            bundle3: {
+                id: 'bundle3',
+                title: 'Bundle 3: Using Energy Transformations',
+                icon: '⚡',
+                description: 'Investigate how energy is transferred and transformed in various systems, from simple machines to complex energy systems.',
+                progress: 0,
+                totalLessons: 11,
+                completedLessons: 0,
+                lessons: [
+                    {
+                        id: 'lesson3-1',
+                        title: 'Forms of Energy',
+                        description: 'Identify and describe different forms of energy.',
+                        duration: '45 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson3-2',
+                        title: 'Energy Transfer',
+                        description: 'Investigate how energy is transferred between objects.',
+                        duration: '50 min',
+                        type: 'lab',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson3-3',
+                        title: 'Simple Machines',
+                        description: 'Explore how simple machines make work easier.',
+                        duration: '45 min',
+                        type: 'simulation',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson3-4',
+                        title: 'Lever Systems',
+                        description: 'Build and test different types of levers.',
+                        duration: '50 min',
+                        type: 'lab',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson3-5',
+                        title: 'Pulley Systems',
+                        description: 'Investigate how pulleys change the direction and amount of force.',
+                        duration: '45 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson3-6',
+                        title: 'Wheel and Axle',
+                        description: 'Study how wheels and axles work together.',
+                        duration: '40 min',
+                        type: 'simulation',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson3-7',
+                        title: 'Inclined Planes',
+                        description: 'Explore how inclined planes reduce the force needed to move objects.',
+                        duration: '45 min',
+                        type: 'lab',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson3-8',
+                        title: 'Energy in Motion',
+                        description: 'Investigate kinetic and potential energy.',
+                        duration: '50 min',
+                        type: 'interactive',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson3-9',
+                        title: 'Energy Conservation',
+                        description: 'Study how energy is conserved in systems.',
+                        duration: '45 min',
+                        type: 'simulation',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson3-10',
+                        title: 'Assessment: Energy Systems',
+                        description: 'Comprehensive assessment of energy transformations and simple machines.',
+                        duration: '60 min',
+                        type: 'assessment',
+                        status: 'locked'
+                    },
+                    {
+                        id: 'lesson3-11',
+                        title: 'Project: Rube Goldberg Machine',
+                        description: 'Design and build a Rube Goldberg machine using multiple simple machines.',
+                        duration: '120 min',
+                        type: 'project',
+                        status: 'locked'
+                    }
+                ]
+            }
+        };
+
+        // Main Teacher Portal Component
+        function TeacherPortal() {
+            const [selectedBundle, setSelectedBundle] = useState(null);
+            const [showModal, setShowModal] = useState(false);
+            const [bundles, setBundles] = useState(bundleData);
+
+            const openBundle = (bundleId) => {
+                setSelectedBundle(bundles[bundleId]);
+                setShowModal(true);
+            };
+
+            const closeModal = () => {
+                setShowModal(false);
+                setSelectedBundle(null);
+            };
+
+            const startLesson = (lessonId) => {
+                alert(`Starting lesson: ${lessonId}`);
+                // In a real implementation, this would open the lesson
+            };
+
+            return (
+                <div className="portal-container">
+                    <div className="header">
+                        <h1><i className="fas fa-graduation-cap"></i> STEM Learning Portal</h1>
+                        <p>Teacher Dashboard - Interactive Learning Management System</p>
+                    </div>
+
+                    <div className="dashboard-grid">
+                        <div className="card">
+                            <div className="card-header">
+                                <h3><i className="fas fa-users"></i> Class Overview</h3>
+                                <span className="card-value">0 Students</span>
+                            </div>
+                            <div className="empty-state">
+                                <i className="fas fa-users"></i>
+                                <h3>No students yet</h3>
+                                <p>Add students to get started</p>
+                            </div>
+                            <div style={{textAlign: 'center', marginTop: '20px'}}>
+                                <button className="btn btn-primary" onClick={() => window.open('student-management.html', '_blank')}>
+                                    <i className="fas fa-plus"></i> Add Students
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            <div className="card-header">
+                                <h3><i className="fas fa-chart-line"></i> Progress Tracking</h3>
+                                <span className="card-value">0% Complete</span>
+                            </div>
+                            <div className="empty-state">
+                                <i className="fas fa-chart-line"></i>
+                                <h3>No progress yet</h3>
+                                <p>Start lessons to track progress</p>
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            <div className="card-header">
+                                <h3><i className="fas fa-trophy"></i> Achievements</h3>
+                                <span className="card-value">0 Earned</span>
+                            </div>
+                            <div className="empty-state">
+                                <i className="fas fa-trophy"></i>
+                                <h3>No achievements yet</h3>
+                                <p>Complete activities to earn achievements</p>
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            <div className="card-header">
+                                <h3><i className="fas fa-tools"></i> Quick Actions</h3>
+                                <span className="card-value">Ready</span>
+                            </div>
+                            <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                                <button className="btn btn-primary" onClick={() => window.open('lesson-builder.html', '_blank')}>
+                                    <i className="fas fa-plus"></i> Create Lesson
+                                </button>
+                                <button className="btn btn-primary" onClick={() => window.open('assessment-builder.html', '_blank')}>
+                                    <i className="fas fa-clipboard-check"></i> Create Assessment
+                                </button>
+                                <button className="btn btn-secondary" onClick={() => window.open('student-management.html', '_blank')}>
+                                    <i className="fas fa-users"></i> Manage Students
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bundle Sections */}
+                    {Object.values(bundles).map(bundle => (
+                        <div key={bundle.id} className="bundle-section">
+                            <div className="bundle-header">
+                                <h2>{bundle.icon} {bundle.title}</h2>
+                                <p>{bundle.description}</p>
+                            </div>
+                            
+                            <div className="bundle-grid">
+                                <div className="bundle-card" onClick={() => openBundle(bundle.id)}>
+                                    <div className="bundle-icon">{bundle.icon}</div>
+                                    <div className="bundle-title">{bundle.title}</div>
+                                    <div className="bundle-description">{bundle.description}</div>
+                                    
+                                    <div className="bundle-progress">
+                                        <div className="progress-bar">
+                                            <div className="progress-fill" style={{width: `${bundle.progress}%`}}></div>
+                                        </div>
+                                        <div className="progress-text">
+                                            {bundle.completedLessons} of {bundle.totalLessons} lessons completed ({bundle.progress}%)
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="bundle-actions">
+                                        <button className="btn btn-primary" onClick={(e) => {
+                                            e.stopPropagation();
+                                            openBundle(bundle.id);
+                                        }}>
+                                            <i className="fas fa-play"></i> Start Bundle
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* Bundle Detail Modal */}
+                    {showModal && selectedBundle && (
+                        <div className="modal" onClick={closeModal}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2>{selectedBundle.icon} {selectedBundle.title}</h2>
+                                    <button className="close-btn" onClick={closeModal}>
+                                        <i className="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                
+                                <div style={{marginBottom: '20px'}}>
+                                    <p>{selectedBundle.description}</p>
+                                </div>
+                                
+                                <div style={{marginBottom: '20px'}}>
+                                    <h3>Lessons ({selectedBundle.lessons.length})</h3>
+                                    <div style={{maxHeight: '400px', overflowY: 'auto'}}>
+                                        {selectedBundle.lessons.map((lesson, index) => (
+                                            <div key={lesson.id} style={{
+                                                padding: '15px',
+                                                border: '1px solid #e9ecef',
+                                                borderRadius: '10px',
+                                                marginBottom: '10px',
+                                                backgroundColor: lesson.status === 'locked' ? '#f8f9fa' : '#fff',
+                                                opacity: lesson.status === 'locked' ? 0.6 : 1
+                                            }}>
+                                                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                                    <div>
+                                                        <h4 style={{margin: '0 0 5px 0', color: '#333'}}>
+                                                            {index + 1}. {lesson.title}
+                                                        </h4>
+                                                        <p style={{margin: '0 0 5px 0', color: '#666', fontSize: '0.9rem'}}>
+                                                            {lesson.description}
+                                                        </p>
+                                                        <div style={{display: 'flex', gap: '10px', fontSize: '0.8rem', color: '#999'}}>
+                                                            <span><i className="fas fa-clock"></i> {lesson.duration}</span>
+                                                            <span><i className="fas fa-tag"></i> {lesson.type}</span>
+                                                        </div>
+                                                    </div>
+                                                    <button 
+                                                        className="btn btn-primary" 
+                                                        onClick={() => startLesson(lesson.id)}
+                                                        disabled={lesson.status === 'locked'}
+                                                        style={{
+                                                            opacity: lesson.status === 'locked' ? 0.5 : 1,
+                                                            cursor: lesson.status === 'locked' ? 'not-allowed' : 'pointer'
+                                                        }}
+                                                    >
+                                                        {lesson.status === 'locked' ? '🔒' : '▶️'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                
+                                <div style={{textAlign: 'center'}}>
+                                    <button className="btn btn-secondary" onClick={closeModal}>
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Render the app
+        ReactDOM.render(<TeacherPortal />, document.getElementById('root'));
+    </script>
+</body>
+</html>
+
+
+

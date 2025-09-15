@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Chain Builder - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            height: calc(100vh - 200px);
+        }
+        
+        .organism-panel {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .organism-panel h3 {
+            color: white;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .organism-category {
+            margin-bottom: 20px;
+        }
+
+        .organism-category .category-title {
+            grid-column: 1 / -1;
+            margin-bottom: 10px;
+        }
+
+        .organism-items-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .category-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .organism-item {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .organism-item:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .organism-item:active {
+            cursor: grabbing;
+        }
+        
+        .canvas-area {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .canvas-header {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .canvas-header h3 {
+            margin-bottom: 5px;
+        }
+        
+        .canvas-header p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .food-chain-canvas {
+            background: rgba(255,255,255,0.05);
+            border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 15px;
+            height: calc(100% - 80px);
+            position: relative;
+            overflow: auto;
+        }
+        
+        .organism-node {
+            position: absolute;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: 3px solid white;
+            border-radius: 15px;
+            padding: 12px 16px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: move;
+            min-width: 100px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .organism-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .organism-node.producer {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        .organism-node.primary-consumer {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+        }
+        
+        .organism-node.secondary-consumer {
+            background: linear-gradient(135deg, #dc3545, #e83e8c);
+        }
+        
+        .organism-node.decomposer {
+            background: linear-gradient(135deg, #6f42c1, #6610f2);
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, #ffc107, #fd7e14);
+            border-radius: 2px;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .connection-line.valid {
+            background: linear-gradient(90deg, #28a745, #20c997);
+        }
+        
+        .connection-line.invalid {
+            background: linear-gradient(90deg, #dc3545, #e83e8c);
+        }
+        
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+        
+        .control-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .feedback {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .feedback.show {
+            opacity: 1;
+        }
+        
+        .feedback.success {
+            background: rgba(40, 167, 69, 0.8);
+        }
+        
+        .feedback.error {
+            background: rgba(220, 53, 69, 0.8);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .organism-panel {
+                height: 200px;
+            }
+            
+            .canvas-area {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </button>
+            <div class="header-text">
+                <h1><i class="fas fa-link"></i> Food Chain Builder</h1>
+                <p>Drag organisms to build food chains and see energy flow!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="organism-panel">
+                <h3>Organism Library</h3>
+                
+                <div class="organism-category">
+                    <div class="category-title">🌱 Producers</div>
+                    <div class="organism-items-grid">
+                        <div class="organism-item" draggable="true" data-type="producer" data-name="Grass">
+                            🌱 Grass
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="producer" data-name="Tree">
+                            🌳 Tree
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="producer" data-name="Algae">
+                            🟢 Algae
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="producer" data-name="Flower">
+                            🌸 Flower
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="producer" data-name="Seaweed">
+                            🌿 Seaweed
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="producer" data-name="Moss">
+                            🍀 Moss
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="producer" data-name="Fern">
+                            🌿 Fern
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="producer" data-name="Bush">
+                            🌿 Bush
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="organism-category">
+                    <div class="category-title">🐰 Primary Consumers</div>
+                    <div class="organism-items-grid">
+                        <div class="organism-item" draggable="true" data-type="primary-consumer" data-name="Rabbit">
+                            🐰 Rabbit
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="primary-consumer" data-name="Deer">
+                            🦌 Deer
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="primary-consumer" data-name="Mouse">
+                            🐭 Mouse
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="primary-consumer" data-name="Caterpillar">
+                            🐛 Caterpillar
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="primary-consumer" data-name="Squirrel">
+                            🐿️ Squirrel
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="primary-consumer" data-name="Grasshopper">
+                            🦗 Grasshopper
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="primary-consumer" data-name="Zebra">
+                            🦓 Zebra
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="primary-consumer" data-name="Giraffe">
+                            🦒 Giraffe
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="organism-category">
+                    <div class="category-title">🦅 Secondary Consumers</div>
+                    <div class="organism-items-grid">
+                        <div class="organism-item" draggable="true" data-type="secondary-consumer" data-name="Eagle">
+                            🦅 Eagle
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="secondary-consumer" data-name="Fox">
+                            🦊 Fox
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="secondary-consumer" data-name="Snake">
+                            🐍 Snake
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="secondary-consumer" data-name="Hawk">
+                            🦅 Hawk
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="secondary-consumer" data-name="Lion">
+                            🦁 Lion
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="secondary-consumer" data-name="Wolf">
+                            🐺 Wolf
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="secondary-consumer" data-name="Owl">
+                            🦉 Owl
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="secondary-consumer" data-name="Bear">
+                            🐻 Bear
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="organism-category">
+                    <div class="category-title">🍄 Decomposers</div>
+                    <div class="organism-items-grid">
+                        <div class="organism-item" draggable="true" data-type="decomposer" data-name="Mushroom">
+                            🍄 Mushroom
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="decomposer" data-name="Bacteria">
+                            🦠 Bacteria
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="decomposer" data-name="Worm">
+                            🐛 Worm
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="decomposer" data-name="Mold">
+                            🍄 Mold
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="decomposer" data-name="Ant">
+                            🐜 Ant
+                        </div>
+                        <div class="organism-item" draggable="true" data-type="decomposer" data-name="Beetle">
+                            🪲 Beetle
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="canvas-area">
+                <div class="canvas-header">
+                    <h3>Food Chain Canvas</h3>
+                    <p>Drag organisms here and connect them to show energy flow</p>
+                </div>
+                
+                <div class="controls">
+                    <button class="control-btn" onclick="clearCanvas()">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                    <button class="control-btn" onclick="checkFoodChain()">
+                        <i class="fas fa-check"></i> Check
+                    </button>
+                </div>
+                
+                <div class="food-chain-canvas" id="canvas">
+                    <!-- Organisms and connections will be added here -->
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let draggedElement = null;
+        let organisms = [];
+        let connections = [];
+        let nodeId = 0;
+
+        function goBack() {
+            window.location.href = 'teacher-portal.html';
+        }
+
+        // Drag and drop functionality
+        document.querySelectorAll('.organism-item').forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                draggedElement = this;
+                e.dataTransfer.effectAllowed = 'copy';
+            });
+        });
+
+        document.getElementById('canvas').addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+        });
+
+        document.getElementById('canvas').addEventListener('drop', function(e) {
+            e.preventDefault();
+            if (draggedElement) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                createOrganism(draggedElement.dataset.type, draggedElement.dataset.name, x, y);
+                draggedElement = null;
+            }
+        });
+
+        function createOrganism(type, name, x, y) {
+            const node = document.createElement('div');
+            node.className = `organism-node ${type}`;
+            node.id = `node-${nodeId}`;
+            
+            // Get emoji for the organism
+            const emoji = getOrganismEmoji(name);
+            node.innerHTML = `${emoji} ${name}`;
+            
+            node.style.left = x + 'px';
+            node.style.top = y + 'px';
+            
+            // Make node draggable
+            node.draggable = true;
+            node.addEventListener('dragstart', function(e) {
+                e.dataTransfer.effectAllowed = 'move';
+                this.style.opacity = '0.5';
+            });
+            
+            node.addEventListener('dragend', function() {
+                this.style.opacity = '1';
+            });
+            
+            // Add click handler for connections
+            node.addEventListener('click', function() {
+                selectNode(this);
+            });
+            
+            document.getElementById('canvas').appendChild(node);
+            
+            organisms.push({
+                id: nodeId,
+                type: type,
+                name: name,
+                element: node
+            });
+            
+            nodeId++;
+        }
+
+        let selectedNode = null;
+
+        function getOrganismEmoji(name) {
+            const emojiMap = {
+                // Producers
+                'Grass': '🌱',
+                'Tree': '🌳',
+                'Algae': '🟢',
+                'Flower': '🌸',
+                'Seaweed': '🌿',
+                'Moss': '🍀',
+                'Fern': '🌿',
+                'Bush': '🌿',
+                
+                // Primary Consumers
+                'Rabbit': '🐰',
+                'Deer': '🦌',
+                'Mouse': '🐭',
+                'Caterpillar': '🐛',
+                'Squirrel': '🐿️',
+                'Grasshopper': '🦗',
+                'Zebra': '🦓',
+                'Giraffe': '🦒',
+                
+                // Secondary Consumers
+                'Eagle': '🦅',
+                'Fox': '🦊',
+                'Snake': '🐍',
+                'Hawk': '🦅',
+                'Lion': '🦁',
+                'Wolf': '🐺',
+                'Owl': '🦉',
+                'Bear': '🐻',
+                
+                // Decomposers
+                'Mushroom': '🍄',
+                'Bacteria': '🦠',
+                'Worm': '🐛',
+                'Mold': '🍄',
+                'Ant': '🐜',
+                'Beetle': '🪲'
+            };
+            return emojiMap[name] || '🦠';
+        }
+
+        function selectNode(node) {
+            if (selectedNode) {
+                selectedNode.style.borderColor = 'white';
+                if (selectedNode === node) {
+                    selectedNode = null;
+                    showFeedback('Node deselected', false);
+                    return;
+                }
+                
+                // Try to create connection
+                createConnection(selectedNode, node);
+                selectedNode = null;
+            } else {
+                selectedNode = node;
+                node.style.borderColor = '#ffc107';
+                showFeedback('Node selected! Click another node to connect.', false);
+            }
+        }
+
+        function createConnection(fromNode, toNode) {
+            const fromId = parseInt(fromNode.id.split('-')[1]);
+            const toId = parseInt(toNode.id.split('-')[1]);
+            
+            const fromOrg = organisms.find(o => o.id === fromId);
+            const toOrg = organisms.find(o => o.id === toId);
+            
+            if (!fromOrg || !toOrg) return;
+            
+            // Check if connection is valid
+            const isValid = isValidConnection(fromOrg.type, toOrg.type);
+            
+            // Create visual connection
+            const line = document.createElement('div');
+            line.className = `connection-line ${isValid ? 'valid' : 'invalid'}`;
+            
+            const fromRect = fromNode.getBoundingClientRect();
+            const toRect = toNode.getBoundingClientRect();
+            const canvasRect = document.getElementById('canvas').getBoundingClientRect();
+            
+            const fromX = fromRect.left + fromRect.width/2 - canvasRect.left;
+            const fromY = fromRect.top + fromRect.height/2 - canvasRect.top;
+            const toX = toRect.left + toRect.width/2 - canvasRect.left;
+            const toY = toRect.top + toRect.height/2 - canvasRect.top;
+            
+            const length = Math.sqrt((toX - fromX) ** 2 + (toY - fromY) ** 2);
+            const angle = Math.atan2(toY - fromY, toX - fromX) * 180 / Math.PI;
+            
+            line.style.width = length + 'px';
+            line.style.left = fromX + 'px';
+            line.style.top = fromY + 'px';
+            line.style.transform = `rotate(${angle}deg)`;
+            line.style.transformOrigin = '0 50%';
+            
+            document.getElementById('canvas').appendChild(line);
+            
+            connections.push({
+                from: fromId,
+                to: toId,
+                element: line,
+                valid: isValid
+            });
+            
+            showFeedback(isValid ? 
+                `✅ Valid connection: ${fromOrg.name} → ${toOrg.name}` : 
+                `❌ Invalid connection: ${fromOrg.name} cannot eat ${toOrg.name}`, 
+                isValid
+            );
+        }
+
+        function isValidConnection(fromType, toType) {
+            // Valid connections:
+            // Primary consumers can eat producers
+            // Secondary consumers can eat primary consumers
+            // Decomposers can eat any dead organism
+            // Producers cannot eat anything (they make their own food)
+            
+            if (fromType === 'producer') return false; // Producers don't eat other organisms
+            if (fromType === 'primary-consumer' && toType === 'producer') return true;
+            if (fromType === 'secondary-consumer' && toType === 'primary-consumer') return true;
+            if (fromType === 'decomposer') return true; // Decomposers can eat any dead organism
+            
+            return false;
+        }
+
+        function showFeedback(message, isSuccess) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${isSuccess ? 'success' : 'error'} show`;
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 3000);
+        }
+
+        function clearCanvas() {
+            document.getElementById('canvas').innerHTML = '';
+            organisms = [];
+            connections = [];
+            selectedNode = null;
+            showFeedback('Canvas cleared!', true);
+        }
+
+        function checkFoodChain() {
+            if (organisms.length === 0) {
+                showFeedback('Add some organisms to create a food chain!', false);
+                return;
+            }
+            
+            const validConnections = connections.filter(c => c.valid).length;
+            const totalConnections = connections.length;
+            
+            if (totalConnections === 0) {
+                showFeedback('Connect the organisms to show energy flow!', false);
+                return;
+            }
+            
+            if (validConnections === totalConnections) {
+                showFeedback('🎉 Great job! You created a valid food chain!', true);
+            } else {
+                showFeedback(`You have ${totalConnections - validConnections} invalid connections. Check the red lines!`, false);
+            }
+        }
+
+        // Make canvas nodes draggable
+        document.getElementById('canvas').addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+
+        document.getElementById('canvas').addEventListener('drop', function(e) {
+            e.preventDefault();
+            const draggedNode = document.elementFromPoint(e.clientX, e.clientY);
+            if (draggedNode && draggedNode.classList.contains('organism-node')) {
+                const rect = this.getBoundingClientRect();
+                draggedNode.style.left = (e.clientX - rect.left - 50) + 'px';
+                draggedNode.style.top = (e.clientY - rect.top - 25) + 'px';
+                
+                // Update connections
+                updateConnections();
+            }
+        });
+
+        function updateConnections() {
+            connections.forEach(conn => {
+                const fromNode = document.getElementById(`node-${conn.from}`);
+                const toNode = document.getElementById(`node-${conn.to}`);
+                
+                if (fromNode && toNode) {
+                    const fromRect = fromNode.getBoundingClientRect();
+                    const toRect = toNode.getBoundingClientRect();
+                    const canvasRect = document.getElementById('canvas').getBoundingClientRect();
+                    
+                    const fromX = fromRect.left + fromRect.width/2 - canvasRect.left;
+                    const fromY = fromRect.top + fromRect.height/2 - canvasRect.top;
+                    const toX = toRect.left + toRect.width/2 - canvasRect.left;
+                    const toY = toRect.top + toRect.height/2 - canvasRect.top;
+                    
+                    const length = Math.sqrt((toX - fromX) ** 2 + (toY - fromY) ** 2);
+                    const angle = Math.atan2(toY - fromY, toX - fromX) * 180 / Math.PI;
+                    
+                    conn.element.style.width = length + 'px';
+                    conn.element.style.left = fromX + 'px';
+                    conn.element.style.top = fromY + 'px';
+                    conn.element.style.transform = `rotate(${angle}deg)`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

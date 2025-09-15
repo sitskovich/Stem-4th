@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Journal - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .journal-controls {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            font-family: 'Lexend', sans-serif;
+        }
+        
+        .control-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .control-btn.primary {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-color: #28a745;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .journal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .journal-entry {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .journal-entry:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .entry-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .entry-content h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .entry-content p {
+            margin-bottom: 10px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .entry-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 15px;
+        }
+        
+        .entry-tags {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: white;
+            padding: 60px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .empty-state p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: 'Lexend', sans-serif;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </button>
+            <div class="header-text">
+                <h1><i class="fas fa-camera"></i> Photo Journal</h1>
+                <p>Document your science discoveries and observations!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="journal-controls">
+            <button class="control-btn primary" onclick="openAddModal()">
+                <i class="fas fa-plus"></i> Add Photo Entry
+            </button>
+            <button class="control-btn" onclick="exportJournal()">
+                <i class="fas fa-download"></i> Export Journal
+            </button>
+            <button class="control-btn" onclick="clearJournal()">
+                <i class="fas fa-trash"></i> Clear All
+            </button>
+        </div>
+
+        <div class="journal-grid" id="journalGrid">
+            <div class="empty-state">
+                <i class="fas fa-camera"></i>
+                <h3>No Photos Yet</h3>
+                <p>Start documenting your science discoveries by adding your first photo entry!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Entry Modal -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <h3>Add Photo Entry</h3>
+            <form id="entryForm">
+                <div class="form-group">
+                    <label for="entryTitle">Title</label>
+                    <input type="text" id="entryTitle" placeholder="What did you discover?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="entryImage">Photo</label>
+                    <input type="file" id="entryImage" accept="image/*" onchange="handleFileUpload(event)" required>
+                    <div id="imagePreview" style="display: none; margin-top: 10px;">
+                        <img id="imagePreview" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 10px;">
+                    </div>
+                    <div id="uploadProgress" style="display: none; width: 100%; height: 4px; background: #f0f0f0; border-radius: 2px; margin-top: 10px;">
+                        <div style="width: 0%; height: 100%; background: #28a745; border-radius: 2px; transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="entryDescription">Description</label>
+                    <textarea id="entryDescription" placeholder="Describe what you observed, learned, or discovered..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="entryTags">Tags (comma-separated)</label>
+                    <input type="text" id="entryTags" placeholder="plants, animals, experiment, etc.">
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let journalEntries = JSON.parse(localStorage.getItem('photoJournal')) || [];
+
+        function goBack() {
+            window.location.href = 'student-portal.html';
+        }
+
+        function openAddModal() {
+            document.getElementById('addModal').classList.add('active');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.remove('active');
+            document.getElementById('entryForm').reset();
+        }
+
+        function addEntry(title, imageData, description, tags) {
+            const entry = {
+                id: Date.now(),
+                title: title,
+                image: imageData,
+                description: description,
+                tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString()
+            };
+            
+            journalEntries.unshift(entry);
+            localStorage.setItem('photoJournal', JSON.stringify(journalEntries));
+            renderJournal();
+            closeAddModal();
+        }
+
+        function renderJournal() {
+            const grid = document.getElementById('journalGrid');
+            
+            if (journalEntries.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-camera"></i>
+                        <h3>No Photos Yet</h3>
+                        <p>Start documenting your science discoveries by adding your first photo entry!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = journalEntries.map(entry => `
+                <div class="journal-entry">
+                    <div class="entry-image">
+                        <img src="${entry.image}" alt="${entry.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                    </div>
+                    <div class="entry-content">
+                        <h3>${entry.title}</h3>
+                        <p>${entry.description}</p>
+                        <div class="entry-meta">
+                            <div class="entry-tags">
+                                ${entry.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                            <div>${entry.date} ${entry.time}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearJournal() {
+            if (confirm('Are you sure you want to clear all journal entries?')) {
+                journalEntries = [];
+                localStorage.setItem('photoJournal', JSON.stringify(journalEntries));
+                renderJournal();
+            }
+        }
+
+        function exportJournal() {
+            if (journalEntries.length === 0) {
+                alert('No entries to export!');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(journalEntries, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'photo-journal.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // File upload functionality
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file (JPG, PNG, GIF, etc.)');
+                return;
+            }
+            
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB');
+                return;
+            }
+            
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+            
+            // Store file for upload
+            window.selectedFile = file;
+        }
+
+        // Upload file to server (simulated - in real implementation, this would upload to actual server)
+        function uploadFileToServer(file, callback) {
+            // Simulate file upload with progress
+            const progressBar = document.getElementById('uploadProgress');
+            progressBar.style.display = 'block';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBar.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Generate unique filename
+                    const timestamp = Date.now();
+                    const extension = file.name.split('.').pop();
+                    const filename = `photo_${timestamp}.${extension}`;
+                    
+                    // In real implementation, this would be the server response
+                    const serverPath = `/uploads/student-photos/${filename}`;
+                    
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        progressBar.style.width = '0%';
+                        callback(serverPath);
+                    }, 500);
+                }
+            }, 100);
+        }
+
+        // Form submission
+        document.getElementById('entryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('entryTitle').value;
+            const description = document.getElementById('entryDescription').value;
+            const tags = document.getElementById('entryTags').value;
+            const imageFile = window.selectedFile;
+            
+            if (!title || !description) {
+                alert('Please fill in title and description');
+                return;
+            }
+            
+            if (imageFile) {
+                // Upload file to server
+                uploadFileToServer(imageFile, function(serverPath) {
+                    addJournalEntry(title, description, tags, serverPath);
+                });
+            } else {
+                alert('Please select an image to upload');
+            }
+        }
+
+        function addJournalEntry(title, description, tags, imagePath) {
+            // Add entry with server path
+            addEntry(title, imagePath, description, tags);
+            
+            // Clear form
+            document.getElementById('entryForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            window.selectedFile = null;
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('addModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddModal();
+            }
+        });
+
+        // Initialize
+        renderJournal();
+    </script>
+</body>
+</html>

@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Video Resources - 4th Grade STEM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .bundle-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .bundle-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .bundle-icon {
+            font-size: 2.5rem;
+            color: #667eea;
+        }
+
+        .bundle-info h2 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .bundle-info p {
+            color: #666;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .video-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-thumbnail:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .video-thumbnail:hover .play-button {
+            background: white;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .video-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .video-duration {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .video-source {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .video-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-content {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .video-iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: 15px;
+            border: none;
+        }
+
+        .video-details {
+            margin-top: 20px;
+        }
+
+        .video-details h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .video-details p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .worksheets-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .worksheets-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .worksheets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .worksheet-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .worksheet-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .worksheet-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .worksheet-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .videos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-iframe {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="teacher-portal.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Portal
+        </a>
+        <h1><i class="fas fa-video"></i> Educational Video Resources</h1>
+        <p>Comprehensive video library for 4th Grade STEM Curriculum</p>
+    </div>
+
+    <div class="container">
+        <!-- Bundle 1: Organism Structures & Behavior -->
+        <div class="bundle-section">
+            <div class="bundle-header">
+                <div class="bundle-icon">🦋</div>
+                <div class="bundle-info">
+                    <h2>Bundle 1: Organism Structures & Behavior</h2>
+                    <p>Life Science • September-October 2025</p>
+                </div>
+            </div>
+            
+            <div class="videos-grid">
+                <div class="video-card" onclick="openVideo('animal-adaptations')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-paw"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Animal Adaptations: Survival in Different Environments</h3>
+                        <p class="video-description">Explore how animals adapt to their environments through physical and behavioral changes.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">8:45</div>
+                            <div class="video-source">
+                                <i class="fab fa-youtube"></i> National Geographic Kids
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('plant-structures')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-seedling"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Plant Structures: Roots, Stems, and Leaves</h3>
+                        <p class="video-description">Learn about the different parts of plants and how they help plants survive and grow.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">6:30</div>
+                            <div class="video-source">
+                                <i class="fas fa-graduation-cap"></i> Khan Academy
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('food-chains')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-link"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Food Chains and Food Webs</h3>
+                        <p class="video-description">Discover how energy flows through ecosystems via food chains and complex food webs.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">7:15</div>
+                            <div class="video-source">
+                                <i class="fas fa-brain"></i> BrainPOP
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('animal-behavior')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-eye"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Animal Behavior: Migration and Hibernation</h3>
+                        <p class="video-description">Understand why animals migrate and hibernate, and how these behaviors help them survive.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">9:20</div>
+                            <div class="video-source">
+                                <i class="fab fa-youtube"></i> SciShow Kids
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="worksheets-section">
+                <h3><i class="fas fa-file-alt"></i> Related Worksheets & Activities</h3>
+                <div class="worksheets-grid">
+                    <div class="worksheet-item">
+                        <h4>Animal Adaptation Worksheet</h4>
+                        <p>Identify adaptations and match animals to their environments</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Plant Parts Diagram</h4>
+                        <p>Label and color the different parts of a plant</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Food Chain Builder</h4>
+                        <p>Create your own food chain using provided organisms</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Behavior Observation Chart</h4>
+                        <p>Track animal behaviors in your local environment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bundle 2: Earth's Surface & Resources -->
+        <div class="bundle-section">
+            <div class="bundle-header">
+                <div class="bundle-icon">🌍</div>
+                <div class="bundle-info">
+                    <h2>Bundle 2: Earth's Surface & Resources</h2>
+                    <p>Earth Science • November-December 2025</p>
+                </div>
+            </div>
+            
+            <div class="videos-grid">
+                <div class="video-card" onclick="openVideo('rock-cycle')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-mountain"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">The Rock Cycle: How Rocks Change</h3>
+                        <p class="video-description">Follow the journey of rocks as they transform through the rock cycle.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">10:15</div>
+                            <div class="video-source">
+                                <i class="fas fa-flask"></i> PhET Simulations
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('weathering-erosion')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-wind"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Weathering and Erosion</h3>
+                        <p class="video-description">See how wind, water, and ice shape Earth's surface over time.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">8:30</div>
+                            <div class="video-source">
+                                <i class="fab fa-youtube"></i> Crash Course Kids
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('natural-resources')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-leaf"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Natural Resources: Renewable vs Non-Renewable</h3>
+                        <p class="video-description">Learn about Earth's resources and how we can use them responsibly.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">7:45</div>
+                            <div class="video-source">
+                                <i class="fas fa-brain"></i> BrainPOP
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('earthquakes-volcanoes')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-volcano"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Earthquakes and Volcanoes</h3>
+                        <p class="video-description">Explore the powerful forces that shape Earth's surface.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">9:50</div>
+                            <div class="video-source">
+                                <i class="fab fa-youtube"></i> National Geographic
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="worksheets-section">
+                <h3><i class="fas fa-file-alt"></i> Related Worksheets & Activities</h3>
+                <div class="worksheets-grid">
+                    <div class="worksheet-item">
+                        <h4>Rock Cycle Diagram</h4>
+                        <p>Complete the rock cycle with arrows and labels</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Weathering Experiment</h4>
+                        <p>Conduct experiments to observe weathering processes</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Resource Classification</h4>
+                        <p>Sort natural resources into renewable and non-renewable</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Earthquake Safety Plan</h4>
+                        <p>Create a safety plan for natural disasters</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bundle 3: Using Energy Transformations -->
+        <div class="bundle-section">
+            <div class="bundle-header">
+                <div class="bundle-icon">⚡</div>
+                <div class="bundle-info">
+                    <h2>Bundle 3: Using Energy Transformations</h2>
+                    <p>Physical Science • January-February 2026</p>
+                </div>
+            </div>
+            
+            <div class="videos-grid">
+                <div class="video-card" onclick="openVideo('energy-forms')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-bolt"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Forms of Energy: Light, Heat, Sound, and Motion</h3>
+                        <p class="video-description">Discover the different forms of energy and how they transform.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">8:20</div>
+                            <div class="video-source">
+                                <i class="fas fa-flask"></i> PhET Simulations
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('simple-machines')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-cogs"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Simple Machines: Making Work Easier</h3>
+                        <p class="video-description">Learn about levers, pulleys, wheels, and inclined planes.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">7:35</div>
+                            <div class="video-source">
+                                <i class="fab fa-youtube"></i> SciShow Kids
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('electric-circuits')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-microchip"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Electric Circuits: Conductors and Insulators</h3>
+                        <p class="video-description">Build circuits and learn about electrical conductivity.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">9:10</div>
+                            <div class="video-source">
+                                <i class="fas fa-flask"></i> PhET Simulations
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('force-motion')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-running"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Forces and Motion: Push, Pull, and Gravity</h3>
+                        <p class="video-description">Explore how forces affect the motion of objects.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">8:45</div>
+                            <div class="video-source">
+                                <i class="fas fa-brain"></i> BrainPOP
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="worksheets-section">
+                <h3><i class="fas fa-file-alt"></i> Related Worksheets & Activities</h3>
+                <div class="worksheets-grid">
+                    <div class="worksheet-item">
+                        <h4>Energy Transformation Chart</h4>
+                        <p>Track how energy changes from one form to another</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Simple Machine Scavenger Hunt</h4>
+                        <p>Find simple machines in everyday objects</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Circuit Building Guide</h4>
+                        <p>Step-by-step instructions for building circuits</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Force and Motion Lab</h4>
+                        <p>Conduct experiments with different forces</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bundle 4: Engineering & Design -->
+        <div class="bundle-section">
+            <div class="bundle-header">
+                <div class="bundle-icon">🔧</div>
+                <div class="bundle-info">
+                    <h2>Bundle 4: Engineering & Design</h2>
+                    <p>Engineering • March-May 2026</p>
+                </div>
+            </div>
+            
+            <div class="videos-grid">
+                <div class="video-card" onclick="openVideo('engineering-process')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-tools"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Engineering Design Process</h3>
+                        <p class="video-description">Learn the steps engineers use to solve problems and create solutions.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">6:50</div>
+                            <div class="video-source">
+                                <i class="fas fa-graduation-cap"></i> Khan Academy
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('problem-solving')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-lightbulb"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Engineering Problem Solving</h3>
+                        <p class="video-description">See how engineers identify problems and develop creative solutions.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">8:15</div>
+                            <div class="video-source">
+                                <i class="fab fa-youtube"></i> Crash Course Kids
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('prototyping')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-cube"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Building and Testing Prototypes</h3>
+                        <p class="video-description">Learn how engineers build, test, and improve their designs.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">7:25</div>
+                            <div class="video-source">
+                                <i class="fas fa-brain"></i> BrainPOP
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="openVideo('sustainable-design')">
+                    <div class="video-thumbnail">
+                        <i class="fas fa-recycle"></i>
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Sustainable Engineering Solutions</h3>
+                        <p class="video-description">Explore how engineers create solutions that help protect our planet.</p>
+                        <div class="video-meta">
+                            <div class="video-duration">9:30</div>
+                            <div class="video-source">
+                                <i class="fab fa-youtube"></i> National Geographic
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="worksheets-section">
+                <h3><i class="fas fa-file-alt"></i> Related Worksheets & Activities</h3>
+                <div class="worksheets-grid">
+                    <div class="worksheet-item">
+                        <h4>Design Process Worksheet</h4>
+                        <p>Follow the engineering design process step by step</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Problem Identification Chart</h4>
+                        <p>Identify and analyze real-world problems</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Prototype Planning Sheet</h4>
+                        <p>Plan and sketch your engineering solution</p>
+                    </div>
+                    <div class="worksheet-item">
+                        <h4>Testing and Improvement Log</h4>
+                        <p>Record test results and design improvements</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="video-modal">
+        <div class="video-content">
+            <button class="close-btn" onclick="closeVideo()">&times;</button>
+            <div id="video-container">
+                <!-- Video content will be loaded here -->
+            </div>
+            <div class="video-details">
+                <h3 id="video-title">Video Title</h3>
+                <p id="video-description">Video description will appear here.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const videoData = {
+            'animal-adaptations': {
+                title: 'Animal Adaptations: Survival in Different Environments',
+                description: 'This video explores how animals have developed amazing adaptations to survive in their specific environments. From camouflage to migration, discover the incredible ways animals have evolved to thrive.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Animal Adaptations" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'plant-structures': {
+                title: 'Plant Structures: Roots, Stems, and Leaves',
+                description: 'Learn about the different parts of plants and how each structure helps plants survive, grow, and reproduce in their environment.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Plant Structures" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'food-chains': {
+                title: 'Food Chains and Food Webs',
+                description: 'Discover how energy flows through ecosystems via food chains and complex food webs, and learn about producers, consumers, and decomposers.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Food Chains" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'animal-behavior': {
+                title: 'Animal Behavior: Migration and Hibernation',
+                description: 'Understand why animals migrate and hibernate, and how these behaviors help them survive changing seasons and environmental conditions.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Animal Behavior" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'rock-cycle': {
+                title: 'The Rock Cycle: How Rocks Change',
+                description: 'Follow the journey of rocks as they transform through the rock cycle, from igneous to sedimentary to metamorphic and back again.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Rock Cycle" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'weathering-erosion': {
+                title: 'Weathering and Erosion',
+                description: 'See how wind, water, and ice shape Earth\'s surface over time through the processes of weathering and erosion.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Weathering and Erosion" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'natural-resources': {
+                title: 'Natural Resources: Renewable vs Non-Renewable',
+                description: 'Learn about Earth\'s resources and how we can use them responsibly to protect our planet for future generations.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Natural Resources" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'earthquakes-volcanoes': {
+                title: 'Earthquakes and Volcanoes',
+                description: 'Explore the powerful forces that shape Earth\'s surface, from tectonic plate movement to volcanic eruptions.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Earthquakes and Volcanoes" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'energy-forms': {
+                title: 'Forms of Energy: Light, Heat, Sound, and Motion',
+                description: 'Discover the different forms of energy and how they transform from one type to another in our everyday lives.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Forms of Energy" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'simple-machines': {
+                title: 'Simple Machines: Making Work Easier',
+                description: 'Learn about levers, pulleys, wheels, and inclined planes, and how they make work easier for humans.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Simple Machines" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'electric-circuits': {
+                title: 'Electric Circuits: Conductors and Insulators',
+                description: 'Build circuits and learn about electrical conductivity, conductors, insulators, and how electricity flows.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Electric Circuits" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'force-motion': {
+                title: 'Forces and Motion: Push, Pull, and Gravity',
+                description: 'Explore how forces affect the motion of objects, including gravity, friction, and applied forces.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Forces and Motion" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'engineering-process': {
+                title: 'Engineering Design Process',
+                description: 'Learn the steps engineers use to solve problems and create solutions, from identifying problems to testing prototypes.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Engineering Design Process" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'problem-solving': {
+                title: 'Engineering Problem Solving',
+                description: 'See how engineers identify problems and develop creative solutions using the engineering design process.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Engineering Problem Solving" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'prototyping': {
+                title: 'Building and Testing Prototypes',
+                description: 'Learn how engineers build, test, and improve their designs through the prototyping process.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Building and Testing Prototypes" class="video-iframe" allowfullscreen></iframe>'
+            },
+            'sustainable-design': {
+                title: 'Sustainable Engineering Solutions',
+                description: 'Explore how engineers create solutions that help protect our planet and promote sustainability.',
+                embed: '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Sustainable Engineering Solutions" class="video-iframe" allowfullscreen></iframe>'
+            }
+        };
+
+        function openVideo(videoId) {
+            const video = videoData[videoId];
+            if (video) {
+                document.getElementById('video-container').innerHTML = video.embed;
+                document.getElementById('video-title').textContent = video.title;
+                document.getElementById('video-description').textContent = video.description;
+                document.getElementById('video-modal').classList.add('active');
+            }
+        }
+
+        function closeVideo() {
+            document.getElementById('video-modal').classList.remove('active');
+            document.getElementById('video-container').innerHTML = '';
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('video-modal')) {
+                closeVideo();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>

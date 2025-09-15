@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClassDojo Mini - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .classdojo-header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .classdojo-logo {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .class-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .class-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 25px;
+        }
+
+        .students-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .student-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .student-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .student-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .student-points {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .points-display {
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .skills-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            background: #f8f9fa;
+        }
+
+        .skill-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .skill-icon.positive {
+            background: #28a745;
+        }
+
+        .skill-icon.negative {
+            background: #dc3545;
+        }
+
+        .skill-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .quick-actions {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .action-btn {
+            width: 100%;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .action-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
+        .action-btn.secondary {
+            background: #6c757d;
+        }
+
+        .action-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .character-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .character-option:hover {
+            transform: scale(1.1);
+        }
+
+        .character-option.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="teacher-portal.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </a>
+            <div class="header-text">
+                <h1><i class="fas fa-smile"></i> ClassDojo Mini</h1>
+                <p>Classroom management and student engagement</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="classdojo-header">
+            <div class="classdojo-logo">
+                <i class="fas fa-smile"></i>
+            </div>
+            <div class="class-title">STEM Class - 4th Grade</div>
+            <div class="class-stats">
+                <div class="stat-item">
+                    <span class="stat-number">1</span>
+                    <span class="stat-label">Student</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">Points Today</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">Total Points</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="students-section">
+                <h2 class="section-title">
+                    <i class="fas fa-users"></i> Students
+                </h2>
+                <div class="students-grid" id="studentsGrid">
+                    <!-- Students will be dynamically added here -->
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="skills-panel">
+                    <h3 class="section-title">
+                        <i class="fas fa-star"></i> Skills
+                    </h3>
+                    <div class="skill-item" onclick="awardPoints('participation')">
+                        <div class="skill-icon positive">
+                            <i class="fas fa-hand-paper"></i>
+                        </div>
+                        <div class="skill-name">Participation</div>
+                    </div>
+                    <div class="skill-item" onclick="awardPoints('helping')">
+                        <div class="skill-icon positive">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <div class="skill-name">Helping Others</div>
+                    </div>
+                    <div class="skill-item" onclick="awardPoints('creativity')">
+                        <div class="skill-icon positive">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="skill-name">Creativity</div>
+                    </div>
+                    <div class="skill-item" onclick="awardPoints('teamwork')">
+                        <div class="skill-icon positive">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="skill-name">Teamwork</div>
+                    </div>
+                    <div class="skill-item" onclick="awardPoints('focus')">
+                        <div class="skill-icon positive">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="skill-name">Focus</div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h3 class="section-title">
+                        <i class="fas fa-bolt"></i> Quick Actions
+                    </h3>
+                    <button class="action-btn" onclick="addStudent()">
+                        <i class="fas fa-user-plus"></i> Add Student
+                    </button>
+                    <button class="action-btn secondary" onclick="viewReports()">
+                        <i class="fas fa-chart-bar"></i> View Reports
+                    </button>
+                    <button class="action-btn secondary" onclick="exportData()">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div id="addStudentModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title">Add New Student</h2>
+            
+            <div class="form-group">
+                <label for="studentName">Student Name</label>
+                <input type="text" id="studentName" placeholder="Enter student name">
+            </div>
+            
+            <div class="form-group">
+                <label>Choose Character</label>
+                <div class="character-grid">
+                    <div class="character-option" data-char="👦" onclick="selectCharacter(this)">
+                        <span>👦</span>
+                    </div>
+                    <div class="character-option" data-char="👧" onclick="selectCharacter(this)">
+                        <span>👧</span>
+                    </div>
+                    <div class="character-option" data-char="🧑" onclick="selectCharacter(this)">
+                        <span>🧑</span>
+                    </div>
+                    <div class="character-option" data-char="👨" onclick="selectCharacter(this)">
+                        <span>👨</span>
+                    </div>
+                    <div class="character-option" data-char="👩" onclick="selectCharacter(this)">
+                        <span>👩</span>
+                    </div>
+                    <div class="character-option" data-char="🧒" onclick="selectCharacter(this)">
+                        <span>🧒</span>
+                    </div>
+                    <div class="character-option" data-char="🧑‍🎓" onclick="selectCharacter(this)">
+                        <span>🧑‍🎓</span>
+                    </div>
+                    <div class="character-option" data-char="🤖" onclick="selectCharacter(this)">
+                        <span>🤖</span>
+                    </div>
+                    <div class="character-option" data-char="🦸" onclick="selectCharacter(this)">
+                        <span>🦸</span>
+                    </div>
+                    <div class="character-option" data-char="🧙" onclick="selectCharacter(this)">
+                        <span>🧙</span>
+                    </div>
+                    <div class="character-option" data-char="🦄" onclick="selectCharacter(this)">
+                        <span>🦄</span>
+                    </div>
+                    <div class="character-option" data-char="🐱" onclick="selectCharacter(this)">
+                        <span>🐱</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: right; margin-top: 20px;">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" onclick="saveStudent()">Add Student</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let students = [];
+        let selectedCharacter = '👦';
+        let totalPoints = 0;
+
+        // Sample student data
+        const sampleStudent = {
+            id: 1,
+            name: 'Alex Johnson',
+            character: '🧑',
+            points: 0,
+            skills: []
+        };
+
+        function initClassDojo() {
+            // Load sample student
+            students = [sampleStudent];
+            renderStudents();
+            updateStats();
+        }
+
+        function renderStudents() {
+            const grid = document.getElementById('studentsGrid');
+            grid.innerHTML = '';
+            
+            students.forEach(student => {
+                const studentCard = document.createElement('div');
+                studentCard.className = 'student-card';
+                studentCard.innerHTML = `
+                    <div class="student-avatar">${student.character}</div>
+                    <div class="student-name">${student.name}</div>
+                    <div class="student-points">
+                        <div class="points-display">${student.points} points</div>
+                    </div>
+                `;
+                studentCard.onclick = () => viewStudentDetails(student);
+                grid.appendChild(studentCard);
+            });
+        }
+
+        function updateStats() {
+            totalPoints = students.reduce((sum, student) => sum + student.points, 0);
+            document.querySelector('.stat-item:nth-child(2) .stat-number').textContent = 
+                students.reduce((sum, student) => sum + (student.points > 0 ? 1 : 0), 0);
+            document.querySelector('.stat-item:nth-child(3) .stat-number').textContent = totalPoints;
+        }
+
+        function addStudent() {
+            document.getElementById('addStudentModal').classList.add('active');
+        }
+
+        function selectCharacter(element) {
+            document.querySelectorAll('.character-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedCharacter = element.dataset.char;
+        }
+
+        function saveStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            if (!name) {
+                alert('Please enter a student name');
+                return;
+            }
+
+            const newStudent = {
+                id: students.length + 1,
+                name: name,
+                character: selectedCharacter,
+                points: 0,
+                skills: []
+            };
+
+            students.push(newStudent);
+            renderStudents();
+            updateStats();
+            closeModal();
+            
+            // Reset form
+            document.getElementById('studentName').value = '';
+            document.querySelectorAll('.character-option').forEach(opt => opt.classList.remove('selected'));
+            selectedCharacter = '👦';
+        }
+
+        function awardPoints(skill) {
+            if (students.length === 0) {
+                alert('Please add a student first');
+                return;
+            }
+
+            // Award points to all students (in a real app, you'd select specific students)
+            students.forEach(student => {
+                student.points += 1;
+                if (!student.skills.includes(skill)) {
+                    student.skills.push(skill);
+                }
+            });
+
+            renderStudents();
+            updateStats();
+            
+            // Show feedback
+            showNotification(`Awarded ${skill} points to all students!`);
+        }
+
+        function viewStudentDetails(student) {
+            alert(`Student: ${student.name}\nPoints: ${student.points}\nSkills: ${student.skills.join(', ') || 'None yet'}`);
+        }
+
+        function viewReports() {
+            alert('Reports feature coming soon! This would show detailed analytics and progress tracking.');
+        }
+
+        function exportData() {
+            const data = {
+                students: students,
+                totalPoints: totalPoints,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'classdojo-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 1001;
+                font-weight: 500;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function closeModal() {
+            document.getElementById('addStudentModal').classList.remove('active');
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initClassDojo);
+    </script>
+</body>
+</html>

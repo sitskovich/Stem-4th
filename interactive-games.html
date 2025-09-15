@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive STEM Games - 4th Grade</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .game-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+        }
+
+        .game-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .game-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .game-features li {
+            padding: 5px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .game-features li i {
+            color: #28a745;
+            width: 16px;
+        }
+
+        .play-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .game-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .game-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .game-area {
+            min-height: 400px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .option-btn:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option-btn.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .puzzle-piece {
+            aspect-ratio: 1;
+            background: #667eea;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .puzzle-piece:hover {
+            background: #5a6fd8;
+            transform: scale(1.05);
+        }
+
+        .puzzle-piece.selected {
+            background: #ff6b35;
+            transform: scale(1.1);
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: #667eea;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .memory-card:hover {
+            transform: scale(1.05);
+        }
+
+        .memory-card.flipped {
+            background: white;
+            color: #333;
+            border: 2px solid #667eea;
+        }
+
+        .memory-card.matched {
+            background: #28a745;
+            color: white;
+        }
+
+        .chain-builder {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .organism {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .organism:hover {
+            background: #e3f2fd;
+            transform: translateY(-2px);
+        }
+
+        .organism.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .connection-line {
+            height: 2px;
+            background: #667eea;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+
+        .connection-line.connected {
+            background: #28a745;
+            height: 4px;
+        }
+
+        .connection-line.incorrect {
+            background: #dc3545;
+            height: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-content {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            .puzzle-grid, .memory-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="teacher-portal.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Portal
+        </a>
+        <h1><i class="fas fa-gamepad"></i> Interactive STEM Games</h1>
+        <p>Engaging educational games for 4th Grade Science Curriculum</p>
+    </div>
+
+    <div class="container">
+        <div class="games-grid">
+            <!-- Energy Transformation Game -->
+            <div class="game-card" onclick="openGame('energy-game')">
+                <div class="game-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="game-title">Energy Transformation Challenge</h3>
+                <p class="game-description">Match different forms of energy and learn how they transform from one type to another.</p>
+                <ul class="game-features">
+                    <li><i class="fas fa-check"></i> Interactive energy matching</li>
+                    <li><i class="fas fa-check"></i> Real-world examples</li>
+                    <li><i class="fas fa-check"></i> Progress tracking</li>
+                    <li><i class="fas fa-check"></i> Bundle 3 aligned</li>
+                </ul>
+                <button class="play-btn">Play Game</button>
+            </div>
+
+            <!-- Food Chain Builder -->
+            <div class="game-card" onclick="openGame('food-chain')">
+                <div class="game-icon">
+                    <i class="fas fa-link"></i>
+                </div>
+                <h3 class="game-title">Food Chain Builder</h3>
+                <p class="game-description">Build complete food chains by connecting producers, consumers, and decomposers.</p>
+                <ul class="game-features">
+                    <li><i class="fas fa-check"></i> Drag and drop interface</li>
+                    <li><i class="fas fa-check"></i> Multiple ecosystems</li>
+                    <li><i class="fas fa-check"></i> Instant feedback</li>
+                    <li><i class="fas fa-check"></i> Bundle 1 aligned</li>
+                </ul>
+                <button class="play-btn">Play Game</button>
+            </div>
+
+            <!-- Rock Cycle Puzzle -->
+            <div class="game-card" onclick="openGame('rock-cycle')">
+                <div class="game-icon">
+                    <i class="fas fa-mountain"></i>
+                </div>
+                <h3 class="game-title">Rock Cycle Puzzle</h3>
+                <p class="game-description">Arrange rock types and processes to complete the rock cycle transformation.</p>
+                <ul class="game-features">
+                    <li><i class="fas fa-check"></i> Interactive puzzle solving</li>
+                    <li><i class="fas fa-check"></i> Visual learning</li>
+                    <li><i class="fas fa-check"></i> Step-by-step guidance</li>
+                    <li><i class="fas fa-check"></i> Bundle 2 aligned</li>
+                </ul>
+                <button class="play-btn">Play Game</button>
+            </div>
+
+            <!-- Simple Machines Memory -->
+            <div class="game-card" onclick="openGame('simple-machines')">
+                <div class="game-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3 class="game-title">Simple Machines Memory</h3>
+                <p class="game-description">Match simple machines with their functions and real-world examples.</p>
+                <ul class="game-features">
+                    <li><i class="fas fa-check"></i> Memory card game</li>
+                    <li><i class="fas fa-check"></i> Visual recognition</li>
+                    <li><i class="fas fa-check"></i> Multiple difficulty levels</li>
+                    <li><i class="fas fa-check"></i> Bundle 3 aligned</li>
+                </ul>
+                <button class="play-btn">Play Game</button>
+            </div>
+
+            <!-- Weather Patterns Quiz -->
+            <div class="game-card" onclick="openGame('weather-quiz')">
+                <div class="game-icon">
+                    <i class="fas fa-cloud-sun"></i>
+                </div>
+                <h3 class="game-title">Weather Patterns Quiz</h3>
+                <p class="game-description">Test your knowledge of weather patterns, climate, and atmospheric phenomena.</p>
+                <ul class="game-features">
+                    <li><i class="fas fa-check"></i> Multiple choice questions</li>
+                    <li><i class="fas fa-check"></i> Real weather data</li>
+                    <li><i class="fas fa-check"></i> Instant scoring</li>
+                    <li><i class="fas fa-check"></i> Bundle 2 aligned</li>
+                </ul>
+                <button class="play-btn">Play Game</button>
+            </div>
+
+            <!-- Engineering Design Challenge -->
+            <div class="game-card" onclick="openGame('engineering')">
+                <div class="game-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h3 class="game-title">Engineering Design Challenge</h3>
+                <p class="game-description">Solve real-world problems using the engineering design process.</p>
+                <ul class="game-features">
+                    <li><i class="fas fa-check"></i> Problem-solving scenarios</li>
+                    <li><i class="fas fa-check"></i> Design process steps</li>
+                    <li><i class="fas fa-check"></i> Creative thinking</li>
+                    <li><i class="fas fa-check"></i> Bundle 4 aligned</li>
+                </ul>
+                <button class="play-btn">Play Game</button>
+            </div>
+
+            <!-- Animal Adaptation Game -->
+            <div class="game-card" onclick="openGame('adaptations')">
+                <div class="game-icon">
+                    <i class="fas fa-paw"></i>
+                </div>
+                <h3 class="game-title">Animal Adaptation Adventure</h3>
+                <p class="game-description">Help animals survive by choosing the right adaptations for different environments.</p>
+                <ul class="game-features">
+                    <li><i class="fas fa-check"></i> Environmental challenges</li>
+                    <li><i class="fas fa-check"></i> Adaptation matching</li>
+                    <li><i class="fas fa-check"></i> Survival scenarios</li>
+                    <li><i class="fas fa-check"></i> Bundle 1 aligned</li>
+                </ul>
+                <button class="play-btn">Play Game</button>
+            </div>
+
+            <!-- Circuit Builder -->
+            <div class="game-card" onclick="openGame('circuits')">
+                <div class="game-icon">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <h3 class="game-title">Electric Circuit Builder</h3>
+                <p class="game-description">Build working electrical circuits and learn about conductors and insulators.</p>
+                <ul class="game-features">
+                    <li><i class="fas fa-check"></i> Virtual circuit building</li>
+                    <li><i class="fas fa-check"></i> Real-time testing</li>
+                    <li><i class="fas fa-check"></i> Safety education</li>
+                    <li><i class="fas fa-check"></i> Bundle 3 aligned</li>
+                </ul>
+                <button class="play-btn">Play Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Modals -->
+    <div id="energy-game" class="game-modal">
+        <div class="game-content">
+            <button class="close-btn" onclick="closeGame('energy-game')">&times;</button>
+            <h2><i class="fas fa-bolt"></i> Energy Transformation Challenge</h2>
+            <div class="score-display">
+                Score: <span id="energy-score">0</span> | Level: <span id="energy-level">1</span>
+            </div>
+            <div class="game-area" id="energy-game-area">
+                <div class="question-card">
+                    <div class="question-text">Match the energy transformation:</div>
+                    <div class="options-grid">
+                        <button class="option-btn" onclick="selectEnergyOption(this, 'correct')">Battery → Light Bulb</button>
+                        <button class="option-btn" onclick="selectEnergyOption(this, 'incorrect')">Sun → Plant</button>
+                        <button class="option-btn" onclick="selectEnergyOption(this, 'incorrect')">Wind → Turbine</button>
+                        <button class="option-btn" onclick="selectEnergyOption(this, 'incorrect')">Food → Body</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="food-chain" class="game-modal">
+        <div class="game-content">
+            <button class="close-btn" onclick="closeGame('food-chain')">&times;</button>
+            <h2><i class="fas fa-link"></i> Food Chain Builder</h2>
+            <div class="score-display">
+                Chains Built: <span id="chain-score">0</span> | Accuracy: <span id="chain-accuracy">100%</span>
+            </div>
+            <div class="game-area">
+                <div class="chain-builder">
+                    <div class="organism" onclick="selectOrganism(this, 'producer')">🌱 Grass</div>
+                    <div class="connection-line"></div>
+                    <div class="organism" onclick="selectOrganism(this, 'primary')">🐰 Rabbit</div>
+                    <div class="connection-line"></div>
+                    <div class="organism" onclick="selectOrganism(this, 'secondary')">🦅 Eagle</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="rock-cycle" class="game-modal">
+        <div class="game-content">
+            <button class="close-btn" onclick="closeGame('rock-cycle')">&times;</button>
+            <h2><i class="fas fa-mountain"></i> Rock Cycle Puzzle</h2>
+            <div class="score-display">
+                Pieces Placed: <span id="rock-score">0</span> / 8
+            </div>
+            <div class="game-area">
+                <div class="puzzle-grid">
+                    <div class="puzzle-piece" onclick="selectPuzzlePiece(this)">Igneous</div>
+                    <div class="puzzle-piece" onclick="selectPuzzlePiece(this)">Sedimentary</div>
+                    <div class="puzzle-piece" onclick="selectPuzzlePiece(this)">Metamorphic</div>
+                    <div class="puzzle-piece" onclick="selectPuzzlePiece(this)">Weathering</div>
+                    <div class="puzzle-piece" onclick="selectPuzzlePiece(this)">Erosion</div>
+                    <div class="puzzle-piece" onclick="selectPuzzlePiece(this)">Heat</div>
+                    <div class="puzzle-piece" onclick="selectPuzzlePiece(this)">Pressure</div>
+                    <div class="puzzle-piece" onclick="selectPuzzlePiece(this)">Melting</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="simple-machines" class="game-modal">
+        <div class="game-content">
+            <button class="close-btn" onclick="closeGame('simple-machines')">&times;</button>
+            <h2><i class="fas fa-cogs"></i> Simple Machines Memory</h2>
+            <div class="score-display">
+                Matches: <span id="memory-score">0</span> | Moves: <span id="memory-moves">0</span>
+            </div>
+            <div class="game-area">
+                <div class="memory-grid">
+                    <div class="memory-card" onclick="flipCard(this, 'lever')">?</div>
+                    <div class="memory-card" onclick="flipCard(this, 'pulley')">?</div>
+                    <div class="memory-card" onclick="flipCard(this, 'wheel')">?</div>
+                    <div class="memory-card" onclick="flipCard(this, 'inclined')">?</div>
+                    <div class="memory-card" onclick="flipCard(this, 'lever')">?</div>
+                    <div class="memory-card" onclick="flipCard(this, 'pulley')">?</div>
+                    <div class="memory-card" onclick="flipCard(this, 'wheel')">?</div>
+                    <div class="memory-card" onclick="flipCard(this, 'inclined')">?</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentGame = null;
+        let gameScores = {
+            'energy-game': 0,
+            'food-chain': 0,
+            'rock-cycle': 0,
+            'simple-machines': 0
+        };
+
+        function openGame(gameId) {
+            currentGame = gameId;
+            document.getElementById(gameId).classList.add('active');
+            initializeGame(gameId);
+        }
+
+        function closeGame(gameId) {
+            document.getElementById(gameId).classList.remove('active');
+            currentGame = null;
+        }
+
+        function initializeGame(gameId) {
+            switch(gameId) {
+                case 'energy-game':
+                    initializeEnergyGame();
+                    break;
+                case 'food-chain':
+                    initializeFoodChain();
+                    break;
+                case 'rock-cycle':
+                    initializeRockCycle();
+                    break;
+                case 'simple-machines':
+                    initializeMemoryGame();
+                    break;
+            }
+        }
+
+        function initializeEnergyGame() {
+            const questions = [
+                {
+                    question: "What energy transformation happens in a flashlight?",
+                    options: [
+                        { text: "Chemical → Electrical → Light", correct: true },
+                        { text: "Light → Electrical → Chemical", correct: false },
+                        { text: "Heat → Light → Electrical", correct: false },
+                        { text: "Sound → Light → Chemical", correct: false }
+                    ]
+                },
+                {
+                    question: "What energy transformation happens in a solar panel?",
+                    options: [
+                        { text: "Light → Electrical", correct: true },
+                        { text: "Heat → Light", correct: false },
+                        { text: "Chemical → Light", correct: false },
+                        { text: "Sound → Electrical", correct: false }
+                    ]
+                }
+            ];
+            
+            displayEnergyQuestion(questions[0]);
+        }
+
+        function displayEnergyQuestion(question) {
+            const gameArea = document.getElementById('energy-game-area');
+            gameArea.innerHTML = `
+                <div class="question-card">
+                    <div class="question-text">${question.question}</div>
+                    <div class="options-grid">
+                        ${question.options.map(option => 
+                            `<button class="option-btn" onclick="selectEnergyOption(this, ${option.correct})">${option.text}</button>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectEnergyOption(button, isCorrect) {
+            const options = button.parentElement.querySelectorAll('.option-btn');
+            options.forEach(opt => {
+                opt.disabled = true;
+                if (opt === button) {
+                    opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    if (isCorrect) {
+                        gameScores['energy-game']++;
+                        document.getElementById('energy-score').textContent = gameScores['energy-game'];
+                    }
+                }
+            });
+            
+            setTimeout(() => {
+                // Load next question or show completion
+                if (gameScores['energy-game'] < 5) {
+                    initializeEnergyGame(); // Load next question
+                } else {
+                    showGameComplete('energy-game');
+                }
+            }, 2000);
+        }
+
+        function initializeFoodChain() {
+            // Food chain game logic
+            console.log('Initializing food chain game');
+        }
+
+        function selectOrganism(element, type) {
+            element.classList.toggle('selected');
+            // Add food chain logic here
+        }
+
+        function initializeRockCycle() {
+            // Rock cycle puzzle logic
+            console.log('Initializing rock cycle puzzle');
+        }
+
+        function selectPuzzlePiece(element) {
+            element.classList.toggle('selected');
+            // Add puzzle logic here
+        }
+
+        function initializeMemoryGame() {
+            // Memory game logic
+            console.log('Initializing memory game');
+        }
+
+        function flipCard(element, type) {
+            if (element.classList.contains('flipped') || element.classList.contains('matched')) return;
+            
+            element.classList.add('flipped');
+            element.textContent = getMachineIcon(type);
+            
+            // Add memory game matching logic here
+        }
+
+        function getMachineIcon(type) {
+            const icons = {
+                'lever': '⚖️',
+                'pulley': '🏗️',
+                'wheel': '🎡',
+                'inclined': '🛤️'
+            };
+            return icons[type] || '?';
+        }
+
+        function showGameComplete(gameId) {
+            const gameArea = document.getElementById(gameId + '-game-area') || document.querySelector(`#${gameId} .game-area`);
+            gameArea.innerHTML = `
+                <div class="question-card" style="text-align: center;">
+                    <h3 style="color: #28a745; margin-bottom: 20px;">🎉 Game Complete! 🎉</h3>
+                    <p style="font-size: 1.2rem; margin-bottom: 20px;">Great job! You've mastered this concept!</p>
+                    <button class="play-btn" onclick="initializeGame('${gameId}')" style="width: auto; padding: 10px 30px;">Play Again</button>
+                </div>
+            `;
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('game-modal')) {
+                closeGame(currentGame);
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && currentGame) {
+                closeGame(currentGame);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4th Grade Video Organizer - STEM Learning</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .video-organizer-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(248, 249, 250, 0.8);
+            color: #333;
+            border: 1px solid rgba(233, 236, 239, 0.5);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(233, 236, 239, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .filter-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 10px 15px;
+            border: 2px solid rgba(233, 236, 239, 0.5);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .video-thumbnail:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #667eea;
+        }
+
+        .video-icon {
+            font-size: 4rem;
+            color: #667eea;
+        }
+
+        .video-info {
+            margin-bottom: 20px;
+        }
+
+        .video-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .video-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .video-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .meta-item i {
+            color: #667eea;
+        }
+
+        .video-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.8rem;
+        }
+
+        .btn-icon {
+            padding: 8px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .video-details {
+            background: rgba(248, 249, 250, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(233, 236, 239, 0.5);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .detail-value {
+            color: #666;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid rgba(233, 236, 239, 0.5);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .video-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // 4th Grade STEM Video Data
+        const videoData = [
+            {
+                id: 1,
+                title: 'Plant Life Cycle - From Seed to Flower',
+                description: 'Learn about how plants grow from tiny seeds into beautiful flowers. Discover the stages of plant development and what plants need to survive.',
+                duration: '8:45',
+                grade: '4th Grade',
+                subject: 'Life Science',
+                topic: 'Plants',
+                difficulty: 'Beginner',
+                views: 1250,
+                likes: 89,
+                uploadDate: '2024-01-10',
+                thumbnail: '🌱',
+                tags: ['plants', 'life cycle', 'biology', 'nature'],
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                learningObjectives: [
+                    'Identify the stages of plant growth',
+                    'Understand what plants need to survive',
+                    'Compare different types of plants'
+                ],
+                teacher: 'Ms. Duncan'
+            },
+            {
+                id: 2,
+                title: 'Simple Machines - Levers and Pulleys',
+                description: 'Explore how simple machines make work easier. Build and test different types of levers and pulleys in this hands-on lesson.',
+                duration: '12:30',
+                grade: '4th Grade',
+                subject: 'Physical Science',
+                topic: 'Simple Machines',
+                difficulty: 'Intermediate',
+                views: 980,
+                likes: 76,
+                uploadDate: '2024-01-08',
+                thumbnail: '⚙️',
+                tags: ['simple machines', 'physics', 'engineering', 'levers'],
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                learningObjectives: [
+                    'Identify different types of simple machines',
+                    'Explain how levers and pulleys work',
+                    'Design a simple machine to solve a problem'
+                ],
+                teacher: 'Mr. Hilton'
+            },
+            {
+                id: 3,
+                title: 'Weather Patterns and Climate',
+                description: 'Discover how weather forms and changes. Learn about different weather patterns and how they affect our daily lives.',
+                duration: '10:15',
+                grade: '4th Grade',
+                subject: 'Earth Science',
+                topic: 'Weather',
+                difficulty: 'Beginner',
+                views: 1450,
+                likes: 102,
+                uploadDate: '2024-01-05',
+                thumbnail: '⛅',
+                tags: ['weather', 'climate', 'meteorology', 'atmosphere'],
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                learningObjectives: [
+                    'Describe different weather patterns',
+                    'Explain how weather affects daily life',
+                    'Predict weather based on observations'
+                ],
+                teacher: 'Mrs. Owens'
+            },
+            {
+                id: 4,
+                title: 'Animal Adaptations for Survival',
+                description: 'Learn how animals adapt to their environments to survive. Explore different types of adaptations and how they help animals.',
+                duration: '9:20',
+                grade: '4th Grade',
+                subject: 'Life Science',
+                topic: 'Animals',
+                difficulty: 'Intermediate',
+                views: 1100,
+                likes: 85,
+                uploadDate: '2024-01-03',
+                thumbnail: '🦎',
+                tags: ['animals', 'adaptations', 'survival', 'evolution'],
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                learningObjectives: [
+                    'Identify different types of animal adaptations',
+                    'Explain how adaptations help animals survive',
+                    'Compare adaptations of different animals'
+                ],
+                teacher: 'Ms. Duncan'
+            },
+            {
+                id: 5,
+                title: 'Energy Transfer and Transformation',
+                description: 'Discover how energy moves and changes form. Learn about different types of energy and how they transform.',
+                duration: '11:45',
+                grade: '4th Grade',
+                subject: 'Physical Science',
+                topic: 'Energy',
+                difficulty: 'Advanced',
+                views: 890,
+                likes: 67,
+                uploadDate: '2024-01-01',
+                thumbnail: '⚡',
+                tags: ['energy', 'physics', 'transformation', 'motion'],
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                learningObjectives: [
+                    'Identify different types of energy',
+                    'Explain how energy transfers between objects',
+                    'Demonstrate energy transformations'
+                ],
+                teacher: 'Mr. Hilton'
+            },
+            {
+                id: 6,
+                title: 'Rocks and Minerals - Earth\'s Building Blocks',
+                description: 'Explore the different types of rocks and minerals that make up our planet. Learn how to identify and classify them.',
+                duration: '7:30',
+                grade: '4th Grade',
+                subject: 'Earth Science',
+                topic: 'Geology',
+                difficulty: 'Beginner',
+                views: 1350,
+                likes: 94,
+                uploadDate: '2023-12-28',
+                thumbnail: '🪨',
+                tags: ['rocks', 'minerals', 'geology', 'earth'],
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                learningObjectives: [
+                    'Identify different types of rocks',
+                    'Classify rocks by their properties',
+                    'Explain how rocks form'
+                ],
+                teacher: 'Mrs. Owens'
+            },
+            {
+                id: 7,
+                title: 'Food Chains and Food Webs',
+                description: 'Learn how energy flows through ecosystems. Discover the relationships between producers, consumers, and decomposers.',
+                duration: '9:50',
+                grade: '4th Grade',
+                subject: 'Life Science',
+                topic: 'Ecosystems',
+                difficulty: 'Intermediate',
+                views: 1200,
+                likes: 88,
+                uploadDate: '2023-12-25',
+                thumbnail: '🕸️',
+                tags: ['food chains', 'ecosystems', 'energy flow', 'biology'],
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                learningObjectives: [
+                    'Identify producers, consumers, and decomposers',
+                    'Explain how energy flows through food chains',
+                    'Create a food web for an ecosystem'
+                ],
+                teacher: 'Ms. Duncan'
+            },
+            {
+                id: 8,
+                title: 'States of Matter - Solid, Liquid, Gas',
+                description: 'Explore the three states of matter and how they change. Conduct experiments to see matter transformations.',
+                duration: '8:15',
+                grade: '4th Grade',
+                subject: 'Physical Science',
+                topic: 'Matter',
+                difficulty: 'Beginner',
+                views: 1600,
+                likes: 115,
+                uploadDate: '2023-12-22',
+                thumbnail: '🧊',
+                tags: ['matter', 'states', 'physics', 'experiments'],
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                learningObjectives: [
+                    'Identify the three states of matter',
+                    'Explain how matter changes states',
+                    'Conduct experiments with matter'
+                ],
+                teacher: 'Mr. Hilton'
+            }
+        ];
+
+        // Main Video Organizer Component
+        function VideoOrganizer() {
+            const [videos, setVideos] = useState(videoData);
+            const [filteredVideos, setFilteredVideos] = useState(videoData);
+            const [selectedVideo, setSelectedVideo] = useState(null);
+            const [showModal, setShowModal] = useState(false);
+            const [filters, setFilters] = useState({
+                subject: '',
+                topic: '',
+                difficulty: '',
+                teacher: '',
+                search: ''
+            });
+
+            // Filter videos based on current filters
+            useEffect(() => {
+                let filtered = videos;
+
+                if (filters.subject) {
+                    filtered = filtered.filter(video => video.subject === filters.subject);
+                }
+
+                if (filters.topic) {
+                    filtered = filtered.filter(video => video.topic === filters.topic);
+                }
+
+                if (filters.difficulty) {
+                    filtered = filtered.filter(video => video.difficulty === filters.difficulty);
+                }
+
+                if (filters.teacher) {
+                    filtered = filtered.filter(video => video.teacher === filters.teacher);
+                }
+
+                if (filters.search) {
+                    filtered = filtered.filter(video =>
+                        video.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+                        video.description.toLowerCase().includes(filters.search.toLowerCase()) ||
+                        video.tags.some(tag => tag.toLowerCase().includes(filters.search.toLowerCase()))
+                    );
+                }
+
+                setFilteredVideos(filtered);
+            }, [filters, videos]);
+
+            const openVideo = (video) => {
+                setSelectedVideo(video);
+                setShowModal(true);
+            };
+
+            const closeModal = () => {
+                setShowModal(false);
+                setSelectedVideo(null);
+            };
+
+            const handleFilterChange = (filterType, value) => {
+                setFilters(prev => ({
+                    ...prev,
+                    [filterType]: value
+                }));
+            };
+
+            const clearFilters = () => {
+                setFilters({
+                    subject: '',
+                    topic: '',
+                    difficulty: '',
+                    teacher: '',
+                    search: ''
+                });
+            };
+
+            const getUniqueValues = (property) => {
+                return [...new Set(videos.map(video => video[property]))];
+            };
+
+            return (
+                <div className="video-organizer-container">
+                    <div className="header">
+                        <h1><i className="fas fa-video"></i> 4th Grade Video Organizer</h1>
+                        <div className="header-actions">
+                            <button className="btn btn-secondary" onClick={() => window.location.href = 'teacher-portal-react.html'}>
+                                <i className="fas fa-arrow-left"></i> Back to Portal
+                            </button>
+                            <button className="btn btn-success">
+                                <i className="fas fa-plus"></i> Add Video
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="filter-section">
+                        <div className="filter-controls">
+                            <div className="search-bar">
+                                <input
+                                    type="text"
+                                    placeholder="Search videos by title, description, or tags..."
+                                    value={filters.search}
+                                    onChange={(e) => handleFilterChange('search', e.target.value)}
+                                />
+                            </div>
+                            
+                            <div className="filter-group">
+                                <label>Subject</label>
+                                <select
+                                    value={filters.subject}
+                                    onChange={(e) => handleFilterChange('subject', e.target.value)}
+                                >
+                                    <option value="">All Subjects</option>
+                                    {getUniqueValues('subject').map(subject => (
+                                        <option key={subject} value={subject}>{subject}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="filter-group">
+                                <label>Topic</label>
+                                <select
+                                    value={filters.topic}
+                                    onChange={(e) => handleFilterChange('topic', e.target.value)}
+                                >
+                                    <option value="">All Topics</option>
+                                    {getUniqueValues('topic').map(topic => (
+                                        <option key={topic} value={topic}>{topic}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="filter-group">
+                                <label>Difficulty</label>
+                                <select
+                                    value={filters.difficulty}
+                                    onChange={(e) => handleFilterChange('difficulty', e.target.value)}
+                                >
+                                    <option value="">All Levels</option>
+                                    {getUniqueValues('difficulty').map(difficulty => (
+                                        <option key={difficulty} value={difficulty}>{difficulty}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="filter-group">
+                                <label>Teacher</label>
+                                <select
+                                    value={filters.teacher}
+                                    onChange={(e) => handleFilterChange('teacher', e.target.value)}
+                                >
+                                    <option value="">All Teachers</option>
+                                    {getUniqueValues('teacher').map(teacher => (
+                                        <option key={teacher} value={teacher}>{teacher}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <button className="btn btn-secondary" onClick={clearFilters}>
+                                <i className="fas fa-times"></i> Clear Filters
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="video-grid">
+                        {filteredVideos.length > 0 ? (
+                            filteredVideos.map(video => (
+                                <div key={video.id} className="video-card">
+                                    <div className="video-thumbnail" onClick={() => openVideo(video)}>
+                                        <div className="video-icon">{video.thumbnail}</div>
+                                        <div className="play-overlay">
+                                            <div className="play-button">
+                                                <i className="fas fa-play"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="video-info">
+                                        <h3 className="video-title">{video.title}</h3>
+                                        <p className="video-description">{video.description}</p>
+                                        
+                                        <div className="video-meta">
+                                            <div className="meta-item">
+                                                <i className="fas fa-clock"></i>
+                                                <span>{video.duration}</span>
+                                            </div>
+                                            <div className="meta-item">
+                                                <i className="fas fa-eye"></i>
+                                                <span>{video.views} views</span>
+                                            </div>
+                                            <div className="meta-item">
+                                                <i className="fas fa-heart"></i>
+                                                <span>{video.likes} likes</span>
+                                            </div>
+                                            <div className="meta-item">
+                                                <i className="fas fa-user"></i>
+                                                <span>{video.teacher}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="video-tags">
+                                            {video.tags.map(tag => (
+                                                <span key={tag} className="tag">{tag}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="video-actions">
+                                        <div className="action-group">
+                                            <button className="btn btn-primary btn-sm" onClick={() => openVideo(video)}>
+                                                <i className="fas fa-play"></i> Watch
+                                            </button>
+                                            <button className="btn btn-secondary btn-sm">
+                                                <i className="fas fa-download"></i> Download
+                                            </button>
+                                        </div>
+                                        <div className="action-group">
+                                            <button className="btn btn-secondary btn-icon">
+                                                <i className="fas fa-heart"></i>
+                                            </button>
+                                            <button className="btn btn-secondary btn-icon">
+                                                <i className="fas fa-share"></i>
+                                            </button>
+                                            <button className="btn btn-secondary btn-icon">
+                                                <i className="fas fa-bookmark"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="empty-state">
+                                <i className="fas fa-search"></i>
+                                <h3>No videos found</h3>
+                                <p>Try adjusting your filters or search terms</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Video Modal */}
+                    {showModal && selectedVideo && (
+                        <div className="modal" onClick={closeModal}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2>{selectedVideo.title}</h2>
+                                    <button className="close-btn" onClick={closeModal}>
+                                        <i className="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                
+                                <div className="video-player">
+                                    <iframe
+                                        width="100%"
+                                        height="100%"
+                                        src={selectedVideo.videoUrl}
+                                        title={selectedVideo.title}
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
+
+                                <div className="video-details">
+                                    <div className="detail-row">
+                                        <span className="detail-label">Description:</span>
+                                        <span className="detail-value">{selectedVideo.description}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Duration:</span>
+                                        <span className="detail-value">{selectedVideo.duration}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Subject:</span>
+                                        <span className="detail-value">{selectedVideo.subject}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Topic:</span>
+                                        <span className="detail-value">{selectedVideo.topic}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Difficulty:</span>
+                                        <span className="detail-value">{selectedVideo.difficulty}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Teacher:</span>
+                                        <span className="detail-value">{selectedVideo.teacher}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Upload Date:</span>
+                                        <span className="detail-value">{selectedVideo.uploadDate}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Learning Objectives:</span>
+                                        <span className="detail-value">
+                                            <ul style={{margin: 0, paddingLeft: '20px'}}>
+                                                {selectedVideo.learningObjectives.map((objective, index) => (
+                                                    <li key={index}>{objective}</li>
+                                                ))}
+                                            </ul>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Render the app
+        ReactDOM.render(<VideoOrganizer />, document.getElementById('root'));
+    </script>
+</body>
+</html>
+
+
+
