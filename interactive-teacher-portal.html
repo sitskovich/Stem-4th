@@ -993,6 +993,84 @@
         }
 
         function loadLessonData(lessonId) {
+            // Helper to merge Objectives and Vocabulary onto the same slide for consistent formatting
+            function mergeObjectivesAndVocabulary(slides) {
+                if (!Array.isArray(slides)) return slides;
+                const merged = [];
+                for (let i = 0; i < slides.length; i++) {
+                    const slide = slides[i];
+                    const title = (slide.title || '').toLowerCase();
+                    const next = slides[i + 1];
+                    const nextTitle = (next && next.title ? next.title : '').toLowerCase();
+
+                    const isObjectives = title.includes('learning objectives') || title.includes('objectives');
+                    const vocabOnSame = Boolean(slide.vocabulary);
+                    const nextIsVocabulary = next && (nextTitle.includes('vocabulary'));
+
+                    // Already combined or no vocabulary following
+                    if (!isObjectives || vocabOnSame || !nextIsVocabulary) {
+                        merged.push(slide);
+                        continue;
+                    }
+
+                    // Merge current Objectives slide with the following Vocabulary slide
+                    const combined = {
+                        ...slide,
+                        title: slide.title.includes('Objectives') && next.title.includes('Vocabulary')
+                            ? slide.title.replace('Objectives', 'Learning Objectives & Vocabulary')
+                            : 'Learning Objectives & Vocabulary',
+                        // Keep existing content, append a heading for vocabulary list if needed
+                        content: (slide.content || '') + '\n\n📚 Key Vocabulary:',
+                        vocabulary: next.vocabulary || []
+                    };
+                    merged.push(combined);
+                    i++; // Skip the next slide since it has been merged
+                }
+                return merged;
+            }
+
+            // Helper to diversify Digital Citizenship slides using shared resources
+            function diversifyDigitalCitizenship(slides, seedIndex) {
+                if (!Array.isArray(slides)) return slides;
+                const dcModules = [
+                    {
+                        title: 'Digital Citizenship: Sharing Personal Information',
+                        content: '🔐 Think before you share!\n\n<div class="interactive-question">What should you keep private online?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🆔</span>\n    <span class="reveal-question">Personal details</span>\n    <span class="reveal-answer">Full name, address, phone number, school, and passwords stay private</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">👪</span>\n    <span class="reveal-question">Ask a trusted adult</span>\n    <span class="reveal-answer">Check with an adult before posting or signing up for sites</span>\n</div>'
+                    },
+                    {
+                        title: 'Digital Citizenship: Password Strength',
+                        content: '🛡️ Strong passwords protect your accounts.\n\n<div class="interactive-question">How do you build a strong password?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🔤</span>\n    <span class="reveal-question">Mix characters</span>\n    <span class="reveal-answer">Use upper/lowercase letters, numbers, and symbols</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">♻️</span>\n    <span class="reveal-question">Unique for each site</span>\n    <span class="reveal-answer">Never reuse the same password across websites</span>\n</div>'
+                    },
+                    {
+                        title: 'Digital Citizenship: Website Credibility',
+                        content: '🧭 Not all websites are equal.\n\n<div class="interactive-question">How can you tell if a website is trustworthy?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🔎</span>\n    <span class="reveal-question">Check the author</span>\n    <span class="reveal-answer">Look for an author/organization and publication date</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📚</span>\n    <span class="reveal-question">Cross-verify</span>\n    <span class="reveal-answer">Compare information with another reliable source</span>\n</div>'
+                    },
+                    {
+                        title: 'Digital Citizenship: Recognizing Fake Content',
+                        content: '🚩 Spot misinformation online.\n\n<div class="interactive-question">What are red flags for fake content?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🗓️</span>\n    <span class="reveal-question">Out-of-date info</span>\n    <span class="reveal-answer">Old posts/images used as if they are new</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🧪</span>\n    <span class="reveal-question">No evidence</span>\n    <span class="reveal-answer">Claims without sources, or only opinions</span>\n</div>'
+                    },
+                    {
+                        title: 'Digital Citizenship: Online Gaming Safety',
+                        content: '🎮 Stay safe while playing online.\n\n<div class="interactive-question">What are smart choices in games?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🗣️</span>\n    <span class="reveal-question">Chat wisely</span>\n    <span class="reveal-answer">Don\'t share personal info; report bullying or harassment</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">👥</span>\n    <span class="reveal-question">Friends only</span>\n    <span class="reveal-answer">Play with people you know; use privacy settings</span>\n</div>'
+                    }
+                ];
+
+                // Replace any generic DC slide with a rotating module
+                const result = slides.map((s) => ({ ...s }));
+                for (let i = 0; i < result.length; i++) {
+                    const s = result[i];
+                    if (!s.title || !s.title.toLowerCase().includes('digital citizenship')) continue;
+                    const text = (s.content || '').toLowerCase();
+                    const looksGeneric = text.includes('research') || text.includes('responsibly') || text.includes('guidelines');
+                    if (looksGeneric) {
+                        const mod = dcModules[seedIndex % dcModules.length];
+                        result[i].title = mod.title;
+                        result[i].content = mod.content;
+                    }
+                }
+                return result;
+            }
+
             lessonData = {
                 'lesson1': {
                     title: 'Accessing Prior Knowledge - Organism Structures',
@@ -1192,21 +1270,14 @@
                     title: 'Human Impact on Ecosystems',
                     slides: [
                         {
-                            title: 'Human Impact on Ecosystems',
-                            content: 'Today we will identify human activities affecting ecosystems and explore conservation strategies.'
-                        },
-                        {
                             title: 'Warm-up: Environmental Impact Scenarios',
                             content: 'Look at these scenarios. Which human activities help or harm ecosystems?',
-                            image: 'https://via.placeholder.com/800x600/ff6b35/ffffff?text=Human+Impact'
+                            image: 'images/imageslesson7-1.png'
                         },
                         {
                             title: 'Learning Objectives',
-                            content: 'By the end of this lesson, you will be able to:\n• Identify human activities affecting ecosystems\n• Understand conservation and protection\n• Explore sustainable practices'
-                        },
-                        {
-                            title: 'Vocabulary Cards',
-                            content: 'Let\'s learn conservation vocabulary!',
+                            content: 'By the end of this lesson, you will be able to:\n• Identify human activities affecting ecosystems\n• Understand conservation and protection\n• Explore sustainable practices',
+                            // Vocabulary will be merged onto this slide by pre-processing below
                             vocabulary: [
                                 { term: 'Conservation', definition: 'The protection and preservation of natural resources' },
                                 { term: 'Pollution', definition: 'Harmful substances in the environment' },
@@ -1217,16 +1288,16 @@
                         {
                             title: 'Content: Human Impact on Nature',
                             content: 'Human activities like pollution, deforestation, and overfishing can harm ecosystems. But we can also help protect them.',
-                            image: 'https://via.placeholder.com/800x600/ff6b35/ffffff?text=Human+Impact+on+Nature'
+                            image: 'images/imageslesson7-1.png'
                         },
                         {
                             title: 'Deep Dive: Conservation Strategies',
                             content: 'We can protect ecosystems by reducing pollution, creating protected areas, and using sustainable practices.',
-                            image: 'https://via.placeholder.com/800x600/28a745/ffffff?text=Conservation+Strategies'
+                            image: 'images/imageslesson7-2.png'
                         },
                         {
-                            title: 'Digital Citizenship: Environmental Research',
-                            content: '🌱 When researching environmental issues, follow these guidelines:\n\n<div class="interactive-question">How can you research environmental issues responsibly?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📚</span>\n    <span class="reveal-question">Use reliable sources</span>\n    <span class="reveal-answer">Choose scientific journals and environmental organizations</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌍</span>\n    <span class="reveal-question">Consider multiple perspectives</span>\n    <span class="reveal-answer">Look at different viewpoints and scientific evidence</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌱</span>\n    <span class="reveal-question">Think critically</span>\n    <span class="reveal-answer">Question sources and evaluate evidence carefully</span>\n</div>'
+                            title: 'Digital Citizenship: Website Credibility',
+                            content: '🧭 Not all websites are equal.\n\n<div class="interactive-question">How can you tell if a website is trustworthy?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🔎</span>\n    <span class="reveal-question">Check the author</span>\n    <span class="reveal-answer">Look for an author/organization and publication date</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📚</span>\n    <span class="reveal-question">Cross-verify</span>\n    <span class="reveal-answer">Compare information with another reliable source</span>\n</div>'
                         }
                     ]
                 },
@@ -2321,6 +2392,16 @@
                     ]
                 }
             };
+
+            // Apply global slide fixes: merge Objectives+Vocabulary and diversify DC
+            Object.keys(lessonData).forEach((lid, idx) => {
+                const slides = lessonData[lid].slides;
+                const merged = mergeObjectivesAndVocabulary(slides);
+                // Change Digital Citizenship module every 4 lessons (after labs: 4, 8, 12, ...)
+                const lessonNum = parseInt((lid || '').replace('lesson', ''), 10);
+                const groupIndex = Number.isFinite(lessonNum) ? Math.floor((lessonNum - 1) / 4) : Math.floor(idx / 4);
+                lessonData[lid].slides = diversifyDigitalCitizenship(merged, groupIndex);
+            });
         }
 
         function generateSlides() {
