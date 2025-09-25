@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Assessments - 4th Grade STEM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .assessment-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .assessment-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .assessment-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .assessment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .assessment-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .assessment-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+        }
+
+        .assessment-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .assessment-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .assessment-features li {
+            padding: 5px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .assessment-features li i {
+            color: #28a745;
+            width: 16px;
+        }
+
+        .create-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .create-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .assessment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .assessment-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .assessment-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .assessment-form {
+            margin: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .question-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+
+        .remove-question {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .options-list {
+            margin-top: 15px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .option-item input[type="radio"] {
+            width: auto;
+        }
+
+        .option-item input[type="text"] {
+            flex: 1;
+        }
+
+        .add-option {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .add-question {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 20px 0;
+        }
+
+        .preview-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .preview-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preview-question {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .preview-options {
+            margin-top: 15px;
+        }
+
+        .preview-option {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .export-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .export-btn.secondary {
+            background: #6c757d;
+        }
+
+        .export-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        @media (max-width: 768px) {
+            .assessment-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .assessment-content {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="teacher-portal.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Portal
+        </a>
+        <h1><i class="fas fa-clipboard-list"></i> Comprehensive Assessments</h1>
+        <p>Create and manage assessments for all 4th Grade STEM bundles</p>
+    </div>
+
+    <div class="container">
+        <div class="assessment-types">
+            <!-- CER Assessment -->
+            <div class="assessment-card" onclick="openAssessment('cer')">
+                <div class="assessment-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3 class="assessment-title">Claim-Evidence-Reasoning (CER)</h3>
+                <p class="assessment-description">Create scientific reasoning assessments that develop critical thinking and argumentation skills.</p>
+                <ul class="assessment-features">
+                    <li><i class="fas fa-check"></i> Scientific argumentation</li>
+                    <li><i class="fas fa-check"></i> Evidence-based reasoning</li>
+                    <li><i class="fas fa-check"></i> Critical thinking development</li>
+                    <li><i class="fas fa-check"></i> NGSS aligned</li>
+                </ul>
+                <button class="create-btn">Create CER Assessment</button>
+            </div>
+
+            <!-- Multiple Choice -->
+            <div class="assessment-card" onclick="openAssessment('multiple-choice')">
+                <div class="assessment-icon">
+                    <i class="fas fa-list-ul"></i>
+                </div>
+                <h3 class="assessment-title">Multiple Choice Questions</h3>
+                <p class="assessment-description">Build comprehensive multiple choice assessments with instant feedback and scoring.</p>
+                <ul class="assessment-features">
+                    <li><i class="fas fa-check"></i> Instant scoring</li>
+                    <li><i class="fas fa-check"></i> Detailed explanations</li>
+                    <li><i class="fas fa-check"></i> Difficulty levels</li>
+                    <li><i class="fas fa-check"></i> Auto-grading</li>
+                </ul>
+                <button class="create-btn">Create Multiple Choice</button>
+            </div>
+
+            <!-- Open-Ended Response -->
+            <div class="assessment-card" onclick="openAssessment('open-ended')">
+                <div class="assessment-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <h3 class="assessment-title">Open-Ended Response</h3>
+                <p class="assessment-description">Design open-ended questions that assess deep understanding and communication skills.</p>
+                <ul class="assessment-features">
+                    <li><i class="fas fa-check"></i> Deep understanding assessment</li>
+                    <li><i class="fas fa-check"></i> Communication skills</li>
+                    <li><i class="fas fa-check"></i> Rubric-based grading</li>
+                    <li><i class="fas fa-check"></i> Student reflection</li>
+                </ul>
+                <button class="create-btn">Create Open-Ended</button>
+            </div>
+
+            <!-- Math Connections -->
+            <div class="assessment-card" onclick="openAssessment('math-connections')">
+                <div class="assessment-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3 class="assessment-title">Math Connections</h3>
+                <p class="assessment-description">Integrate mathematics with science concepts through word problems and data analysis.</p>
+                <ul class="assessment-features">
+                    <li><i class="fas fa-check"></i> Word problem solving</li>
+                    <li><i class="fas fa-check"></i> Data analysis</li>
+                    <li><i class="fas fa-check"></i> Real-world applications</li>
+                    <li><i class="fas fa-check"></i> Cross-curricular integration</li>
+                </ul>
+                <button class="create-btn">Create Math Assessment</button>
+            </div>
+
+            <!-- Lab Reports -->
+            <div class="assessment-card" onclick="openAssessment('lab-reports')">
+                <div class="assessment-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3 class="assessment-title">Lab Reports & Rubrics</h3>
+                <p class="assessment-description">Create structured lab report templates with comprehensive rubrics for hands-on activities.</p>
+                <ul class="assessment-features">
+                    <li><i class="fas fa-check"></i> Structured templates</li>
+                    <li><i class="fas fa-check"></i> Comprehensive rubrics</li>
+                    <li><i class="fas fa-check"></i> Scientific method</li>
+                    <li><i class="fas fa-check"></i> Data collection</li>
+                </ul>
+                <button class="create-btn">Create Lab Report</button>
+            </div>
+
+            <!-- Performance Tasks -->
+            <div class="assessment-card" onclick="openAssessment('performance-tasks')">
+                <div class="assessment-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3 class="assessment-title">Performance Tasks</h3>
+                <p class="assessment-description">Design authentic performance tasks that assess real-world problem-solving skills.</p>
+                <ul class="assessment-features">
+                    <li><i class="fas fa-check"></i> Authentic assessment</li>
+                    <li><i class="fas fa-check"></i> Problem-solving focus</li>
+                    <li><i class="fas fa-check"></i> Real-world scenarios</li>
+                    <li><i class="fas fa-check"></i> Portfolio development</li>
+                </ul>
+                <button class="create-btn">Create Performance Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assessment Creation Modal -->
+    <div id="assessment-modal" class="assessment-modal">
+        <div class="assessment-content">
+            <button class="close-btn" onclick="closeAssessment()">&times;</button>
+            <h2 id="modal-title">Create Assessment</h2>
+            
+            <div class="assessment-form" id="assessment-form">
+                <!-- Form content will be loaded here -->
+            </div>
+            
+            <div class="preview-section" id="preview-section" style="display: none;">
+                <h3><i class="fas fa-eye"></i> Assessment Preview</h3>
+                <div id="preview-content">
+                    <!-- Preview content will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="export-buttons" id="export-buttons" style="display: none;">
+                <button class="export-btn" onclick="exportAssessment('pdf')">
+                    <i class="fas fa-file-pdf"></i> Export as PDF
+                </button>
+                <button class="export-btn secondary" onclick="exportAssessment('word')">
+                    <i class="fas fa-file-word"></i> Export as Word
+                </button>
+                <button class="export-btn secondary" onclick="saveAssessment()">
+                    <i class="fas fa-save"></i> Save Assessment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentAssessmentType = null;
+        let assessmentData = {
+            title: '',
+            description: '',
+            bundle: '',
+            questions: []
+        };
+
+        function openAssessment(type) {
+            currentAssessmentType = type;
+            document.getElementById('assessment-modal').classList.add('active');
+            loadAssessmentForm(type);
+        }
+
+        function closeAssessment() {
+            document.getElementById('assessment-modal').classList.remove('active');
+            currentAssessmentType = null;
+            resetAssessmentData();
+        }
+
+        function loadAssessmentForm(type) {
+            const form = document.getElementById('assessment-form');
+            const title = document.getElementById('modal-title');
+            
+            switch(type) {
+                case 'cer':
+                    title.textContent = 'Create CER Assessment';
+                    form.innerHTML = getCERForm();
+                    break;
+                case 'multiple-choice':
+                    title.textContent = 'Create Multiple Choice Assessment';
+                    form.innerHTML = getMultipleChoiceForm();
+                    break;
+                case 'open-ended':
+                    title.textContent = 'Create Open-Ended Assessment';
+                    form.innerHTML = getOpenEndedForm();
+                    break;
+                case 'math-connections':
+                    title.textContent = 'Create Math Connections Assessment';
+                    form.innerHTML = getMathConnectionsForm();
+                    break;
+                case 'lab-reports':
+                    title.textContent = 'Create Lab Report Template';
+                    form.innerHTML = getLabReportForm();
+                    break;
+                case 'performance-tasks':
+                    title.textContent = 'Create Performance Task';
+                    form.innerHTML = getPerformanceTaskForm();
+                    break;
+            }
+        }
+
+        function getCERForm() {
+            return `
+                <div class="form-group">
+                    <label for="cer-title">Assessment Title</label>
+                    <input type="text" id="cer-title" placeholder="e.g., Energy Transformation CER Assessment">
+                </div>
+                <div class="form-group">
+                    <label for="cer-bundle">Bundle</label>
+                    <select id="cer-bundle">
+                        <option value="">Select Bundle</option>
+                        <option value="bundle1">Bundle 1: Organism Structures & Behavior</option>
+                        <option value="bundle2">Bundle 2: Earth's Surface & Resources</option>
+                        <option value="bundle3">Bundle 3: Using Energy Transformations</option>
+                        <option value="bundle4">Bundle 4: Engineering & Design</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cer-scenario">Scenario/Context</label>
+                    <textarea id="cer-scenario" placeholder="Describe the scientific scenario or phenomenon students will analyze..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="cer-prompt">CER Prompt</label>
+                    <textarea id="cer-prompt" placeholder="What claim should students make? What evidence should they provide? How should they reason through the problem?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="cer-rubric">Rubric Criteria</label>
+                    <textarea id="cer-rubric" placeholder="Define what makes a strong claim, evidence, and reasoning..."></textarea>
+                </div>
+                <button class="create-btn" onclick="generateCERPreview()">Generate Preview</button>
+            `;
+        }
+
+        function getMultipleChoiceForm() {
+            return `
+                <div class="form-group">
+                    <label for="mc-title">Assessment Title</label>
+                    <input type="text" id="mc-title" placeholder="e.g., Energy Forms Multiple Choice Quiz">
+                </div>
+                <div class="form-group">
+                    <label for="mc-bundle">Bundle</label>
+                    <select id="mc-bundle">
+                        <option value="">Select Bundle</option>
+                        <option value="bundle1">Bundle 1: Organism Structures & Behavior</option>
+                        <option value="bundle2">Bundle 2: Earth's Surface & Resources</option>
+                        <option value="bundle3">Bundle 3: Using Energy Transformations</option>
+                        <option value="bundle4">Bundle 4: Engineering & Design</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="mc-description">Description</label>
+                    <textarea id="mc-description" placeholder="Brief description of the assessment..."></textarea>
+                </div>
+                <div id="questions-container">
+                    <div class="question-item">
+                        <div class="question-header">
+                            <span class="question-number">Question 1</span>
+                            <button class="remove-question" onclick="removeQuestion(this)">Remove</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Question Text</label>
+                            <textarea placeholder="Enter your question here..."></textarea>
+                        </div>
+                        <div class="options-list">
+                            <div class="option-item">
+                                <input type="radio" name="q1-correct" value="a">
+                                <input type="text" placeholder="Option A">
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="q1-correct" value="b">
+                                <input type="text" placeholder="Option B">
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="q1-correct" value="c">
+                                <input type="text" placeholder="Option C">
+                            </div>
+                            <div class="option-item">
+                                <input type="radio" name="q1-correct" value="d">
+                                <input type="text" placeholder="Option D">
+                            </div>
+                        </div>
+                        <button class="add-option" onclick="addOption(this)">Add Option</button>
+                    </div>
+                </div>
+                <button class="add-question" onclick="addQuestion()">Add Question</button>
+                <button class="create-btn" onclick="generateMCPreview()">Generate Preview</button>
+            `;
+        }
+
+        function getOpenEndedForm() {
+            return `
+                <div class="form-group">
+                    <label for="oe-title">Assessment Title</label>
+                    <input type="text" id="oe-title" placeholder="e.g., Animal Adaptation Analysis">
+                </div>
+                <div class="form-group">
+                    <label for="oe-bundle">Bundle</label>
+                    <select id="oe-bundle">
+                        <option value="">Select Bundle</option>
+                        <option value="bundle1">Bundle 1: Organism Structures & Behavior</option>
+                        <option value="bundle2">Bundle 2: Earth's Surface & Resources</option>
+                        <option value="bundle3">Bundle 3: Using Energy Transformations</option>
+                        <option value="bundle4">Bundle 4: Engineering & Design</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="oe-context">Context/Background</label>
+                    <textarea id="oe-context" placeholder="Provide context or background information for the question..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="oe-question">Open-Ended Question</label>
+                    <textarea id="oe-question" placeholder="Write your open-ended question here..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="oe-rubric">Scoring Rubric</label>
+                    <textarea id="oe-rubric" placeholder="Define scoring criteria (e.g., 4 points for complete answer, 3 points for mostly complete, etc.)..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="oe-exemplar">Exemplar Response</label>
+                    <textarea id="oe-exemplar" placeholder="Provide an example of a high-quality response..."></textarea>
+                </div>
+                <button class="create-btn" onclick="generateOEPreview()">Generate Preview</button>
+            `;
+        }
+
+        function getMathConnectionsForm() {
+            return `
+                <div class="form-group">
+                    <label for="math-title">Assessment Title</label>
+                    <input type="text" id="math-title" placeholder="e.g., Energy Calculations Word Problems">
+                </div>
+                <div class="form-group">
+                    <label for="math-bundle">Bundle</label>
+                    <select id="math-bundle">
+                        <option value="">Select Bundle</option>
+                        <option value="bundle1">Bundle 1: Organism Structures & Behavior</option>
+                        <option value="bundle2">Bundle 2: Earth's Surface & Resources</option>
+                        <option value="bundle3">Bundle 3: Using Energy Transformations</option>
+                        <option value="bundle4">Bundle 4: Engineering & Design</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="math-skills">Math Skills Focus</label>
+                    <select id="math-skills">
+                        <option value="">Select Math Skills</option>
+                        <option value="word-problems">Word Problems</option>
+                        <option value="data-analysis">Data Analysis</option>
+                        <option value="measurement">Measurement</option>
+                        <option value="calculations">Calculations</option>
+                        <option value="graphing">Graphing</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="math-context">Real-World Context</label>
+                    <textarea id="math-context" placeholder="Describe the real-world scenario that connects math and science..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="math-problems">Math Problems</label>
+                    <textarea id="math-problems" placeholder="Write your math problems here..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="math-solutions">Answer Key</label>
+                    <textarea id="math-solutions" placeholder="Provide solutions and step-by-step work..."></textarea>
+                </div>
+                <button class="create-btn" onclick="generateMathPreview()">Generate Preview</button>
+            `;
+        }
+
+        function getLabReportForm() {
+            return `
+                <div class="form-group">
+                    <label for="lab-title">Lab Report Title</label>
+                    <input type="text" id="lab-title" placeholder="e.g., Energy Transfer Investigation">
+                </div>
+                <div class="form-group">
+                    <label for="lab-bundle">Bundle</label>
+                    <select id="lab-bundle">
+                        <option value="">Select Bundle</option>
+                        <option value="bundle1">Bundle 1: Organism Structures & Behavior</option>
+                        <option value="bundle2">Bundle 2: Earth's Surface & Resources</option>
+                        <option value="bundle3">Bundle 3: Using Energy Transformations</option>
+                        <option value="bundle4">Bundle 4: Engineering & Design</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="lab-objective">Lab Objective</label>
+                    <textarea id="lab-objective" placeholder="What will students learn from this lab?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="lab-materials">Materials List</label>
+                    <textarea id="lab-materials" placeholder="List all materials needed for the lab..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="lab-procedure">Procedure</label>
+                    <textarea id="lab-procedure" placeholder="Step-by-step procedure for the lab..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="lab-data">Data Collection</label>
+                    <textarea id="lab-data" placeholder="How should students collect and record data?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="lab-analysis">Analysis Questions</label>
+                    <textarea id="lab-analysis" placeholder="Questions to help students analyze their data..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="lab-conclusion">Conclusion Guidelines</label>
+                    <textarea id="lab-conclusion" placeholder="Guidelines for writing conclusions..."></textarea>
+                </div>
+                <button class="create-btn" onclick="generateLabPreview()">Generate Preview</button>
+            `;
+        }
+
+        function getPerformanceTaskForm() {
+            return `
+                <div class="form-group">
+                    <label for="task-title">Performance Task Title</label>
+                    <input type="text" id="task-title" placeholder="e.g., Design a Sustainable Ecosystem">
+                </div>
+                <div class="form-group">
+                    <label for="task-bundle">Bundle</label>
+                    <select id="task-bundle">
+                        <option value="">Select Bundle</option>
+                        <option value="bundle1">Bundle 1: Organism Structures & Behavior</option>
+                        <option value="bundle2">Bundle 2: Earth's Surface & Resources</option>
+                        <option value="bundle3">Bundle 3: Using Energy Transformations</option>
+                        <option value="bundle4">Bundle 4: Engineering & Design</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="task-scenario">Task Scenario</label>
+                    <textarea id="task-scenario" placeholder="Describe the real-world problem or challenge students will address..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="task-objectives">Learning Objectives</label>
+                    <textarea id="task-objectives" placeholder="What should students demonstrate they can do?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="task-deliverables">Deliverables</label>
+                    <textarea id="task-deliverables" placeholder="What products or presentations should students create?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="task-criteria">Success Criteria</label>
+                    <textarea id="task-criteria" placeholder="How will you know students have succeeded?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="task-timeline">Timeline</label>
+                    <textarea id="task-timeline" placeholder="How long should this task take? What are the milestones?"></textarea>
+                </div>
+                <button class="create-btn" onclick="generateTaskPreview()">Generate Preview</button>
+            `;
+        }
+
+        function addQuestion() {
+            const container = document.getElementById('questions-container');
+            const questionCount = container.children.length + 1;
+            
+            const questionHTML = `
+                <div class="question-item">
+                    <div class="question-header">
+                        <span class="question-number">Question ${questionCount}</span>
+                        <button class="remove-question" onclick="removeQuestion(this)">Remove</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Question Text</label>
+                        <textarea placeholder="Enter your question here..."></textarea>
+                    </div>
+                    <div class="options-list">
+                        <div class="option-item">
+                            <input type="radio" name="q${questionCount}-correct" value="a">
+                            <input type="text" placeholder="Option A">
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="q${questionCount}-correct" value="b">
+                            <input type="text" placeholder="Option B">
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="q${questionCount}-correct" value="c">
+                            <input type="text" placeholder="Option C">
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="q${questionCount}-correct" value="d">
+                            <input type="text" placeholder="Option D">
+                        </div>
+                    </div>
+                    <button class="add-option" onclick="addOption(this)">Add Option</button>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', questionHTML);
+        }
+
+        function removeQuestion(button) {
+            button.closest('.question-item').remove();
+            updateQuestionNumbers();
+        }
+
+        function updateQuestionNumbers() {
+            const questions = document.querySelectorAll('.question-number');
+            questions.forEach((number, index) => {
+                number.textContent = `Question ${index + 1}`;
+            });
+        }
+
+        function addOption(button) {
+            const optionsList = button.previousElementSibling;
+            const optionCount = optionsList.children.length;
+            const nextLetter = String.fromCharCode(97 + optionCount); // a, b, c, d, etc.
+            
+            const optionHTML = `
+                <div class="option-item">
+                    <input type="radio" name="${button.closest('.question-item').querySelector('input[type="radio"]').name}" value="${nextLetter}">
+                    <input type="text" placeholder="Option ${nextLetter.toUpperCase()}">
+                </div>
+            `;
+            
+            optionsList.insertAdjacentHTML('beforeend', optionHTML);
+        }
+
+        function generateCERPreview() {
+            const title = document.getElementById('cer-title').value;
+            const bundle = document.getElementById('cer-bundle').value;
+            const scenario = document.getElementById('cer-scenario').value;
+            const prompt = document.getElementById('cer-prompt').value;
+            const rubric = document.getElementById('cer-rubric').value;
+            
+            const preview = `
+                <h3>${title}</h3>
+                <p><strong>Bundle:</strong> ${bundle}</p>
+                <div class="preview-question">
+                    <h4>Scenario:</h4>
+                    <p>${scenario}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>CER Prompt:</h4>
+                    <p>${prompt}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Rubric:</h4>
+                    <p>${rubric}</p>
+                </div>
+            `;
+            
+            document.getElementById('preview-content').innerHTML = preview;
+            document.getElementById('preview-section').style.display = 'block';
+            document.getElementById('export-buttons').style.display = 'flex';
+        }
+
+        function generateMCPreview() {
+            const title = document.getElementById('mc-title').value;
+            const bundle = document.getElementById('mc-bundle').value;
+            const description = document.getElementById('mc-description').value;
+            
+            let questionsHTML = '';
+            const questions = document.querySelectorAll('.question-item');
+            
+            questions.forEach((question, index) => {
+                const questionText = question.querySelector('textarea').value;
+                const options = question.querySelectorAll('.option-item');
+                
+                let optionsHTML = '';
+                options.forEach(option => {
+                    const optionText = option.querySelector('input[type="text"]').value;
+                    const isCorrect = option.querySelector('input[type="radio"]').checked;
+                    optionsHTML += `<div class="preview-option" style="border-left-color: ${isCorrect ? '#28a745' : '#667eea'}">${optionText} ${isCorrect ? '✓' : ''}</div>`;
+                });
+                
+                questionsHTML += `
+                    <div class="preview-question">
+                        <h4>Question ${index + 1}:</h4>
+                        <p>${questionText}</p>
+                        <div class="preview-options">${optionsHTML}</div>
+                    </div>
+                `;
+            });
+            
+            const preview = `
+                <h3>${title}</h3>
+                <p><strong>Bundle:</strong> ${bundle}</p>
+                <p><strong>Description:</strong> ${description}</p>
+                ${questionsHTML}
+            `;
+            
+            document.getElementById('preview-content').innerHTML = preview;
+            document.getElementById('preview-section').style.display = 'block';
+            document.getElementById('export-buttons').style.display = 'flex';
+        }
+
+        function generateOEPreview() {
+            const title = document.getElementById('oe-title').value;
+            const bundle = document.getElementById('oe-bundle').value;
+            const context = document.getElementById('oe-context').value;
+            const question = document.getElementById('oe-question').value;
+            const rubric = document.getElementById('oe-rubric').value;
+            const exemplar = document.getElementById('oe-exemplar').value;
+            
+            const preview = `
+                <h3>${title}</h3>
+                <p><strong>Bundle:</strong> ${bundle}</p>
+                <div class="preview-question">
+                    <h4>Context:</h4>
+                    <p>${context}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Question:</h4>
+                    <p>${question}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Scoring Rubric:</h4>
+                    <p>${rubric}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Exemplar Response:</h4>
+                    <p>${exemplar}</p>
+                </div>
+            `;
+            
+            document.getElementById('preview-content').innerHTML = preview;
+            document.getElementById('preview-section').style.display = 'block';
+            document.getElementById('export-buttons').style.display = 'flex';
+        }
+
+        function generateMathPreview() {
+            const title = document.getElementById('math-title').value;
+            const bundle = document.getElementById('math-bundle').value;
+            const skills = document.getElementById('math-skills').value;
+            const context = document.getElementById('math-context').value;
+            const problems = document.getElementById('math-problems').value;
+            const solutions = document.getElementById('math-solutions').value;
+            
+            const preview = `
+                <h3>${title}</h3>
+                <p><strong>Bundle:</strong> ${bundle}</p>
+                <p><strong>Math Skills:</strong> ${skills}</p>
+                <div class="preview-question">
+                    <h4>Context:</h4>
+                    <p>${context}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Math Problems:</h4>
+                    <p>${problems}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Answer Key:</h4>
+                    <p>${solutions}</p>
+                </div>
+            `;
+            
+            document.getElementById('preview-content').innerHTML = preview;
+            document.getElementById('preview-section').style.display = 'block';
+            document.getElementById('export-buttons').style.display = 'flex';
+        }
+
+        function generateLabPreview() {
+            const title = document.getElementById('lab-title').value;
+            const bundle = document.getElementById('lab-bundle').value;
+            const objective = document.getElementById('lab-objective').value;
+            const materials = document.getElementById('lab-materials').value;
+            const procedure = document.getElementById('lab-procedure').value;
+            const data = document.getElementById('lab-data').value;
+            const analysis = document.getElementById('lab-analysis').value;
+            const conclusion = document.getElementById('lab-conclusion').value;
+            
+            const preview = `
+                <h3>${title}</h3>
+                <p><strong>Bundle:</strong> ${bundle}</p>
+                <div class="preview-question">
+                    <h4>Objective:</h4>
+                    <p>${objective}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Materials:</h4>
+                    <p>${materials}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Procedure:</h4>
+                    <p>${procedure}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Data Collection:</h4>
+                    <p>${data}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Analysis Questions:</h4>
+                    <p>${analysis}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Conclusion Guidelines:</h4>
+                    <p>${conclusion}</p>
+                </div>
+            `;
+            
+            document.getElementById('preview-content').innerHTML = preview;
+            document.getElementById('preview-section').style.display = 'block';
+            document.getElementById('export-buttons').style.display = 'flex';
+        }
+
+        function generateTaskPreview() {
+            const title = document.getElementById('task-title').value;
+            const bundle = document.getElementById('task-bundle').value;
+            const scenario = document.getElementById('task-scenario').value;
+            const objectives = document.getElementById('task-objectives').value;
+            const deliverables = document.getElementById('task-deliverables').value;
+            const criteria = document.getElementById('task-criteria').value;
+            const timeline = document.getElementById('task-timeline').value;
+            
+            const preview = `
+                <h3>${title}</h3>
+                <p><strong>Bundle:</strong> ${bundle}</p>
+                <div class="preview-question">
+                    <h4>Task Scenario:</h4>
+                    <p>${scenario}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Learning Objectives:</h4>
+                    <p>${objectives}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Deliverables:</h4>
+                    <p>${deliverables}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Success Criteria:</h4>
+                    <p>${criteria}</p>
+                </div>
+                <div class="preview-question">
+                    <h4>Timeline:</h4>
+                    <p>${timeline}</p>
+                </div>
+            `;
+            
+            document.getElementById('preview-content').innerHTML = preview;
+            document.getElementById('preview-section').style.display = 'block';
+            document.getElementById('export-buttons').style.display = 'flex';
+        }
+
+        function exportAssessment(format) {
+            const content = document.getElementById('preview-content').innerHTML;
+            const title = document.querySelector('#preview-content h3').textContent;
+            
+            if (format === 'pdf') {
+                // Simulate PDF export
+                alert(`Exporting "${title}" as PDF...\n\nThis would generate a PDF file with the assessment content.`);
+            } else if (format === 'word') {
+                // Simulate Word export
+                alert(`Exporting "${title}" as Word document...\n\nThis would generate a Word file with the assessment content.`);
+            }
+        }
+
+        function saveAssessment() {
+            const title = document.querySelector('#preview-content h3').textContent;
+            alert(`Saving "${title}" to your assessment library...\n\nThis would save the assessment for future use.`);
+        }
+
+        function resetAssessmentData() {
+            assessmentData = {
+                title: '',
+                description: '',
+                bundle: '',
+                questions: []
+            };
+            document.getElementById('preview-section').style.display = 'none';
+            document.getElementById('export-buttons').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('assessment-modal')) {
+                closeAssessment();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAssessment();
+            }
+        });
+    </script>
+</body>
+</html>

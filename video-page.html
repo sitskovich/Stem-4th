@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Video - STEM Learning Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .video-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .video-header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .video-header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .video-player-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .control-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .video-info {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .video-info h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .video-description {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .video-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #f8f9fa;
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid #e9ecef;
+        }
+
+        .related-videos {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .related-videos h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 150px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #667eea;
+        }
+
+        .video-card-content {
+            padding: 15px;
+        }
+
+        .video-card h3 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .video-card p {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .back-btn {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #e9ecef;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <button class="back-btn" onclick="goBack()">← Back to Portal</button>
+        
+        <div class="video-header">
+            <h1 id="videoTitle">Energy Transfer in Living Systems</h1>
+            <div class="video-meta">
+                <span>📚 Grade 4 Science</span>
+                <span>⏱️ 8 minutes</span>
+                <span>👥 24 students viewed</span>
+                <span>⭐ 4.8 rating</span>
+            </div>
+        </div>
+
+        <div class="video-player-section">
+            <div class="video-wrapper">
+                <video id="mainVideo" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    <source src="https://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="video-controls">
+                <button class="control-btn" onclick="togglePlayPause()">⏯️ Play/Pause</button>
+                <button class="control-btn" onclick="restartVideo()">🔄 Restart</button>
+                <button class="control-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+                <button class="control-btn" onclick="addToFavorites()">❤️ Add to Favorites</button>
+            </div>
+        </div>
+
+        <div class="video-info">
+            <h2>About This Video</h2>
+            <div class="video-description">
+                <p>This educational video explores how energy flows through living systems, from the sun to plants and animals. Students will learn about photosynthesis, food chains, and energy pyramids in an engaging, easy-to-understand format.</p>
+                <p><strong>Learning Objectives:</strong></p>
+                <ul>
+                    <li>Understand how energy enters living systems</li>
+                    <li>Identify the role of producers, consumers, and decomposers</li>
+                    <li>Explain energy transfer in food chains</li>
+                    <li>Recognize the importance of the sun as the primary energy source</li>
+                </ul>
+            </div>
+            <div class="video-tags">
+                <span class="tag">Energy</span>
+                <span class="tag">Food Chains</span>
+                <span class="tag">Photosynthesis</span>
+                <span class="tag">Ecosystems</span>
+                <span class="tag">Grade 4</span>
+            </div>
+        </div>
+
+        <div class="related-videos">
+            <h2>Related Videos</h2>
+            <div class="video-grid">
+                <div class="video-card" onclick="loadVideo('Photosynthesis Process')">
+                    <div class="video-thumbnail">🌱</div>
+                    <div class="video-card-content">
+                        <h3>Photosynthesis Process</h3>
+                        <p>Learn how plants make their own food using sunlight</p>
+                    </div>
+                </div>
+                <div class="video-card" onclick="loadVideo('Food Web Dynamics')">
+                    <div class="video-thumbnail">🕸️</div>
+                    <div class="video-card-content">
+                        <h3>Food Web Dynamics</h3>
+                        <p>Explore complex feeding relationships in ecosystems</p>
+                    </div>
+                </div>
+                <div class="video-card" onclick="loadVideo('Energy Pyramids')">
+                    <div class="video-thumbnail">🔺</div>
+                    <div class="video-card-content">
+                        <h3>Energy Pyramids</h3>
+                        <p>Understand energy flow through trophic levels</p>
+                    </div>
+                </div>
+                <div class="video-card" onclick="loadVideo('Decomposers Role')">
+                    <div class="video-thumbnail">🍄</div>
+                    <div class="video-card-content">
+                        <h3>Decomposers Role</h3>
+                        <p>Discover how decomposers recycle nutrients</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('mainVideo');
+        const videoTitle = document.getElementById('videoTitle');
+
+        function goBack() {
+            // Try to go back in history, if that fails, open the teacher portal
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'teacher-portal.html';
+            }
+        }
+
+        // Make all video elements clickable
+        function initializeVideoPage() {
+            // Get video title from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoTitle = urlParams.get('title') || 'Sample STEM Video';
+            
+            // Update page content
+            document.getElementById('videoTitle').textContent = videoTitle;
+            
+            // Make all interactive elements functional
+            const interactiveElements = document.querySelectorAll('.interactive-element');
+            interactiveElements.forEach(element => {
+                element.style.cursor = 'pointer';
+                element.addEventListener('click', function() {
+                    alert('Interactive element clicked: ' + this.textContent);
+                });
+            });
+
+            // Make all buttons functional
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                if (!button.onclick) {
+                    button.addEventListener('click', function() {
+                        alert('Button clicked: ' + this.textContent);
+                    });
+                }
+            });
+
+            // Make all links functional
+            const links = document.querySelectorAll('a');
+            links.forEach(link => {
+                if (!link.href || link.href === '#') {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        alert('Link clicked: ' + this.textContent);
+                    });
+                }
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeVideoPage);
+
+        function togglePlayPause() {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+
+        function restartVideo() {
+            video.currentTime = 0;
+            video.play();
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                video.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function addToFavorites() {
+            alert('Video added to favorites!');
+        }
+
+        function loadVideo(title) {
+            videoTitle.textContent = title;
+            // In a real implementation, this would load the actual video
+            alert(`Loading video: ${title}`);
+        }
+
+        // Get video title from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const title = urlParams.get('title');
+        if (title) {
+            videoTitle.textContent = decodeURIComponent(title);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Tools - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .tool-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .tool-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .tool-features {
+            margin-bottom: 15px;
+        }
+
+        .tool-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tool-features li {
+            padding: 5px 0;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .tool-features li:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .tool-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tool-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .quiz-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .question {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .question h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .options li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .options li:hover {
+            background: #e9ecef;
+        }
+
+        .options li.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .results {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #28a745;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="teacher-portal.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </a>
+            <div class="header-text">
+                <h1><i class="fas fa-question-circle"></i> Assessment Tools</h1>
+                <p>Digital quizzes and progress tracking for 4th grade STEM</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="tools-grid">
+            <div class="tool-card" onclick="openAssessment('bundle1-quiz')">
+                <div class="tool-icon">🌱</div>
+                <div class="tool-title">Bundle 1 Quiz</div>
+                <div class="tool-description">
+                    Test knowledge of organism structures, plant and animal adaptations, and ecosystems.
+                </div>
+                <div class="tool-features">
+                    <ul>
+                        <li>15 multiple choice questions</li>
+                        <li>Instant feedback</li>
+                        <li>Progress tracking</li>
+                        <li>Detailed explanations</li>
+                    </ul>
+                </div>
+                <button class="tool-button">Start Quiz</button>
+            </div>
+
+            <div class="tool-card" onclick="openAssessment('bundle2-quiz')">
+                <div class="tool-icon">🏔️</div>
+                <div class="tool-title">Bundle 2 Quiz</div>
+                <div class="tool-description">
+                    Assess understanding of Earth's surface, rocks, weathering, and natural resources.
+                </div>
+                <div class="tool-features">
+                    <ul>
+                        <li>15 multiple choice questions</li>
+                        <li>Visual diagrams</li>
+                        <li>Interactive elements</li>
+                        <li>Performance analytics</li>
+                    </ul>
+                </div>
+                <button class="tool-button">Start Quiz</button>
+            </div>
+
+            <div class="tool-card" onclick="openAssessment('vocabulary-test')">
+                <div class="tool-icon">📚</div>
+                <div class="tool-title">Vocabulary Test</div>
+                <div class="tool-description">
+                    Comprehensive vocabulary assessment covering all 4 bundles with definitions and examples.
+                </div>
+                <div class="tool-features">
+                    <ul>
+                        <li>50 vocabulary words</li>
+                        <li>Multiple question types</li>
+                        <li>Audio pronunciation</li>
+                        <li>Spaced repetition</li>
+                    </ul>
+                </div>
+                <button class="tool-button">Start Test</button>
+            </div>
+
+            <div class="tool-card" onclick="openAssessment('comprehensive-exam')">
+                <div class="tool-icon">🎓</div>
+                <div class="tool-title">Comprehensive Exam</div>
+                <div class="tool-description">
+                    Full-year assessment covering all STEM concepts with mixed question types.
+                </div>
+                <div class="tool-features">
+                    <ul>
+                        <li>50 questions total</li>
+                        <li>Multiple choice & short answer</li>
+                        <li>Time-limited</li>
+                        <li>Detailed score report</li>
+                    </ul>
+                </div>
+                <button class="tool-button">Start Exam</button>
+            </div>
+
+            <div class="tool-card" onclick="openAssessment('lab-assessment')">
+                <div class="tool-icon">🔬</div>
+                <div class="tool-title">Lab Assessment</div>
+                <div class="tool-description">
+                    Evaluate lab skills, scientific method, and data analysis abilities.
+                </div>
+                <div class="tool-features">
+                    <ul>
+                        <li>Lab scenario questions</li>
+                        <li>Data interpretation</li>
+                        <li>Scientific reasoning</li>
+                        <li>Practical applications</li>
+                    </ul>
+                </div>
+                <button class="tool-button">Start Assessment</button>
+            </div>
+
+            <div class="tool-card" onclick="openAssessment('progress-tracker')">
+                <div class="tool-icon">📊</div>
+                <div class="tool-title">Progress Tracker</div>
+                <div class="tool-description">
+                    View detailed progress reports and performance analytics across all assessments.
+                </div>
+                <div class="tool-features">
+                    <ul>
+                        <li>Performance trends</li>
+                        <li>Weakness identification</li>
+                        <li>Improvement suggestions</li>
+                        <li>Parent reports</li>
+                    </ul>
+                </div>
+                <button class="tool-button">View Progress</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assessment Modal -->
+    <div id="assessmentModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeAssessment()">&times;</button>
+            <div id="assessmentContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuiz = null;
+        let currentQuestion = 0;
+        let score = 0;
+        let answers = [];
+
+        function openAssessment(assessmentType) {
+            const modal = document.getElementById('assessmentModal');
+            const content = document.getElementById('assessmentContent');
+            
+            const assessments = {
+                'bundle1-quiz': {
+                    title: 'Bundle 1: Organism Structures Quiz',
+                    questions: [
+                        {
+                            question: 'What is the main function of plant roots?',
+                            options: ['To make food', 'To absorb water and nutrients', 'To produce flowers', 'To store energy'],
+                            correct: 1
+                        },
+                        {
+                            question: 'Which of the following is a producer in a food chain?',
+                            options: ['Rabbit', 'Grass', 'Hawk', 'Snake'],
+                            correct: 1
+                        },
+                        {
+                            question: 'How do birds\' beaks help them survive?',
+                            options: ['They help birds fly faster', 'They help birds attract mates', 'They help birds find and eat food', 'They help birds stay warm'],
+                            correct: 2
+                        }
+                    ]
+                },
+                'bundle2-quiz': {
+                    title: 'Bundle 2: Earth\'s Surface Quiz',
+                    questions: [
+                        {
+                            question: 'What process breaks down rocks into smaller pieces?',
+                            options: ['Erosion', 'Weathering', 'Deposition', 'Sedimentation'],
+                            correct: 1
+                        },
+                        {
+                            question: 'Which layer of Earth is the thickest?',
+                            options: ['Crust', 'Mantle', 'Outer Core', 'Inner Core'],
+                            correct: 1
+                        },
+                        {
+                            question: 'What type of rock forms from cooled lava?',
+                            options: ['Sedimentary', 'Metamorphic', 'Igneous', 'Fossil'],
+                            correct: 2
+                        }
+                    ]
+                },
+                'vocabulary-test': {
+                    title: 'STEM Vocabulary Test',
+                    questions: [
+                        {
+                            question: 'What does "photosynthesis" mean?',
+                            options: ['The process of breathing', 'The process of growing', 'The process of making food using sunlight', 'The process of reproducing'],
+                            correct: 2
+                        },
+                        {
+                            question: 'What is an "ecosystem"?',
+                            options: ['A type of animal', 'A community of living things and their environment', 'A type of plant', 'A type of rock'],
+                            correct: 1
+                        },
+                        {
+                            question: 'What does "weathering" mean?',
+                            options: ['The process of rain falling', 'The process of rocks breaking down', 'The process of wind blowing', 'The process of temperature changing'],
+                            correct: 1
+                        }
+                    ]
+                }
+            };
+            
+            if (assessments[assessmentType]) {
+                currentQuiz = assessments[assessmentType];
+                currentQuestion = 0;
+                score = 0;
+                answers = [];
+                startQuiz();
+                modal.classList.add('active');
+            }
+        }
+
+        function startQuiz() {
+            const content = document.getElementById('assessmentContent');
+            content.innerHTML = `
+                <h2>${currentQuiz.title}</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div id="quizContainer"></div>
+            `;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const container = document.getElementById('quizContainer');
+            const question = currentQuiz.questions[currentQuestion];
+            const progress = ((currentQuestion + 1) / currentQuiz.questions.length) * 100;
+            
+            container.innerHTML = `
+                <div class="question">
+                    <h4>Question ${currentQuestion + 1} of ${currentQuiz.questions.length}</h4>
+                    <p>${question.question}</p>
+                    <ul class="options">
+                        ${question.options.map((option, index) => 
+                            `<li onclick="selectAnswer(${index})">${option}</li>`
+                        ).join('')}
+                    </ul>
+                    <button class="tool-button" onclick="nextQuestion()" id="nextBtn" disabled>Next Question</button>
+                </div>
+            `;
+            
+            document.querySelector('.progress-fill').style.width = progress + '%';
+        }
+
+        function selectAnswer(selectedIndex) {
+            // Remove previous selection
+            document.querySelectorAll('.options li').forEach(li => li.classList.remove('selected'));
+            // Add selection to clicked option
+            document.querySelectorAll('.options li')[selectedIndex].classList.add('selected');
+            
+            answers[currentQuestion] = selectedIndex;
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (answers[currentQuestion] === currentQuiz.questions[currentQuestion].correct) {
+                score++;
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const percentage = Math.round((score / currentQuiz.questions.length) * 100);
+            const container = document.getElementById('quizContainer');
+            
+            container.innerHTML = `
+                <div class="results">
+                    <h3>Quiz Complete!</h3>
+                    <div class="score">${score}/${currentQuiz.questions.length} (${percentage}%)</div>
+                    <p>${getPerformanceMessage(percentage)}</p>
+                    <button class="tool-button" onclick="restartQuiz()">Take Quiz Again</button>
+                    <button class="tool-button" onclick="closeAssessment()">Close</button>
+                </div>
+            `;
+        }
+
+        function getPerformanceMessage(percentage) {
+            if (percentage >= 90) return "Excellent work! You have a strong understanding of this topic.";
+            if (percentage >= 80) return "Good job! You understand most of the concepts.";
+            if (percentage >= 70) return "Not bad! Review the material and try again.";
+            return "Keep studying! You'll get better with practice.";
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answers = [];
+            startQuiz();
+        }
+
+        function closeAssessment() {
+            document.getElementById('assessmentModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('assessmentModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAssessment();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAssessment();
+            }
+        });
+    </script>
+</body>
+</html>

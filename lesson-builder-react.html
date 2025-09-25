@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Builder - React Edition</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .builder-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(248, 249, 250, 0.8);
+            color: #333;
+            border: 1px solid rgba(233, 236, 239, 0.5);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(233, 236, 239, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .builder-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 25px;
+            height: calc(100vh - 200px);
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #667eea;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-blocks {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .content-block {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-block:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .content-block:active {
+            cursor: grabbing;
+        }
+
+        .block-icon {
+            font-size: 1.5rem;
+        }
+
+        .block-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .block-info p {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .main-workspace {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .workspace-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(233, 236, 239, 0.5);
+        }
+
+        .workspace-header h2 {
+            color: #667eea;
+            font-size: 1.5rem;
+        }
+
+        .lesson-canvas {
+            flex: 1;
+            background: rgba(248, 249, 250, 0.5);
+            border: 2px dashed rgba(233, 236, 239, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 400px;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .lesson-slide {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-slide:hover {
+            border-color: #667eea;
+        }
+
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(233, 236, 239, 0.5);
+        }
+
+        .slide-title {
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .slide-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .slide-content {
+            min-height: 200px;
+            position: relative;
+        }
+
+        .drop-zone {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #5a6fd8;
+        }
+
+        .slide-element {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(233, 236, 239, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .slide-element:hover {
+            border-color: #667eea;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.1);
+        }
+
+        .element-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .element-type {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .element-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .element-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .element-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .element-content {
+            color: #333;
+        }
+
+        .properties-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow-y: auto;
+        }
+
+        .property-group {
+            margin-bottom: 20px;
+        }
+
+        .property-group h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .property-item {
+            margin-bottom: 15px;
+        }
+
+        .property-item label {
+            display: block;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .property-item input,
+        .property-item textarea,
+        .property-item select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid rgba(233, 236, 239, 0.5);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .property-item input:focus,
+        .property-item textarea:focus,
+        .property-item select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .property-item textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        @media (max-width: 1200px) {
+            .builder-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+            
+            .sidebar {
+                order: 2;
+            }
+            
+            .main-workspace {
+                order: 1;
+            }
+            
+            .properties-panel {
+                order: 3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Content block types
+        const CONTENT_BLOCKS = [
+            {
+                id: 'text',
+                name: 'Text Block',
+                icon: '📝',
+                description: 'Add text content to your lesson',
+                defaultContent: 'Enter your text here...'
+            },
+            {
+                id: 'image',
+                name: 'Image Block',
+                icon: '🖼️',
+                description: 'Add images to illustrate concepts',
+                defaultContent: 'Image placeholder'
+            },
+            {
+                id: 'video',
+                name: 'Video Block',
+                icon: '🎥',
+                description: 'Embed educational videos',
+                defaultContent: 'Video placeholder'
+            },
+            {
+                id: 'quiz',
+                name: 'Quiz Block',
+                icon: '❓',
+                description: 'Add interactive quiz questions',
+                defaultContent: 'Quiz question placeholder'
+            },
+            {
+                id: 'simulation',
+                name: 'Simulation Block',
+                icon: '🔬',
+                description: 'Interactive simulations and experiments',
+                defaultContent: 'Simulation placeholder'
+            },
+            {
+                id: 'activity',
+                name: 'Activity Block',
+                icon: '🎯',
+                description: 'Hands-on learning activities',
+                defaultContent: 'Activity placeholder'
+            }
+        ];
+
+        // Main Lesson Builder Component
+        function LessonBuilder() {
+            const [lesson, setLesson] = useState({
+                title: 'New Lesson',
+                description: '',
+                slides: [
+                    {
+                        id: 1,
+                        title: 'Slide 1',
+                        elements: []
+                    }
+                ]
+            });
+            const [selectedElement, setSelectedElement] = useState(null);
+            const [draggedBlock, setDraggedBlock] = useState(null);
+            const [showSaveModal, setShowSaveModal] = useState(false);
+
+            const handleDragStart = (e, blockType) => {
+                setDraggedBlock(blockType);
+                e.dataTransfer.effectAllowed = 'copy';
+            };
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+            };
+
+            const handleDrop = (e, slideId) => {
+                e.preventDefault();
+                if (!draggedBlock) return;
+
+                const newElement = {
+                    id: Date.now(),
+                    type: draggedBlock.id,
+                    content: draggedBlock.defaultContent,
+                    properties: {
+                        title: draggedBlock.name,
+                        ...getDefaultProperties(draggedBlock.id)
+                    }
+                };
+
+                setLesson(prevLesson => ({
+                    ...prevLesson,
+                    slides: prevLesson.slides.map(slide =>
+                        slide.id === slideId
+                            ? { ...slide, elements: [...slide.elements, newElement] }
+                            : slide
+                    )
+                }));
+
+                setDraggedBlock(null);
+            };
+
+            const getDefaultProperties = (blockType) => {
+                switch (blockType) {
+                    case 'text':
+                        return { fontSize: '16px', color: '#333', align: 'left' };
+                    case 'image':
+                        return { width: '100%', height: 'auto', alt: 'Image' };
+                    case 'video':
+                        return { width: '100%', height: '315px', autoplay: false };
+                    case 'quiz':
+                        return { question: '', options: ['', '', '', ''], correct: 0 };
+                    case 'simulation':
+                        return { type: 'interactive', controls: true };
+                    case 'activity':
+                        return { duration: '15 min', difficulty: 'medium' };
+                    default:
+                        return {};
+                }
+            };
+
+            const updateElement = (slideId, elementId, updates) => {
+                setLesson(prevLesson => ({
+                    ...prevLesson,
+                    slides: prevLesson.slides.map(slide =>
+                        slide.id === slideId
+                            ? {
+                                ...slide,
+                                elements: slide.elements.map(element =>
+                                    element.id === elementId
+                                        ? { ...element, ...updates }
+                                        : element
+                                )
+                            }
+                            : slide
+                    )
+                }));
+            };
+
+            const deleteElement = (slideId, elementId) => {
+                setLesson(prevLesson => ({
+                    ...prevLesson,
+                    slides: prevLesson.slides.map(slide =>
+                        slide.id === slideId
+                            ? {
+                                ...slide,
+                                elements: slide.elements.filter(element => element.id !== elementId)
+                            }
+                            : slide
+                    )
+                }));
+                setSelectedElement(null);
+            };
+
+            const addSlide = () => {
+                const newSlide = {
+                    id: Date.now(),
+                    title: `Slide ${lesson.slides.length + 1}`,
+                    elements: []
+                };
+                setLesson(prevLesson => ({
+                    ...prevLesson,
+                    slides: [...prevLesson.slides, newSlide]
+                }));
+            };
+
+            const deleteSlide = (slideId) => {
+                if (lesson.slides.length > 1) {
+                    setLesson(prevLesson => ({
+                        ...prevLesson,
+                        slides: prevLesson.slides.filter(slide => slide.id !== slideId)
+                    }));
+                }
+            };
+
+            const saveLesson = () => {
+                const lessonData = {
+                    ...lesson,
+                    savedAt: new Date().toISOString()
+                };
+                localStorage.setItem('lesson_' + Date.now(), JSON.stringify(lessonData));
+                alert('Lesson saved successfully!');
+                setShowSaveModal(false);
+            };
+
+            const previewLesson = () => {
+                alert('Preview functionality would open in a new window');
+            };
+
+            const publishLesson = () => {
+                alert('Publish functionality would make the lesson available to students');
+            };
+
+            return (
+                <div className="builder-container">
+                    <div className="header">
+                        <h1><i className="fas fa-edit"></i> Lesson Builder</h1>
+                        <div className="header-actions">
+                            <button className="btn btn-secondary" onClick={() => window.location.href = 'teacher-portal-react.html'}>
+                                <i className="fas fa-arrow-left"></i> Back to Portal
+                            </button>
+                            <button className="btn btn-primary" onClick={() => setShowSaveModal(true)}>
+                                <i className="fas fa-save"></i> Save Lesson
+                            </button>
+                            <button className="btn btn-secondary" onClick={previewLesson}>
+                                <i className="fas fa-eye"></i> Preview
+                            </button>
+                            <button className="btn btn-success" onClick={publishLesson}>
+                                <i className="fas fa-rocket"></i> Publish
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="builder-layout">
+                        {/* Content Blocks Sidebar */}
+                        <div className="sidebar">
+                            <h3><i className="fas fa-puzzle-piece"></i> Content Blocks</h3>
+                            <div className="content-blocks">
+                                {CONTENT_BLOCKS.map(block => (
+                                    <div
+                                        key={block.id}
+                                        className="content-block"
+                                        draggable
+                                        onDragStart={(e) => handleDragStart(e, block)}
+                                    >
+                                        <div className="block-icon">{block.icon}</div>
+                                        <div className="block-info">
+                                            <h4>{block.name}</h4>
+                                            <p>{block.description}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Main Workspace */}
+                        <div className="main-workspace">
+                            <div className="workspace-header">
+                                <h2><i className="fas fa-layer-group"></i> Lesson Canvas</h2>
+                                <button className="btn btn-primary" onClick={addSlide}>
+                                    <i className="fas fa-plus"></i> Add Slide
+                                </button>
+                            </div>
+                            
+                            <div className="lesson-canvas">
+                                {lesson.slides.map(slide => (
+                                    <div key={slide.id} className="lesson-slide">
+                                        <div className="slide-header">
+                                            <div className="slide-title">{slide.title}</div>
+                                            <div className="slide-actions">
+                                                <button 
+                                                    className="btn btn-secondary"
+                                                    onClick={() => deleteSlide(slide.id)}
+                                                    disabled={lesson.slides.length === 1}
+                                                >
+                                                    <i className="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div 
+                                            className="slide-content"
+                                            onDragOver={handleDragOver}
+                                            onDrop={(e) => handleDrop(e, slide.id)}
+                                        >
+                                            {slide.elements.length === 0 ? (
+                                                <div className="drop-zone">
+                                                    <i className="fas fa-plus-circle" style={{fontSize: '2rem', marginBottom: '10px'}}></i>
+                                                    <p>Drag content blocks here to build your lesson</p>
+                                                </div>
+                                            ) : (
+                                                slide.elements.map(element => (
+                                                    <div
+                                                        key={element.id}
+                                                        className="slide-element"
+                                                        onClick={() => setSelectedElement({...element, slideId: slide.id})}
+                                                        style={{
+                                                            borderColor: selectedElement?.id === element.id ? '#667eea' : undefined
+                                                        }}
+                                                    >
+                                                        <div className="element-header">
+                                                            <div className="element-type">
+                                                                {CONTENT_BLOCKS.find(b => b.id === element.type)?.icon} {element.type.toUpperCase()}
+                                                            </div>
+                                                            <div className="element-actions">
+                                                                <button 
+                                                                    className="element-btn"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        deleteElement(slide.id, element.id);
+                                                                    }}
+                                                                >
+                                                                    <i className="fas fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div className="element-content">
+                                                            {renderElementContent(element)}
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Properties Panel */}
+                        <div className="properties-panel">
+                            <h3><i className="fas fa-cog"></i> Properties</h3>
+                            {selectedElement ? (
+                                <div>
+                                    <div className="property-group">
+                                        <h4>Element Properties</h4>
+                                        <div className="property-item">
+                                            <label>Type</label>
+                                            <input 
+                                                type="text" 
+                                                value={selectedElement.type} 
+                                                readOnly 
+                                            />
+                                        </div>
+                                        <div className="property-item">
+                                            <label>Content</label>
+                                            <textarea
+                                                value={selectedElement.content}
+                                                onChange={(e) => {
+                                                    const updated = {...selectedElement, content: e.target.value};
+                                                    setSelectedElement(updated);
+                                                    updateElement(selectedElement.slideId, selectedElement.id, {content: e.target.value});
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    
+                                    {selectedElement.type === 'text' && (
+                                        <div className="property-group">
+                                            <h4>Text Properties</h4>
+                                            <div className="property-item">
+                                                <label>Font Size</label>
+                                                <select
+                                                    value={selectedElement.properties.fontSize}
+                                                    onChange={(e) => {
+                                                        const updated = {
+                                                            ...selectedElement,
+                                                            properties: {...selectedElement.properties, fontSize: e.target.value}
+                                                        };
+                                                        setSelectedElement(updated);
+                                                        updateElement(selectedElement.slideId, selectedElement.id, {properties: updated.properties});
+                                                    }}
+                                                >
+                                                    <option value="12px">12px</option>
+                                                    <option value="14px">14px</option>
+                                                    <option value="16px">16px</option>
+                                                    <option value="18px">18px</option>
+                                                    <option value="20px">20px</option>
+                                                    <option value="24px">24px</option>
+                                                </select>
+                                            </div>
+                                            <div className="property-item">
+                                                <label>Text Align</label>
+                                                <select
+                                                    value={selectedElement.properties.align}
+                                                    onChange={(e) => {
+                                                        const updated = {
+                                                            ...selectedElement,
+                                                            properties: {...selectedElement.properties, align: e.target.value}
+                                                        };
+                                                        setSelectedElement(updated);
+                                                        updateElement(selectedElement.slideId, selectedElement.id, {properties: updated.properties});
+                                                    }}
+                                                >
+                                                    <option value="left">Left</option>
+                                                    <option value="center">Center</option>
+                                                    <option value="right">Right</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="empty-state">
+                                    <i className="fas fa-mouse-pointer"></i>
+                                    <h3>Select an Element</h3>
+                                    <p>Click on any element to edit its properties</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Save Modal */}
+                    {showSaveModal && (
+                        <div className="modal" onClick={() => setShowSaveModal(false)}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h2>Save Lesson</h2>
+                                    <button className="close-btn" onClick={() => setShowSaveModal(false)}>
+                                        <i className="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                
+                                <div className="property-group">
+                                    <div className="property-item">
+                                        <label>Lesson Title</label>
+                                        <input
+                                            type="text"
+                                            value={lesson.title}
+                                            onChange={(e) => setLesson({...lesson, title: e.target.value})}
+                                        />
+                                    </div>
+                                    <div className="property-item">
+                                        <label>Description</label>
+                                        <textarea
+                                            value={lesson.description}
+                                            onChange={(e) => setLesson({...lesson, description: e.target.value})}
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div style={{textAlign: 'center', marginTop: '20px'}}>
+                                    <button className="btn btn-primary" onClick={saveLesson}>
+                                        <i className="fas fa-save"></i> Save Lesson
+                                    </button>
+                                    <button className="btn btn-secondary" onClick={() => setShowSaveModal(false)} style={{marginLeft: '10px'}}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Helper function to render element content
+        function renderElementContent(element) {
+            switch (element.type) {
+                case 'text':
+                    return (
+                        <div style={{
+                            fontSize: element.properties.fontSize,
+                            textAlign: element.properties.align,
+                            color: element.properties.color
+                        }}>
+                            {element.content}
+                        </div>
+                    );
+                case 'image':
+                    return (
+                        <div style={{
+                            width: element.properties.width,
+                            height: element.properties.height,
+                            background: '#f0f0f0',
+                            border: '2px dashed #ccc',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#666'
+                        }}>
+                            {element.content}
+                        </div>
+                    );
+                case 'video':
+                    return (
+                        <div style={{
+                            width: element.properties.width,
+                            height: element.properties.height,
+                            background: '#000',
+                            color: 'white',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: '8px'
+                        }}>
+                            {element.content}
+                        </div>
+                    );
+                case 'quiz':
+                    return (
+                        <div>
+                            <h4>Quiz Question</h4>
+                            <p>{element.content}</p>
+                            <div style={{marginTop: '10px'}}>
+                                {element.properties.options.map((option, index) => (
+                                    <div key={index} style={{marginBottom: '5px'}}>
+                                        <input type="radio" name={`quiz-${element.id}`} />
+                                        <label style={{marginLeft: '5px'}}>{option}</label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                case 'simulation':
+                    return (
+                        <div style={{
+                            background: '#f8f9fa',
+                            border: '2px dashed #667eea',
+                            padding: '20px',
+                            textAlign: 'center',
+                            borderRadius: '8px'
+                        }}>
+                            <i className="fas fa-flask" style={{fontSize: '2rem', color: '#667eea', marginBottom: '10px'}}></i>
+                            <p>{element.content}</p>
+                        </div>
+                    );
+                case 'activity':
+                    return (
+                        <div style={{
+                            background: '#fff3cd',
+                            border: '1px solid #ffeaa7',
+                            padding: '15px',
+                            borderRadius: '8px'
+                        }}>
+                            <h4>Activity: {element.content}</h4>
+                            <p>Duration: {element.properties.duration}</p>
+                            <p>Difficulty: {element.properties.difficulty}</p>
+                        </div>
+                    );
+                default:
+                    return <div>{element.content}</div>;
+            }
+        }
+
+        // Render the app
+        ReactDOM.render(<LessonBuilder />, document.getElementById('root'));
+    </script>
+</body>
+</html>
+
+
+

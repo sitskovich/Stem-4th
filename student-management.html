@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management - STEM Learning Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .header p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #e9ecef;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .back-btn {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #e9ecef;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .student-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+        }
+
+        .student-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .student-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .student-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" onclick="goBack()">← Back to Portal</button>
+        
+        <div class="header">
+            <h1>👥 Student Management</h1>
+            <p>Add, edit, and manage your students. Track their progress and performance.</p>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showAddStudentForm()">➕ Add New Student</button>
+                <button class="btn btn-secondary" onclick="importStudents()">📥 Import Students</button>
+                <button class="btn btn-secondary" onclick="exportStudents()">📤 Export Students</button>
+                <button class="btn btn-secondary" onclick="createClass()">🏫 Create New Class</button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3 id="totalStudents">0</h3>
+                <p>Total Students</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="activeStudents">0</h3>
+                <p>Active Students</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalClasses">0</h3>
+                <p>Total Classes</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="avgPerformance">--</h3>
+                <p>Avg Performance</p>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2>📝 Add New Student</h2>
+                <form id="addStudentForm" onsubmit="addStudent(event)">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="grade">Grade Level *</label>
+                        <select id="grade" name="grade" required>
+                            <option value="">Select Grade</option>
+                            <option value="1st">1st Grade</option>
+                            <option value="2nd">2nd Grade</option>
+                            <option value="3rd">3rd Grade</option>
+                            <option value="4th">4th Grade</option>
+                            <option value="5th">5th Grade</option>
+                            <option value="6th">6th Grade</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="class">Class Assignment</label>
+                        <select id="class" name="class">
+                            <option value="">Select Class</option>
+                            <option value="science-a">Science A</option>
+                            <option value="science-b">Science B</option>
+                            <option value="math-a">Math A</option>
+                            <option value="math-b">Math B</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Any additional notes about the student..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Student</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>👥 Student List</h2>
+                <div class="student-list" id="studentList">
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <h3>No students added yet</h3>
+                        <p>Add your first student to get started!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏫 Class Management</h2>
+            <div class="content-grid">
+                <div>
+                    <h3>Create New Class</h3>
+                    <form id="createClassForm" onsubmit="createNewClass(event)">
+                        <div class="form-group">
+                            <label for="className">Class Name *</label>
+                            <input type="text" id="className" name="className" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="classGrade">Grade Level *</label>
+                            <select id="classGrade" name="classGrade" required>
+                                <option value="">Select Grade</option>
+                                <option value="1st">1st Grade</option>
+                                <option value="2nd">2nd Grade</option>
+                                <option value="3rd">3rd Grade</option>
+                                <option value="4th">4th Grade</option>
+                                <option value="5th">5th Grade</option>
+                                <option value="6th">6th Grade</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="classSubject">Subject *</label>
+                            <select id="classSubject" name="classSubject" required>
+                                <option value="">Select Subject</option>
+                                <option value="science">Science</option>
+                                <option value="math">Math</option>
+                                <option value="stem">STEM</option>
+                                <option value="engineering">Engineering</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="classDescription">Description</label>
+                            <textarea id="classDescription" name="classDescription" rows="3" placeholder="Describe this class..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Class</button>
+                    </form>
+                </div>
+                <div>
+                    <h3>Existing Classes</h3>
+                    <div id="classList">
+                        <div class="empty-state">
+                            <i class="fas fa-school"></i>
+                            <h3>No classes created yet</h3>
+                            <p>Create your first class to organize students!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let students = [];
+        let classes = [];
+
+        function goBack() {
+            // Try to go back in history, if that fails, open the teacher portal
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'teacher-portal.html';
+            }
+        }
+
+        function showAddStudentForm() {
+            document.getElementById('addStudentForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function addStudent(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const student = {
+                id: Date.now(),
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                grade: formData.get('grade'),
+                class: formData.get('class'),
+                notes: formData.get('notes'),
+                status: 'active',
+                joinDate: new Date().toLocaleDateString()
+            };
+
+            students.push(student);
+            updateStudentList();
+            updateStats();
+            event.target.reset();
+            
+            alert(`Student ${student.firstName} ${student.lastName} added successfully!`);
+        }
+
+        function updateStudentList() {
+            const studentList = document.getElementById('studentList');
+            
+            if (students.length === 0) {
+                studentList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <h3>No students added yet</h3>
+                        <p>Add your first student to get started!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            studentList.innerHTML = students.map(student => `
+                <div class="student-item">
+                    <div class="student-info">
+                        <h4>${student.firstName} ${student.lastName}</h4>
+                        <p>Grade: ${student.grade} | Class: ${student.class || 'Unassigned'} | Joined: ${student.joinDate}</p>
+                    </div>
+                    <div class="student-actions">
+                        <button class="btn btn-warning btn-small" onclick="editStudent(${student.id})">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="removeStudent(${student.id})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeStudent(studentId) {
+            if (confirm('Are you sure you want to remove this student?')) {
+                students = students.filter(s => s.id !== studentId);
+                updateStudentList();
+                updateStats();
+            }
+        }
+
+        function editStudent(studentId) {
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                const newFirstName = prompt('First Name:', student.firstName);
+                const newLastName = prompt('Last Name:', student.lastName);
+                const newGrade = prompt('Grade:', student.grade);
+                
+                if (newFirstName && newLastName && newGrade) {
+                    student.firstName = newFirstName;
+                    student.lastName = newLastName;
+                    student.grade = newGrade;
+                    updateStudentList();
+                }
+            }
+        }
+
+        function createNewClass(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const newClass = {
+                id: Date.now(),
+                name: formData.get('className'),
+                grade: formData.get('classGrade'),
+                subject: formData.get('classSubject'),
+                description: formData.get('classDescription'),
+                studentCount: 0,
+                createdDate: new Date().toLocaleDateString()
+            };
+
+            classes.push(newClass);
+            updateClassList();
+            updateStats();
+            event.target.reset();
+            
+            alert(`Class "${newClass.name}" created successfully!`);
+        }
+
+        function updateClassList() {
+            const classList = document.getElementById('classList');
+            
+            if (classes.length === 0) {
+                classList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-school"></i>
+                        <h3>No classes created yet</h3>
+                        <p>Create your first class to organize students!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            classList.innerHTML = classes.map(cls => `
+                <div class="student-item">
+                    <div class="student-info">
+                        <h4>${cls.name}</h4>
+                        <p>Grade: ${cls.grade} | Subject: ${cls.subject} | Students: ${cls.studentCount} | Created: ${cls.createdDate}</p>
+                    </div>
+                    <div class="student-actions">
+                        <button class="btn btn-warning btn-small" onclick="editClass(${cls.id})">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="removeClass(${cls.id})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeClass(classId) {
+            if (confirm('Are you sure you want to remove this class?')) {
+                classes = classes.filter(c => c.id !== classId);
+                updateClassList();
+                updateStats();
+            }
+        }
+
+        function editClass(classId) {
+            const cls = classes.find(c => c.id === classId);
+            if (cls) {
+                const newName = prompt('Class Name:', cls.name);
+                if (newName) {
+                    cls.name = newName;
+                    updateClassList();
+                }
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalStudents').textContent = students.length;
+            document.getElementById('activeStudents').textContent = students.filter(s => s.status === 'active').length;
+            document.getElementById('totalClasses').textContent = classes.length;
+            
+            if (students.length > 0) {
+                document.getElementById('avgPerformance').textContent = '85%'; // Placeholder
+            } else {
+                document.getElementById('avgPerformance').textContent = '--';
+            }
+        }
+
+        function importStudents() {
+            alert('Import functionality would open a file picker to upload a CSV file with student data.');
+        }
+
+        function exportStudents() {
+            if (students.length === 0) {
+                alert('No students to export!');
+                return;
+            }
+            
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "First Name,Last Name,Email,Grade,Class,Notes\n" +
+                students.map(s => `${s.firstName},${s.lastName},${s.email || ''},${s.grade},${s.class || ''},${s.notes || ''}`).join('\n');
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "students.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function createClass() {
+            document.getElementById('createClassForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize
+        updateStats();
+    </script>
+</body>
+</html>

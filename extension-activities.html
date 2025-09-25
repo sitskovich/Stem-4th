@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extension Activities - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .activity-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 5px solid #ff6b35;
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .activity-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .activity-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .activity-type {
+            display: inline-block;
+            background: #fff3e0;
+            color: #f57c00;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .close-btn:hover {
+            color: #333;
+        }
+        
+        .activity-content {
+            margin-top: 20px;
+        }
+        
+        .materials-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .materials-title {
+            font-weight: 600;
+            color: #ff6b35;
+            margin-bottom: 10px;
+        }
+        
+        .materials-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .materials-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .materials-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .procedure-section {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .procedure-title {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .procedure-list {
+            list-style: decimal;
+            padding-left: 20px;
+        }
+        
+        .procedure-list li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .discussion-section {
+            background: #f3e5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .discussion-title {
+            font-weight: 600;
+            color: #7b1fa2;
+            margin-bottom: 10px;
+        }
+        
+        .discussion-questions {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .discussion-questions li {
+            padding: 10px;
+            background: white;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid #7b1fa2;
+        }
+        
+        .extension-activities {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .extension-title {
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .extension-list {
+            list-style: disc;
+            padding-left: 20px;
+        }
+        
+        .extension-list li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </button>
+            <div class="header-text">
+                <h1>Extension Activities</h1>
+                <p>Enrichment activities aligned with STEMscopes curriculum</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="activity-grid">
+            <div class="activity-card" onclick="openActivity('would-you-rather')">
+                <div class="activity-title">
+                    <i class="fas fa-question-circle"></i>
+                    Discussion - Would You Rather
+                </div>
+                <div class="activity-description">
+                    Students write their opinion about which natural disaster they would rather experience, supporting their answers with facts and reasoning.
+                </div>
+                <div class="activity-type">Critical Thinking</div>
+            </div>
+
+            <div class="activity-card" onclick="openActivity('what-if')">
+                <div class="activity-title">
+                    <i class="fas fa-lightbulb"></i>
+                    Discussion - What If
+                </div>
+                <div class="activity-description">
+                    Students imagine what they would do if a natural disaster was predicted for tomorrow and create emergency plans.
+                </div>
+                <div class="activity-type">Problem Solving</div>
+            </div>
+
+            <div class="activity-card" onclick="openActivity('geologist-speaker')">
+                <div class="activity-title">
+                    <i class="fas fa-user-tie"></i>
+                    Speaker - Geologist
+                </div>
+                <div class="activity-description">
+                    Arrange a visit with a geologist to discuss how we can protect ourselves from naturally occurring hazardous events.
+                </div>
+                <div class="activity-type">Career Connection</div>
+            </div>
+
+            <div class="activity-card" onclick="openActivity('hurricane-calendar')">
+                <div class="activity-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Science Art - Hurricane Preparation Calendar
+                </div>
+                <div class="activity-description">
+                    Students create a calendar to help people prepare for hurricane season with illustrations and preparation tips.
+                </div>
+                <div class="activity-type">Science Art</div>
+            </div>
+
+            <div class="activity-card" onclick="openActivity('natural-disaster-images')">
+                <div class="activity-title">
+                    <i class="fas fa-images"></i>
+                    Natural Disaster Images Discussion
+                </div>
+                <div class="activity-description">
+                    Students discuss various images of natural disasters and how to prepare for them using guided questions.
+                </div>
+                <div class="activity-type">Visual Learning</div>
+            </div>
+
+            <div class="activity-card" onclick="openActivity('books-on-topic')">
+                <div class="activity-title">
+                    <i class="fas fa-books"></i>
+                    Books on Topic
+                </div>
+                <div class="activity-description">
+                    Recommended reading materials about natural processes, volcanoes, earthquakes, tsunamis, and other natural phenomena.
+                </div>
+                <div class="activity-type">Reading Resources</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Modal -->
+    <div id="activityModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeActivity()">&times;</button>
+            <div id="activityContent"></div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function openActivity(type) {
+            const modal = document.getElementById('activityModal');
+            const content = document.getElementById('activityContent');
+            
+            let activityHTML = '';
+            
+            switch(type) {
+                case 'would-you-rather':
+                    activityHTML = generateWouldYouRatherActivity();
+                    break;
+                case 'what-if':
+                    activityHTML = generateWhatIfActivity();
+                    break;
+                case 'geologist-speaker':
+                    activityHTML = generateGeologistSpeakerActivity();
+                    break;
+                case 'hurricane-calendar':
+                    activityHTML = generateHurricaneCalendarActivity();
+                    break;
+                case 'natural-disaster-images':
+                    activityHTML = generateNaturalDisasterImagesActivity();
+                    break;
+                case 'books-on-topic':
+                    activityHTML = generateBooksOnTopicActivity();
+                    break;
+            }
+            
+            content.innerHTML = activityHTML;
+            modal.classList.add('active');
+        }
+
+        function closeActivity() {
+            document.getElementById('activityModal').classList.remove('active');
+        }
+
+        function generateWouldYouRatherActivity() {
+            return `
+                <h2>Discussion - Would You Rather</h2>
+                
+                <div class="activity-content">
+                    <p><strong>Prompt:</strong> Pose the question: would you rather experience an earthquake, tsunami, or volcanic eruption? Students will write their opinion in their science journals, supporting their answers with fact and reasoning. Encourage critical thinking. Have students share their opinions with the class.</p>
+                    
+                    <div class="discussion-section">
+                        <div class="discussion-title">Discussion Questions:</div>
+                        <ul class="discussion-questions">
+                            <li>Which natural disaster would you choose and why?</li>
+                            <li>What facts support your choice?</li>
+                            <li>What are the potential dangers of each option?</li>
+                            <li>How would you prepare for your chosen disaster?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="extension-activities">
+                        <div class="extension-title">Extension Activities:</div>
+                        <ul class="extension-list">
+                            <li>Creating a thinking map comparing and contrasting two of the natural disasters discussed</li>
+                            <li>Having students write about what they learned about this topic</li>
+                            <li>Another way to review the information presented to the class</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateWhatIfActivity() {
+            return `
+                <h2>Discussion - What If</h2>
+                
+                <div class="activity-content">
+                    <p><strong>Prompt:</strong> What if a tsunami (or earthquake or volcanic eruption) was predicted for tomorrow? What would you do? What steps would your family take?</p>
+                    
+                    <div class="discussion-section">
+                        <div class="discussion-title">Discussion Questions:</div>
+                        <ul class="discussion-questions">
+                            <li>What would be your first action if you heard the warning?</li>
+                            <li>How would you communicate with family members?</li>
+                            <li>What supplies would you need to gather?</li>
+                            <li>Where would you go for safety?</li>
+                            <li>How would you help others in your community?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="extension-activities">
+                        <div class="extension-title">Extension Activities:</div>
+                        <ul class="extension-list">
+                            <li>Having students write an emergency plan in the event of a natural disaster</li>
+                            <li>Creating a poster of important information about preparing for a natural disaster that they could share with another class</li>
+                            <li>Role-playing emergency scenarios</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateGeologistSpeakerActivity() {
+            return `
+                <h2>Speaker - Geologist</h2>
+                
+                <div class="activity-content">
+                    <p><strong>Activity Description:</strong> Arrange a visit with a geologist who can discuss how we can protect ourselves in the event of a naturally occurring hazardous event.</p>
+                    
+                    <div class="procedure-section">
+                        <div class="procedure-title">Preparation Steps:</div>
+                        <ol class="procedure-list">
+                            <li>Prior to the visit, generate questions with the class</li>
+                            <li>Send the questions to the speaker and ask if there is any other important information that they would like to share with the class</li>
+                            <li>Ask how much time they feel the visit should take</li>
+                            <li>After the visit, review the answers with the class and add additional information the expert mentioned</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="discussion-section">
+                        <div class="discussion-title">Sample Questions for the Geologist:</div>
+                        <ul class="discussion-questions">
+                            <li>What tools do geologists use to predict natural disasters?</li>
+                            <li>How can we build structures to withstand earthquakes?</li>
+                            <li>What should people do if they live near a volcano?</li>
+                            <li>How do you study the Earth's layers?</li>
+                            <li>What career opportunities exist in geology?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="extension-activities">
+                        <div class="extension-title">Follow-up Activities:</div>
+                        <ul class="extension-list">
+                            <li>Write thank you letters to the geologist</li>
+                            <li>Create a class book about what they learned</li>
+                            <li>Research different types of geologists and their specializations</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateHurricaneCalendarActivity() {
+            return `
+                <h2>Science Art - Hurricane Preparation Calendar</h2>
+                
+                <div class="activity-content">
+                    <p><strong>Description:</strong> For this Science Art activity, students create a calendar to help people prepare for hurricane season.</p>
+                    
+                    <div class="materials-section">
+                        <div class="materials-title">Materials:</div>
+                        <ul class="materials-list">
+                            <li><strong>Consumable:</strong> 1 Set of calendar pages (6 pages per set, per student)</li>
+                            <li><strong>Reusable:</strong> Colored pencils, assorted colors</li>
+                            <li><strong>Reusable:</strong> Stapler</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="procedure-section">
+                        <div class="procedure-title">Facilitation (Step-by-Step Instructions):</div>
+                        <ol class="procedure-list">
+                            <li>Provide six calendar pages, colored pencils, and a stapler for each student.</li>
+                            <li>Explain to students that they will be creating a calendar page for each month of hurricane season—June through November.</li>
+                            <li>On the top of each calendar page, have students create an illustration of a hurricane preparation tip for each month of hurricane season. They should create six illustrations of six different tips.</li>
+                            <li>Have students include the name of the month and number each day correctly for next year.</li>
+                            <li>To combine their calendars, have students stack the calendar pages in order and staple them at the top.</li>
+                            <li>Encourage students to give their calendar to a family member for next hurricane season!</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="extension-activities">
+                        <div class="extension-title">Final Product Requirements:</div>
+                        <ul class="extension-list">
+                            <li>One illustration at the top of each page</li>
+                            <li>One hurricane preparation tip at the top of each page</li>
+                            <li>Correctly numbered days</li>
+                            <li>Correctly labeled months</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="discussion-section">
+                        <div class="discussion-title">Sample Hurricane Preparation Tips:</div>
+                        <ul class="discussion-questions">
+                            <li>June: Check emergency supplies and create a family emergency plan</li>
+                            <li>July: Trim trees and secure outdoor furniture</li>
+                            <li>August: Stock up on non-perishable food and water</li>
+                            <li>September: Review evacuation routes and shelter locations</li>
+                            <li>October: Prepare emergency kit with batteries and flashlights</li>
+                            <li>November: Review and update insurance policies</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateNaturalDisasterImagesActivity() {
+            return `
+                <h2>Natural Disaster Images Discussion</h2>
+                
+                <div class="activity-content">
+                    <p><strong>Description:</strong> Students will discuss various images of natural disasters, how to prepare for them, and what to do at home or at school when disaster strikes.</p>
+                    
+                    <div class="materials-section">
+                        <div class="materials-title">Materials:</div>
+                        <ul class="materials-list">
+                            <li>1 Natural Disaster Images (per class)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="procedure-section">
+                        <div class="procedure-title">Preparation:</div>
+                        <ol class="procedure-list">
+                            <li>Print color copies of the Natural Disaster Images</li>
+                            <li>Images are of hurricanes, tornados, flooding, wildfires, drought, earthquakes, volcanos, and freezing</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="procedure-section">
+                        <div class="procedure-title">Procedure and Facilitation Points:</div>
+                        <ol class="procedure-list">
+                            <li>Talk with students about types of natural disasters that have occurred in your community, including hurricanes, tornados, flooding, freezing, wildfires, and earthquakes.</li>
+                            <li>Display a picture and discuss what preparations and actions should be taken to be safe during the natural disaster portrayed.</li>
+                            <li>Offer students an alternative solution if students do not naturally come up with differing solutions. Have students compare the strengths and weaknesses of each solution, depending on the type of natural disaster.</li>
+                            <li>Continue using the images that apply to your area.</li>
+                            <li>Lead a discussion using the guiding questions.</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="discussion-section">
+                        <div class="discussion-title">Guiding Questions:</div>
+                        <ul class="discussion-questions">
+                            <li><strong>What is a natural disaster?</strong> A natural process on Earth that can cause damage or harm to the environment</li>
+                            <li><strong>What causes natural disasters?</strong> Natural processes on Earth cause natural disasters.</li>
+                            <li><strong>How can we best prepare for a natural disaster?</strong> We should know how to keep ourselves safe and how to protect our property.</li>
+                            <li><strong>What type of damage occurs from each type of natural disaster?</strong> A tsunami is a huge wave that destroys everything in its path. With a flood, rising water can destroy everything in its path. Earthquakes destroy buildings and roads and can create fires. With volcanos, boulders from the explosion cause damage, and lava flows can melt objects and cause fires in its path.</li>
+                            <li><strong>How can we help reduce some of this damage?</strong> We can reduce some of the damage by having buildings that can withstand earthquakes and by not building in areas that flood or are in the path of lava flows. We can have warning systems to alert people about flooding, tsunamis, tornados, or hurricanes.</li>
+                            <li><strong>Which natural disasters can be reduced using the same solutions?</strong> For hurricanes and wildfires, evacuation is oftentimes necessary.</li>
+                            <li><strong>Why can't we use the same solution for each natural disaster?</strong> Some natural disasters require different levels of preparation or different types of protection.</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateBooksOnTopicActivity() {
+            return `
+                <h2>Books on Topic</h2>
+                
+                <div class="activity-content">
+                    <p><strong>Description:</strong> Recommended reading materials about natural processes and natural hazards for 4th grade students.</p>
+                    
+                    <div class="materials-section">
+                        <div class="materials-title">Recommended Books:</div>
+                        <ul class="materials-list">
+                            <li><strong>Volcanoes & Earthquakes</strong> - Learn about the powerful forces that shape our planet</li>
+                            <li><strong>Forces of Nature</strong> - Explore the amazing natural phenomena that occur on Earth</li>
+                            <li><strong>Tsunamis & Floods</strong> - Understand how water can both create and destroy</li>
+                            <li><strong>Tornadoes</strong> - Discover the science behind these powerful spinning storms</li>
+                            <li><strong>Hurricanes</strong> - Learn about these massive storm systems and how to prepare for them</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="discussion-section">
+                        <div class="discussion-title">Reading Activities:</div>
+                        <ul class="discussion-questions">
+                            <li>Read aloud sessions with class discussion</li>
+                            <li>Independent reading with comprehension questions</li>
+                            <li>Book reports focusing on natural processes</li>
+                            <li>Compare and contrast different natural disasters</li>
+                            <li>Create illustrations based on book descriptions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="extension-activities">
+                        <div class="extension-title">Extension Activities:</div>
+                        <ul class="extension-list">
+                            <li>Create a class library of natural disaster books</li>
+                            <li>Write book reviews for other classes</li>
+                            <li>Research additional books on natural processes</li>
+                            <li>Create a reading log to track progress</li>
+                            <li>Present book summaries to the class</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="procedure-section">
+                        <div class="procedure-title">How to Use These Books:</div>
+                        <ol class="procedure-list">
+                            <li>Introduce books during related lesson topics</li>
+                            <li>Use for independent reading time</li>
+                            <li>Incorporate into research projects</li>
+                            <li>Read aloud during science class</li>
+                            <li>Encourage students to share interesting facts they discover</li>
+                        </ol>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('activityModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeActivity();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Builder - STEM Learning Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .header p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #e9ecef;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .back-btn {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #e9ecef;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .builder-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tool-btn {
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .tool-btn:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+
+        .tool-btn i {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .tool-btn span {
+            display: block;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .lesson-blocks {
+            min-height: 400px;
+            border: 2px dashed #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .lesson-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .lesson-block h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .lesson-block p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .block-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 0.7rem;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .preview-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .preview-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 1024px) {
+            .builder-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" onclick="goBack()">← Back to Portal</button>
+        
+        <div class="header">
+            <h1>📚 Lesson Builder</h1>
+            <p>Create engaging, interactive lessons with drag-and-drop content blocks and multimedia elements.</p>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="saveLesson()">💾 Save Lesson</button>
+                <button class="btn btn-success" onclick="previewLesson()">👁️ Preview</button>
+                <button class="btn btn-secondary" onclick="publishLesson()">🚀 Publish</button>
+                <button class="btn btn-secondary" onclick="loadTemplate()">📋 Load Template</button>
+            </div>
+        </div>
+
+        <div class="builder-layout">
+            <div class="main-content">
+                <h2>Lesson Content</h2>
+                <div class="lesson-blocks" id="lessonBlocks">
+                    <div class="empty-state">
+                        <i class="fas fa-plus-circle"></i>
+                        <h3>Start Building Your Lesson</h3>
+                        <p>Drag content blocks from the sidebar to create your lesson</p>
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <h3>📱 Live Preview</h3>
+                    <div id="lessonPreview">
+                        <p style="color: #666; text-align: center;">Add content blocks to see preview</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="card">
+                    <h2>📝 Lesson Settings</h2>
+                    <div class="form-group">
+                        <label for="lessonTitle">Lesson Title</label>
+                        <input type="text" id="lessonTitle" placeholder="Enter lesson title">
+                    </div>
+                    <div class="form-group">
+                        <label for="lessonGrade">Grade Level</label>
+                        <select id="lessonGrade">
+                            <option value="">Select Grade</option>
+                            <option value="1st">1st Grade</option>
+                            <option value="2nd">2nd Grade</option>
+                            <option value="3rd">3rd Grade</option>
+                            <option value="4th">4th Grade</option>
+                            <option value="5th">5th Grade</option>
+                            <option value="6th">6th Grade</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="lessonSubject">Subject</label>
+                        <select id="lessonSubject">
+                            <option value="">Select Subject</option>
+                            <option value="science">Science</option>
+                            <option value="math">Math</option>
+                            <option value="stem">STEM</option>
+                            <option value="engineering">Engineering</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="lessonDuration">Duration (minutes)</label>
+                        <input type="number" id="lessonDuration" placeholder="45">
+                    </div>
+                    <div class="form-group">
+                        <label for="lessonObjectives">Learning Objectives</label>
+                        <textarea id="lessonObjectives" rows="3" placeholder="Enter learning objectives..."></textarea>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🧩 Content Blocks</h2>
+                    <div class="tool-grid">
+                        <div class="tool-btn" onclick="addContentBlock('text')">
+                            <i class="fas fa-font"></i>
+                            <span>Text Block</span>
+                        </div>
+                        <div class="tool-btn" onclick="addContentBlock('image')">
+                            <i class="fas fa-image"></i>
+                            <span>Image</span>
+                        </div>
+                        <div class="tool-btn" onclick="addContentBlock('video')">
+                            <i class="fas fa-video"></i>
+                            <span>Video</span>
+                        </div>
+                        <div class="tool-btn" onclick="addContentBlock('quiz')">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Quiz</span>
+                        </div>
+                        <div class="tool-btn" onclick="addContentBlock('simulation')">
+                            <i class="fas fa-cogs"></i>
+                            <span>Simulation</span>
+                        </div>
+                        <div class="tool-btn" onclick="addContentBlock('activity')">
+                            <i class="fas fa-hands"></i>
+                            <span>Activity</span>
+                        </div>
+                        <div class="tool-btn" onclick="addContentBlock('poll')">
+                            <i class="fas fa-poll"></i>
+                            <span>Poll</span>
+                        </div>
+                        <div class="tool-btn" onclick="addContentBlock('drawing')">
+                            <i class="fas fa-paint-brush"></i>
+                            <span>Drawing</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📊 Lesson Stats</h2>
+                    <div class="form-group">
+                        <label>Content Blocks: <span id="blockCount">0</span></label>
+                    </div>
+                    <div class="form-group">
+                        <label>Estimated Time: <span id="estimatedTime">0</span> min</label>
+                    </div>
+                    <div class="form-group">
+                        <label>Difficulty: <span id="difficulty">Beginner</span></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let lessonBlocks = [];
+        let blockIdCounter = 0;
+
+        function goBack() {
+            // Try to go back in history, if that fails, open the teacher portal
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'teacher-portal.html';
+            }
+        }
+
+        function addContentBlock(type) {
+            const blockId = ++blockIdCounter;
+            const block = {
+                id: blockId,
+                type: type,
+                content: getDefaultContent(type),
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            lessonBlocks.push(block);
+            updateLessonDisplay();
+            updateStats();
+        }
+
+        function getDefaultContent(type) {
+            switch(type) {
+                case 'text':
+                    return {
+                        title: 'Text Block',
+                        text: 'Enter your text content here...'
+                    };
+                case 'image':
+                    return {
+                        title: 'Image Block',
+                        src: 'https://via.placeholder.com/400x200?text=Image+Placeholder',
+                        alt: 'Image description'
+                    };
+                case 'video':
+                    return {
+                        title: 'Video Block',
+                        src: 'https://www.w3schools.com/html/mov_bbb.mp4',
+                        description: 'Educational video content'
+                    };
+                case 'quiz':
+                    return {
+                        title: 'Quiz Question',
+                        question: 'What is the capital of France?',
+                        options: ['London', 'Paris', 'Berlin', 'Madrid'],
+                        correct: 1
+                    };
+                case 'simulation':
+                    return {
+                        title: 'Interactive Simulation',
+                        description: 'Interactive simulation content'
+                    };
+                case 'activity':
+                    return {
+                        title: 'Hands-on Activity',
+                        description: 'Activity instructions and materials'
+                    };
+                case 'poll':
+                    return {
+                        title: 'Quick Poll',
+                        question: 'How do you feel about this topic?',
+                        options: ['Great!', 'Good', 'Okay', 'Need help']
+                    };
+                case 'drawing':
+                    return {
+                        title: 'Drawing Canvas',
+                        description: 'Interactive drawing area'
+                    };
+                default:
+                    return { title: 'Content Block', description: 'Content description' };
+            }
+        }
+
+        function updateLessonDisplay() {
+            const container = document.getElementById('lessonBlocks');
+            
+            if (lessonBlocks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-plus-circle"></i>
+                        <h3>Start Building Your Lesson</h3>
+                        <p>Drag content blocks from the sidebar to create your lesson</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = lessonBlocks.map(block => `
+                <div class="lesson-block">
+                    <div class="block-actions">
+                        <button class="btn btn-warning btn-small" onclick="editBlock(${block.id})">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="removeBlock(${block.id})">Remove</button>
+                    </div>
+                    <h4>${block.content.title}</h4>
+                    <p>${getBlockDescription(block)}</p>
+                    <small style="color: #999;">Added: ${block.timestamp}</small>
+                </div>
+            `).join('');
+        }
+
+        function getBlockDescription(block) {
+            switch(block.type) {
+                case 'text':
+                    return block.content.text;
+                case 'image':
+                    return `Image: ${block.content.alt}`;
+                case 'video':
+                    return block.content.description;
+                case 'quiz':
+                    return `Question: ${block.content.question}`;
+                case 'simulation':
+                    return block.content.description;
+                case 'activity':
+                    return block.content.description;
+                case 'poll':
+                    return `Poll: ${block.content.question}`;
+                case 'drawing':
+                    return block.content.description;
+                default:
+                    return block.content.description || 'Content block';
+            }
+        }
+
+        function removeBlock(blockId) {
+            if (confirm('Are you sure you want to remove this block?')) {
+                lessonBlocks = lessonBlocks.filter(b => b.id !== blockId);
+                updateLessonDisplay();
+                updateStats();
+            }
+        }
+
+        function editBlock(blockId) {
+            const block = lessonBlocks.find(b => b.id === blockId);
+            if (block) {
+                const newTitle = prompt('Block Title:', block.content.title);
+                if (newTitle) {
+                    block.content.title = newTitle;
+                    updateLessonDisplay();
+                }
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('blockCount').textContent = lessonBlocks.length;
+            
+            const duration = document.getElementById('lessonDuration').value || 0;
+            document.getElementById('estimatedTime').textContent = duration;
+            
+            // Simple difficulty calculation
+            let difficulty = 'Beginner';
+            if (lessonBlocks.length > 5) difficulty = 'Intermediate';
+            if (lessonBlocks.length > 10) difficulty = 'Advanced';
+            document.getElementById('difficulty').textContent = difficulty;
+        }
+
+        function saveLesson() {
+            const lessonData = {
+                title: document.getElementById('lessonTitle').value,
+                grade: document.getElementById('lessonGrade').value,
+                subject: document.getElementById('lessonSubject').value,
+                duration: document.getElementById('lessonDuration').value,
+                objectives: document.getElementById('lessonObjectives').value,
+                blocks: lessonBlocks,
+                created: new Date().toISOString()
+            };
+
+            localStorage.setItem('currentLesson', JSON.stringify(lessonData));
+            alert('Lesson saved successfully!');
+        }
+
+        function previewLesson() {
+            if (lessonBlocks.length === 0) {
+                alert('Add some content blocks first!');
+                return;
+            }
+
+            const preview = document.getElementById('lessonPreview');
+            preview.innerHTML = `
+                <h3>${document.getElementById('lessonTitle').value || 'Untitled Lesson'}</h3>
+                <p><strong>Grade:</strong> ${document.getElementById('lessonGrade').value || 'Not specified'}</p>
+                <p><strong>Subject:</strong> ${document.getElementById('lessonSubject').value || 'Not specified'}</p>
+                <p><strong>Duration:</strong> ${document.getElementById('lessonDuration').value || '0'} minutes</p>
+                <hr style="margin: 15px 0;">
+                ${lessonBlocks.map(block => `
+                    <div style="margin-bottom: 15px; padding: 10px; border-left: 3px solid #667eea; background: #f8f9fa;">
+                        <h4>${block.content.title}</h4>
+                        <p>${getBlockDescription(block)}</p>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        function publishLesson() {
+            if (lessonBlocks.length === 0) {
+                alert('Add some content blocks first!');
+                return;
+            }
+
+            const title = document.getElementById('lessonTitle').value;
+            if (!title) {
+                alert('Please enter a lesson title!');
+                return;
+            }
+
+            if (confirm(`Publish lesson "${title}"?`)) {
+                alert('Lesson published successfully! Students can now access it.');
+            }
+        }
+
+        function loadTemplate() {
+            const templates = [
+                'Science Experiment Template',
+                'Math Problem Solving Template',
+                'STEM Challenge Template',
+                'Interactive Quiz Template'
+            ];
+
+            const template = prompt('Select template:\n1. Science Experiment\n2. Math Problem Solving\n3. STEM Challenge\n4. Interactive Quiz\n\nEnter number (1-4):');
+            
+            if (template && template >= 1 && template <= 4) {
+                const templateName = templates[template - 1];
+                alert(`Loading ${templateName}...`);
+                
+                // Clear current lesson
+                lessonBlocks = [];
+                document.getElementById('lessonTitle').value = templateName;
+                document.getElementById('lessonDuration').value = '45';
+                
+                // Add template blocks
+                addContentBlock('text');
+                addContentBlock('video');
+                addContentBlock('quiz');
+                addContentBlock('activity');
+                
+                updateLessonDisplay();
+                updateStats();
+            }
+        }
+
+        // Update stats when form fields change
+        document.getElementById('lessonDuration').addEventListener('input', updateStats);
+    </script>
+</body>
+</html>

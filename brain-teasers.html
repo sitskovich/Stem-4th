@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Teasers & Critical Thinking Games</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-50%) translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .game-icon {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            text-align: center;
+        }
+
+        .game-description {
+            color: #666;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .game-difficulty {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .difficulty-star {
+            color: #ffd700;
+            font-size: 1.2em;
+        }
+
+        .difficulty-star.empty {
+            color: #ddd;
+        }
+
+        .game-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .game-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .sudoku-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 2px;
+            max-width: 450px;
+            margin: 20px auto;
+            background: #333;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .sudoku-cell {
+            aspect-ratio: 1;
+            background: white;
+            border: none;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sudoku-cell:hover {
+            background: #f0f0f0;
+        }
+
+        .sudoku-cell.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .sudoku-cell.error {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .sudoku-cell.given {
+            background: #e9ecef;
+            font-weight: 700;
+        }
+
+        .logic-puzzle {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .puzzle-question {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .puzzle-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .puzzle-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .puzzle-option:hover {
+            border-color: #667eea;
+        }
+
+        .puzzle-option.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .puzzle-option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .puzzle-option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .check-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 20px 0;
+            color: #667eea;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: #667eea;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .memory-card.flipped {
+            background: white;
+            color: #333;
+        }
+
+        .memory-card.matched {
+            background: #28a745;
+            color: white;
+        }
+
+        .word-search {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 2px;
+            max-width: 400px;
+            margin: 20px auto;
+            background: #333;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .word-cell {
+            aspect-ratio: 1;
+            background: white;
+            border: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .word-cell.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .word-cell.found {
+            background: #28a745;
+            color: white;
+        }
+
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .word-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .word-item.found {
+            background: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="student-portal.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Portal
+        </a>
+        <h1><i class="fas fa-brain"></i> Brain Teasers & Critical Thinking Games</h1>
+        <p>Challenge your mind with interactive puzzles and logic games!</p>
+    </div>
+
+    <div class="container">
+        <div class="games-grid">
+            <!-- Sudoku -->
+            <div class="game-card" onclick="openGame('sudoku')">
+                <div class="game-icon">🔢</div>
+                <h3 class="game-title">Science Sudoku</h3>
+                <p class="game-description">Complete the 9x9 grid using science symbols and numbers. Each row, column, and 3x3 box must contain all symbols exactly once.</p>
+                <div class="game-difficulty">
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                </div>
+                <button class="game-button">Play Sudoku</button>
+            </div>
+
+            <!-- Logic Puzzles -->
+            <div class="game-card" onclick="openGame('logic')">
+                <div class="game-icon">🧩</div>
+                <h3 class="game-title">Science Logic Puzzles</h3>
+                <p class="game-description">Solve challenging logic puzzles based on scientific concepts. Use deductive reasoning to find the correct answers.</p>
+                <div class="game-difficulty">
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                </div>
+                <button class="game-button">Solve Puzzles</button>
+            </div>
+
+            <!-- Memory Game -->
+            <div class="game-card" onclick="openGame('memory')">
+                <div class="game-icon">🧠</div>
+                <h3 class="game-title">Science Memory Match</h3>
+                <p class="game-description">Match science terms with their definitions or pictures. Test your memory and learn science vocabulary!</p>
+                <div class="game-difficulty">
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                </div>
+                <button class="game-button">Play Memory</button>
+            </div>
+
+            <!-- Word Search -->
+            <div class="game-card" onclick="openGame('wordsearch')">
+                <div class="game-icon">🔍</div>
+                <h3 class="game-title">Science Word Search</h3>
+                <p class="game-description">Find hidden science words in the grid. Words can be horizontal, vertical, or diagonal!</p>
+                <div class="game-difficulty">
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                </div>
+                <button class="game-button">Find Words</button>
+            </div>
+
+            <!-- Pattern Recognition -->
+            <div class="game-card" onclick="openGame('pattern')">
+                <div class="game-icon">🔗</div>
+                <h3 class="game-title">Pattern Recognition</h3>
+                <p class="game-description">Identify patterns in scientific sequences. Complete the pattern by choosing the correct next element.</p>
+                <div class="game-difficulty">
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                </div>
+                <button class="game-button">Find Patterns</button>
+            </div>
+
+            <!-- Critical Thinking -->
+            <div class="game-card" onclick="openGame('critical')">
+                <div class="game-icon">💭</div>
+                <h3 class="game-title">Critical Thinking Challenges</h3>
+                <p class="game-description">Solve complex problems using scientific reasoning. Analyze data and draw logical conclusions.</p>
+                <div class="game-difficulty">
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                </div>
+                <button class="game-button">Think Critically</button>
+            </div>
+
+            <!-- Sequence Puzzles -->
+            <div class="game-card" onclick="openGame('sequence')">
+                <div class="game-icon">📊</div>
+                <h3 class="game-title">Sequence Puzzles</h3>
+                <p class="game-description">Complete scientific sequences and series. Identify the rule and predict the next elements.</p>
+                <div class="game-difficulty">
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                </div>
+                <button class="game-button">Solve Sequences</button>
+            </div>
+
+            <!-- Deduction Games -->
+            <div class="game-card" onclick="openGame('deduction')">
+                <div class="game-icon">🕵️</div>
+                <h3 class="game-title">Scientific Deduction</h3>
+                <p class="game-description">Use clues to deduce scientific facts. Eliminate possibilities and find the correct answer through logical reasoning.</p>
+                <div class="game-difficulty">
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                </div>
+                <button class="game-button">Deduce Answers</button>
+            </div>
+
+            <!-- Spatial Reasoning -->
+            <div class="game-card" onclick="openGame('spatial')">
+                <div class="game-icon">🧊</div>
+                <h3 class="game-title">Spatial Reasoning</h3>
+                <p class="game-description">Visualize 3D shapes and molecular structures. Rotate and manipulate objects in your mind.</p>
+                <div class="game-difficulty">
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                    <i class="fas fa-star difficulty-star empty"></i>
+                </div>
+                <button class="game-button">Think Spatially</button>
+            </div>
+
+            <!-- Problem Solving -->
+            <div class="game-card" onclick="openGame('problemsolving')">
+                <div class="game-icon">⚡</div>
+                <h3 class="game-title">Problem Solving</h3>
+                <p class="game-description">Tackle real-world science problems. Use the scientific method to find solutions.</p>
+                <div class="game-difficulty">
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                    <i class="fas fa-star difficulty-star"></i>
+                </div>
+                <button class="game-button">Solve Problems</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Modals -->
+    <div id="gameModal" class="game-modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeGame()">&times;</button>
+            <div id="gameContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentGame = null;
+        let gameScore = 0;
+        let selectedCells = [];
+        let gameData = {};
+
+        function openGame(gameType) {
+            currentGame = gameType;
+            const modal = document.getElementById('gameModal');
+            const content = document.getElementById('gameContent');
+            
+            modal.classList.add('active');
+            
+            switch(gameType) {
+                case 'sudoku':
+                    content.innerHTML = generateSudokuGame();
+                    break;
+                case 'logic':
+                    content.innerHTML = generateLogicGame();
+                    break;
+                case 'memory':
+                    content.innerHTML = generateMemoryGame();
+                    break;
+                case 'wordsearch':
+                    content.innerHTML = generateWordSearchGame();
+                    break;
+                case 'pattern':
+                    content.innerHTML = generatePatternGame();
+                    break;
+                case 'critical':
+                    content.innerHTML = generateCriticalThinkingGame();
+                    break;
+                case 'sequence':
+                    content.innerHTML = generateSequenceGame();
+                    break;
+                case 'deduction':
+                    content.innerHTML = generateDeductionGame();
+                    break;
+                case 'spatial':
+                    content.innerHTML = generateSpatialGame();
+                    break;
+                case 'problemsolving':
+                    content.innerHTML = generateProblemSolvingGame();
+                    break;
+            }
+        }
+
+        function closeGame() {
+            document.getElementById('gameModal').classList.remove('active');
+            currentGame = null;
+            gameScore = 0;
+        }
+
+        function generateSudokuGame() {
+            return `
+                <h2>🔢 Science Sudoku</h2>
+                <p>Complete the grid using science symbols: 🌱 🦋 🐸 🌍 ⚡ 🔬 🌊 🧬 🔬</p>
+                <div class="sudoku-grid" id="sudokuGrid"></div>
+                <div class="score-display">Score: ${gameScore}</div>
+                <button class="check-btn" onclick="checkSudoku()">Check Solution</button>
+            `;
+        }
+
+        function generateLogicGame() {
+            return `
+                <h2>🧩 Science Logic Puzzles</h2>
+                <div class="logic-puzzle">
+                    <div class="puzzle-question">
+                        <strong>Puzzle 1:</strong> Three animals are in a food chain: Grass → Rabbit → Fox. 
+                        If the grass population decreases, what happens to the fox population?
+                    </div>
+                    <div class="puzzle-options">
+                        <div class="puzzle-option" onclick="selectOption(this, 'A')">
+                            A) The fox population increases
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'B')">
+                            B) The fox population decreases
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'C')">
+                            C) The fox population stays the same
+                        </div>
+                    </div>
+                </div>
+                <button class="check-btn" onclick="checkLogicAnswer()">Check Answer</button>
+            `;
+        }
+
+        function generateMemoryGame() {
+            const sciencePairs = [
+                ['🌱', 'Photosynthesis'],
+                ['🦋', 'Metamorphosis'],
+                ['🌍', 'Ecosystem'],
+                ['⚡', 'Energy'],
+                ['🔬', 'Microscope'],
+                ['🌊', 'Water Cycle'],
+                ['🧬', 'DNA'],
+                ['🔬', 'Experiment']
+            ];
+
+            let html = `
+                <h2>🧠 Science Memory Match</h2>
+                <p>Match the science symbols with their terms!</p>
+                <div class="memory-grid" id="memoryGrid"></div>
+                <div class="score-display">Matches: ${gameScore}/8</div>
+            `;
+
+            return html;
+        }
+
+        function generateWordSearchGame() {
+            return `
+                <h2>🔍 Science Word Search</h2>
+                <p>Find these science words in the grid:</p>
+                <div class="word-list">
+                    <div class="word-item">PHOTOSYNTHESIS</div>
+                    <div class="word-item">ECOSYSTEM</div>
+                    <div class="word-item">ADAPTATION</div>
+                    <div class="word-item">ENERGY</div>
+                    <div class="word-item">HABITAT</div>
+                    <div class="word-item">FOODCHAIN</div>
+                </div>
+                <div class="word-search" id="wordSearchGrid"></div>
+                <div class="score-display">Words Found: ${gameScore}/6</div>
+            `;
+        }
+
+        function generatePatternGame() {
+            return `
+                <h2>🔗 Pattern Recognition</h2>
+                <div class="logic-puzzle">
+                    <div class="puzzle-question">
+                        <strong>Pattern 1:</strong> What comes next in this sequence?<br>
+                        🌱 → 🌿 → 🌳 → ?
+                    </div>
+                    <div class="puzzle-options">
+                        <div class="puzzle-option" onclick="selectOption(this, 'A')">
+                            A) 🍃 (Leaf)
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'B')">
+                            B) 🌰 (Acorn)
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'C')">
+                            C) 🌸 (Flower)
+                        </div>
+                    </div>
+                </div>
+                <button class="check-btn" onclick="checkPatternAnswer()">Check Answer</button>
+            `;
+        }
+
+        function generateCriticalThinkingGame() {
+            return `
+                <h2>💭 Critical Thinking Challenge</h2>
+                <div class="logic-puzzle">
+                    <div class="puzzle-question">
+                        <strong>Challenge:</strong> A scientist notices that plants in a greenhouse grow taller than plants outside. 
+                        What could be the reason? Choose the most logical explanation.
+                    </div>
+                    <div class="puzzle-options">
+                        <div class="puzzle-option" onclick="selectOption(this, 'A')">
+                            A) The greenhouse plants are magical
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'B')">
+                            B) The greenhouse provides better temperature and protection
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'C')">
+                            C) The outside plants are lazy
+                        </div>
+                    </div>
+                </div>
+                <button class="check-btn" onclick="checkCriticalAnswer()">Check Answer</button>
+            `;
+        }
+
+        function generateSequenceGame() {
+            return `
+                <h2>📊 Sequence Puzzles</h2>
+                <div class="logic-puzzle">
+                    <div class="puzzle-question">
+                        <strong>Sequence:</strong> Complete this life cycle sequence:<br>
+                        Egg → Caterpillar → ? → Butterfly
+                    </div>
+                    <div class="puzzle-options">
+                        <div class="puzzle-option" onclick="selectOption(this, 'A')">
+                            A) 🐛 (Caterpillar again)
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'B')">
+                            B) 🐛 (Chrysalis)
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'C')">
+                            C) 🦋 (Butterfly)
+                        </div>
+                    </div>
+                </div>
+                <button class="check-btn" onclick="checkSequenceAnswer()">Check Answer</button>
+            `;
+        }
+
+        function generateDeductionGame() {
+            return `
+                <h2>🕵️ Scientific Deduction</h2>
+                <div class="logic-puzzle">
+                    <div class="puzzle-question">
+                        <strong>Clue:</strong> An animal has sharp teeth, hunts at night, and has excellent hearing. 
+                        What type of animal is it most likely to be?
+                    </div>
+                    <div class="puzzle-options">
+                        <div class="puzzle-option" onclick="selectOption(this, 'A')">
+                            A) 🐰 (Rabbit - herbivore)
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'B')">
+                            B) 🦉 (Owl - predator)
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'C')">
+                            C) 🐄 (Cow - herbivore)
+                        </div>
+                    </div>
+                </div>
+                <button class="check-btn" onclick="checkDeductionAnswer()">Check Answer</button>
+            `;
+        }
+
+        function generateSpatialGame() {
+            return `
+                <h2>🧊 Spatial Reasoning</h2>
+                <div class="logic-puzzle">
+                    <div class="puzzle-question">
+                        <strong>3D Thinking:</strong> If you rotate a cube 90 degrees to the right, 
+                        what happens to the top face?
+                    </div>
+                    <div class="puzzle-options">
+                        <div class="puzzle-option" onclick="selectOption(this, 'A')">
+                            A) It becomes the right face
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'B')">
+                            B) It becomes the left face
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'C')">
+                            C) It stays the top face
+                        </div>
+                    </div>
+                </div>
+                <button class="check-btn" onclick="checkSpatialAnswer()">Check Answer</button>
+            `;
+        }
+
+        function generateProblemSolvingGame() {
+            return `
+                <h2>⚡ Problem Solving</h2>
+                <div class="logic-puzzle">
+                    <div class="puzzle-question">
+                        <strong>Problem:</strong> A plant is wilting in your classroom. 
+                        Using the scientific method, what should you do first?
+                    </div>
+                    <div class="puzzle-options">
+                        <div class="puzzle-option" onclick="selectOption(this, 'A')">
+                            A) Throw it away
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'B')">
+                            B) Observe and ask questions
+                        </div>
+                        <div class="puzzle-option" onclick="selectOption(this, 'C')">
+                            C) Water it immediately
+                        </div>
+                    </div>
+                </div>
+                <button class="check-btn" onclick="checkProblemAnswer()">Check Answer</button>
+            `;
+        }
+
+        function selectOption(element, answer) {
+            // Remove previous selection
+            document.querySelectorAll('.puzzle-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Select current option
+            element.classList.add('selected');
+            element.dataset.answer = answer;
+        }
+
+        function checkLogicAnswer() {
+            const selected = document.querySelector('.puzzle-option.selected');
+            if (selected && selected.dataset.answer === 'B') {
+                selected.classList.add('correct');
+                gameScore++;
+                alert('Correct! When grass decreases, rabbits have less food, so fox population also decreases.');
+            } else if (selected) {
+                selected.classList.add('incorrect');
+                alert('Incorrect! Think about the food chain relationship.');
+            } else {
+                alert('Please select an answer first!');
+            }
+        }
+
+        function checkPatternAnswer() {
+            const selected = document.querySelector('.puzzle-option.selected');
+            if (selected && selected.dataset.answer === 'B') {
+                selected.classList.add('correct');
+                gameScore++;
+                alert('Correct! The sequence shows plant growth: seed → sprout → tree → fruit (acorn)!');
+            } else if (selected) {
+                selected.classList.add('incorrect');
+                alert('Incorrect! Think about the natural life cycle of a plant.');
+            } else {
+                alert('Please select an answer first!');
+            }
+        }
+
+        function checkCriticalAnswer() {
+            const selected = document.querySelector('.puzzle-option.selected');
+            if (selected && selected.dataset.answer === 'B') {
+                selected.classList.add('correct');
+                gameScore++;
+                alert('Correct! Greenhouses provide controlled temperature and protection from harsh weather.');
+            } else if (selected) {
+                selected.classList.add('incorrect');
+                alert('Incorrect! Think about what greenhouses provide that outdoor conditions don\'t.');
+            } else {
+                alert('Please select an answer first!');
+            }
+        }
+
+        function checkSequenceAnswer() {
+            const selected = document.querySelector('.puzzle-option.selected');
+            if (selected && selected.dataset.answer === 'B') {
+                selected.classList.add('correct');
+                gameScore++;
+                alert('Correct! The chrysalis (pupa) stage comes between caterpillar and butterfly!');
+            } else if (selected) {
+                selected.classList.add('incorrect');
+                alert('Incorrect! Remember the complete metamorphosis cycle.');
+            } else {
+                alert('Please select an answer first!');
+            }
+        }
+
+        function checkDeductionAnswer() {
+            const selected = document.querySelector('.puzzle-option.selected');
+            if (selected && selected.dataset.answer === 'B') {
+                selected.classList.add('correct');
+                gameScore++;
+                alert('Correct! Owls are nocturnal predators with sharp talons and excellent hearing!');
+            } else if (selected) {
+                selected.classList.add('incorrect');
+                alert('Incorrect! Think about which animals hunt at night with sharp teeth.');
+            } else {
+                alert('Please select an answer first!');
+            }
+        }
+
+        function checkSpatialAnswer() {
+            const selected = document.querySelector('.puzzle-option.selected');
+            if (selected && selected.dataset.answer === 'A') {
+                selected.classList.add('correct');
+                gameScore++;
+                alert('Correct! When rotating right, the top face moves to the right side!');
+            } else if (selected) {
+                selected.classList.add('incorrect');
+                alert('Incorrect! Try visualizing the cube rotation in your mind.');
+            } else {
+                alert('Please select an answer first!');
+            }
+        }
+
+        function checkProblemAnswer() {
+            const selected = document.querySelector('.puzzle-option.selected');
+            if (selected && selected.dataset.answer === 'B') {
+                selected.classList.add('correct');
+                gameScore++;
+                alert('Correct! The scientific method starts with observation and asking questions!');
+            } else if (selected) {
+                selected.classList.add('incorrect');
+                alert('Incorrect! Remember the first step of the scientific method.');
+            } else {
+                alert('Please select an answer first!');
+            }
+        }
+
+        function checkSudoku() {
+            alert('Sudoku checking feature coming soon! Keep practicing!');
+        }
+
+        // Initialize games when modal opens
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add any initialization code here
+        });
+    </script>
+</body>
+</html>

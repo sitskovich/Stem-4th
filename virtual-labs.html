@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Labs - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .labs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .lab-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .lab-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .lab-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .lab-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .lab-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .lab-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .lab-duration {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .lab-grade {
+            background: #f3e5f5;
+            color: #7b1fa2;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .lab-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .lab-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .lab-simulation {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .simulation-placeholder {
+            text-align: center;
+            color: #666;
+        }
+
+        .simulation-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .lab-instructions {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .lab-materials {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="teacher-portal.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </a>
+            <div class="header-text">
+                <h1><i class="fas fa-microscope"></i> Virtual Labs</h1>
+                <p>Interactive online science experiments and simulations</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="labs-grid">
+            <div class="lab-card" onclick="openLab('plant-structures')">
+                <div class="lab-icon">🌱</div>
+                <div class="lab-title">Plant Structure Investigation</div>
+                <div class="lab-description">
+                    Explore the different parts of plants and their functions through interactive dissection and labeling activities.
+                </div>
+                <div class="lab-details">
+                    <span class="lab-duration">15-20 min</span>
+                    <span class="lab-grade">Bundle 1</span>
+                </div>
+                <button class="lab-button">Start Lab</button>
+            </div>
+
+            <div class="lab-card" onclick="openLab('food-chain')">
+                <div class="lab-icon">🔗</div>
+                <div class="lab-title">Food Chain Simulation</div>
+                <div class="lab-description">
+                    Build and test different food chains to understand energy flow and ecosystem interactions.
+                </div>
+                <div class="lab-details">
+                    <span class="lab-duration">20-25 min</span>
+                    <span class="lab-grade">Bundle 1</span>
+                </div>
+                <button class="lab-button">Start Lab</button>
+            </div>
+
+            <div class="lab-card" onclick="openLab('rock-cycle')">
+                <div class="lab-icon">🪨</div>
+                <div class="lab-title">Rock Cycle Experiment</div>
+                <div class="lab-description">
+                    Simulate the rock cycle and observe how different types of rocks form and transform.
+                </div>
+                <div class="lab-details">
+                    <span class="lab-duration">25-30 min</span>
+                    <span class="lab-grade">Bundle 2</span>
+                </div>
+                <button class="lab-button">Start Lab</button>
+            </div>
+
+            <div class="lab-card" onclick="openLab('weathering')">
+                <div class="lab-icon">🌊</div>
+                <div class="lab-title">Weathering & Erosion Lab</div>
+                <div class="lab-description">
+                    Investigate how wind, water, and ice change Earth's surface over time.
+                </div>
+                <div class="lab-details">
+                    <span class="lab-duration">20-25 min</span>
+                    <span class="lab-grade">Bundle 2</span>
+                </div>
+                <button class="lab-button">Start Lab</button>
+            </div>
+
+            <div class="lab-card" onclick="openLab('energy-transfer')">
+                <div class="lab-icon">⚡</div>
+                <div class="lab-title">Energy Transfer Simulation</div>
+                <div class="lab-description">
+                    Explore how energy moves through different systems and transforms from one type to another.
+                </div>
+                <div class="lab-details">
+                    <span class="lab-duration">25-30 min</span>
+                    <span class="lab-grade">Bundle 3</span>
+                </div>
+                <button class="lab-button">Start Lab</button>
+            </div>
+
+            <div class="lab-card" onclick="openLab('simple-machines')">
+                <div class="lab-icon">🔧</div>
+                <div class="lab-title">Simple Machines Builder</div>
+                <div class="lab-description">
+                    Design and test different simple machines to understand how they make work easier.
+                </div>
+                <div class="lab-details">
+                    <span class="lab-duration">30-35 min</span>
+                    <span class="lab-grade">Bundle 3</span>
+                </div>
+                <button class="lab-button">Start Lab</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lab Modal -->
+    <div id="labModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeLab()">&times;</button>
+            <div id="labContent"></div>
+        </div>
+    </div>
+
+    <script>
+        function openLab(labType) {
+            const modal = document.getElementById('labModal');
+            const content = document.getElementById('labContent');
+            
+            const labs = {
+                'plant-structures': {
+                    title: 'Plant Structure Investigation Lab',
+                    content: `
+                        <h2>🌱 Plant Structure Investigation</h2>
+                        
+                        <div class="lab-instructions">
+                            <h4>📋 Lab Instructions</h4>
+                            <ol>
+                                <li>Click on different parts of the plant to learn about their functions</li>
+                                <li>Use the magnifying glass to examine structures in detail</li>
+                                <li>Complete the labeling activity</li>
+                                <li>Answer the reflection questions</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="lab-materials">
+                            <h4>🔬 Virtual Materials</h4>
+                            <ul>
+                                <li>Interactive plant model</li>
+                                <li>Digital microscope</li>
+                                <li>Labeling tools</li>
+                                <li>Data recording sheet</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="lab-simulation">
+                            <div class="simulation-placeholder">
+                                <i class="fas fa-seedling"></i>
+                                <h3>Plant Structure Simulator</h3>
+                                <p>Click on different parts of the plant to explore their functions</p>
+                                <button class="lab-button" onclick="startPlantSimulation()">Start Simulation</button>
+                            </div>
+                        </div>
+                        
+                        <div class="lab-instructions">
+                            <h4>📝 Reflection Questions</h4>
+                            <ol>
+                                <li>What is the main function of plant roots?</li>
+                                <li>How do leaves help plants survive?</li>
+                                <li>Why are flowers important for plants?</li>
+                            </ol>
+                        </div>
+                    `
+                },
+                'food-chain': {
+                    title: 'Food Chain Simulation Lab',
+                    content: `
+                        <h2>🔗 Food Chain Simulation</h2>
+                        
+                        <div class="lab-instructions">
+                            <h4>📋 Lab Instructions</h4>
+                            <ol>
+                                <li>Drag organisms to build a food chain</li>
+                                <li>Test what happens when you remove different organisms</li>
+                                <li>Observe energy flow through the ecosystem</li>
+                                <li>Record your observations</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="lab-materials">
+                            <h4>🔬 Virtual Materials</h4>
+                            <ul>
+                                <li>Interactive ecosystem builder</li>
+                                <li>Organism library</li>
+                                <li>Energy flow tracker</li>
+                                <li>Observation journal</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="lab-simulation">
+                            <div class="simulation-placeholder">
+                                <i class="fas fa-link"></i>
+                                <h3>Food Chain Builder</h3>
+                                <p>Drag organisms to create your food chain</p>
+                                <button class="lab-button" onclick="startFoodChainSimulation()">Start Simulation</button>
+                            </div>
+                        </div>
+                        
+                        <div class="lab-instructions">
+                            <h4>📝 Data Collection</h4>
+                            <p>Record what happens when you:</p>
+                            <ul>
+                                <li>Remove the producer from your food chain</li>
+                                <li>Add an extra consumer</li>
+                                <li>Change the order of organisms</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                'rock-cycle': {
+                    title: 'Rock Cycle Experiment Lab',
+                    content: `
+                        <h2>🪨 Rock Cycle Experiment</h2>
+                        
+                        <div class="lab-instructions">
+                            <h4>📋 Lab Instructions</h4>
+                            <ol>
+                                <li>Start with a rock and apply different processes</li>
+                                <li>Watch how heat, pressure, and weathering change rocks</li>
+                                <li>Track the transformation through the rock cycle</li>
+                                <li>Identify the resulting rock types</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="lab-materials">
+                            <h4>🔬 Virtual Materials</h4>
+                            <ul>
+                                <li>Interactive rock samples</li>
+                                <li>Heat and pressure controls</li>
+                                <li>Weathering simulation</li>
+                                <li>Rock identification guide</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="lab-simulation">
+                            <div class="simulation-placeholder">
+                                <i class="fas fa-mountain"></i>
+                                <h3>Rock Cycle Simulator</h3>
+                                <p>Apply different processes to transform rocks</p>
+                                <button class="lab-button" onclick="startRockCycleSimulation()">Start Simulation</button>
+                            </div>
+                        </div>
+                        
+                        <div class="lab-instructions">
+                            <h4>📝 Observations</h4>
+                            <p>Record how each process changes the rock:</p>
+                            <ul>
+                                <li>Heat and pressure → Metamorphic rock</li>
+                                <li>Melting and cooling → Igneous rock</li>
+                                <li>Weathering and deposition → Sedimentary rock</li>
+                            </ul>
+                        </div>
+                    `
+                }
+            };
+            
+            if (labs[labType]) {
+                content.innerHTML = labs[labType].content;
+                modal.classList.add('active');
+            }
+        }
+
+        function startPlantSimulation() {
+            alert('Plant Structure Simulation would start here! This would be an interactive 3D model where students can click on different plant parts to learn about their functions.');
+        }
+
+        function startFoodChainSimulation() {
+            alert('Food Chain Simulation would start here! This would be a drag-and-drop interface where students can build food chains and observe energy flow.');
+        }
+
+        function startRockCycleSimulation() {
+            alert('Rock Cycle Simulation would start here! This would be an interactive model where students can apply different geological processes to transform rocks.');
+        }
+
+        function closeLab() {
+            document.getElementById('labModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('labModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLab();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLab();
+            }
+        });
+    </script>
+</body>
+</html>

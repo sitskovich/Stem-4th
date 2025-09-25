@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Cards - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            font-family: 'Lexend', sans-serif;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .bundle-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .bundle-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        .bundle-btn:hover, .bundle-btn.active {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.6);
+            transform: translateY(-2px);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .vocab-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vocab-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .vocab-card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            backface-visibility: hidden;
+            transition: all 0.6s ease;
+            padding: 20px;
+        }
+        
+        .card-back {
+            transform: rotateY(-180deg);
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+        
+        .vocab-card.flipped .card-front {
+            transform: rotateY(-180deg);
+        }
+        
+        .vocab-card.flipped .card-back {
+            transform: rotateY(0deg);
+        }
+        
+        .vocab-card {
+            transform-style: preserve-3d;
+        }
+        
+        .vocab-word {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .vocab-definition {
+            font-size: 1rem;
+            line-height: 1.4;
+            color: #666;
+        }
+
+        .card-back .vocab-word {
+            color: white;
+        }
+        
+        .card-back .vocab-definition {
+            color: rgba(255,255,255,0.9);
+            font-size: 1rem;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .control-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin: 0 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .stats {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .stats h3 {
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </button>
+            <div class="header-text">
+                <h1><i class="fas fa-credit-card"></i> Vocabulary Cards</h1>
+                <p>Interactive flashcards for all 4th Grade STEM bundles</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="bundle-selector">
+            <button class="bundle-btn active" onclick="showBundle('bundle1')">Bundle 1: Organisms</button>
+            <button class="bundle-btn" onclick="showBundle('bundle2')">Bundle 2: Earth Science</button>
+            <button class="bundle-btn" onclick="showBundle('bundle3')">Bundle 3: Energy & Forces</button>
+            <button class="bundle-btn" onclick="showBundle('bundle4')">Bundle 4: Engineering</button>
+            <button class="bundle-btn" onclick="showBundle('mixed')">Mixed Practice</button>
+        </div>
+        
+        <div class="stats">
+            <h3>Progress Tracking</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <p>Cards Studied: <span id="cardsStudied">0</span> / <span id="totalCards">0</span></p>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" onclick="shuffleCards()"><i class="fas fa-random"></i> Shuffle</button>
+            <button class="control-btn" onclick="resetProgress()"><i class="fas fa-undo"></i> Reset</button>
+            <button class="control-btn" onclick="flipAllCards()"><i class="fas fa-sync"></i> Flip All</button>
+        </div>
+        
+        <div class="cards-container" id="cardsContainer">
+            <!-- Cards will be dynamically generated here -->
+        </div>
+    </div>
+
+    <script>
+        const vocabularyData = {
+            bundle1: [
+                { word: "Structure", definition: "A part of an organism that has a specific function" },
+                { word: "Function", definition: "The job or purpose that a structure serves" },
+                { word: "Organism", definition: "A living thing, such as a plant or animal" },
+                { word: "Adaptation", definition: "A characteristic that helps an organism survive in its environment" },
+                { word: "Anatomy", definition: "The study of the structure of living things" },
+                { word: "Root", definition: "The part of a plant that anchors it and absorbs water" },
+                { word: "Stem", definition: "The part of a plant that supports leaves and transports nutrients" },
+                { word: "Leaf", definition: "The part of a plant that captures sunlight for photosynthesis" },
+                { word: "Photosynthesis", definition: "The process plants use to make food from sunlight" },
+                { word: "Chlorophyll", definition: "The green pigment that helps plants capture sunlight" },
+                { word: "Behavior", definition: "The way an animal acts or responds to its environment" },
+                { word: "Habitat", definition: "The natural environment where an organism lives" },
+                { word: "Species", definition: "A group of similar organisms that can reproduce" },
+                { word: "Ecosystem", definition: "A community of living and non-living things that interact" },
+                { word: "Food Chain", definition: "A sequence showing how energy flows from one organism to another" },
+                { word: "Producer", definition: "An organism that makes its own food using sunlight" },
+                { word: "Consumer", definition: "An organism that eats other organisms for energy" },
+                { word: "Decomposer", definition: "An organism that breaks down dead material" },
+                { word: "Predator", definition: "An animal that hunts and eats other animals" },
+                { word: "Prey", definition: "An animal that is hunted and eaten by other animals" },
+                { word: "Competition", definition: "When organisms compete for the same resources" },
+                { word: "Biodiversity", definition: "The variety of different species in an ecosystem" },
+                { word: "Population", definition: "All members of the same species in an area" },
+                { word: "Community", definition: "All living things in an ecosystem" },
+                { word: "Environment", definition: "All the living and non-living things around an organism" },
+                { word: "Chlorophyll", definition: "The green pigment in plants that captures sunlight" },
+                { word: "Respiration", definition: "The process of breathing in living things" },
+                { word: "Reproduction", definition: "The process of making new organisms" },
+                { word: "Life Cycle", definition: "The stages an organism goes through during its life" },
+                { word: "Metamorphosis", definition: "A dramatic change in body form during development" },
+                { word: "Migration", definition: "The seasonal movement of animals from one place to another" },
+                { word: "Hibernation", definition: "A deep sleep that helps animals survive winter" },
+                { word: "Camouflage", definition: "Colors or patterns that help animals blend in" },
+                { word: "Mimicry", definition: "When one organism looks like another for protection" },
+                { word: "Symbiosis", definition: "A close relationship between different species" },
+                { word: "Predator", definition: "An animal that hunts and eats other animals" },
+                { word: "Prey", definition: "An animal that is hunted and eaten by other animals" },
+                { word: "Herbivore", definition: "An animal that eats only plants" },
+                { word: "Carnivore", definition: "An animal that eats only other animals" },
+                { word: "Omnivore", definition: "An animal that eats both plants and animals" },
+                { word: "Scavenger", definition: "An animal that eats dead organisms" },
+                { word: "Parasite", definition: "An organism that lives on or in another organism" },
+                { word: "Host", definition: "An organism that provides food or shelter for a parasite" },
+                { word: "Pollination", definition: "The transfer of pollen from one flower to another" },
+                { word: "Seed Dispersal", definition: "The movement of seeds away from the parent plant" },
+                { word: "Germination", definition: "The process of a seed beginning to grow" },
+                { word: "Tropism", definition: "A plant's response to environmental stimuli" },
+                { word: "Stimulus", definition: "Something that causes a response in an organism" },
+                { word: "Response", definition: "How an organism reacts to a stimulus" },
+                { word: "Behavior", definition: "The way an animal acts or responds to its environment" },
+                { word: "Instinct", definition: "A behavior that an animal is born knowing how to do" },
+                { word: "Learned Behavior", definition: "A behavior that an animal learns from experience" },
+                { word: "Territory", definition: "An area that an animal defends as its own" },
+                { word: "Competition", definition: "When organisms compete for the same resources" },
+                { word: "Cooperation", definition: "When organisms work together for mutual benefit" },
+                { word: "Extinction", definition: "When all members of a species die out" },
+                { word: "Endangered", definition: "A species at risk of becoming extinct" },
+                { word: "Conservation", definition: "The protection and preservation of natural resources" },
+                { word: "Pollution", definition: "Harmful substances in the environment" },
+                { word: "Deforestation", definition: "The cutting down of forests" },
+                { word: "Global Warming", definition: "The gradual increase in Earth's temperature" },
+                { word: "Climate Change", definition: "Long-term changes in weather patterns" },
+                { word: "Renewable Resource", definition: "A resource that can be replaced naturally" },
+                { word: "Non-renewable Resource", definition: "A resource that cannot be replaced once used" },
+                { word: "Sustainability", definition: "Using resources in a way that doesn't harm the environment" }
+            ],
+            bundle2: [
+                { word: "Natural Process", definition: "A process produced by nature that can be sudden or gradual" },
+                { word: "Natural Hazard", definition: "A naturally occurring event that may have a negative effect on people or the environment" },
+                { word: "Natural Disaster", definition: "When a natural hazard causes significant damage to lives and property" },
+                { word: "Tsunami", definition: "A huge wave caused by underwater earthquakes or volcanic eruptions" },
+                { word: "Flood", definition: "An event that produces excessive water, drowning plants and washing away soil" },
+                { word: "Earthquake", definition: "A sudden movement of the ground that can cause major cracks in Earth's surface" },
+                { word: "Volcanic Eruption", definition: "When hot rocks and gases are released from a volcano" },
+                { word: "Magma", definition: "Melted rock under Earth's surface" },
+                { word: "Lava", definition: "Magma that reaches Earth's surface" },
+                { word: "Weathering", definition: "The breaking down of rocks by wind, water, or ice" },
+                { word: "Erosion", definition: "The movement of weathered rock and soil" },
+                { word: "Deposition", definition: "The dropping of sediment in a new location" },
+                { word: "Fossil", definition: "The remains or traces of ancient living things" },
+                { word: "Sediment", definition: "Small pieces of rock, soil, or organic material" },
+                { word: "Mineral", definition: "A naturally occurring solid with a specific chemical composition" },
+                { word: "Rock Cycle", definition: "The process of rocks changing from one type to another" },
+                { word: "Igneous Rock", definition: "Rock formed from cooled magma or lava" },
+                { word: "Sedimentary Rock", definition: "Rock formed from layers of sediment" },
+                { word: "Metamorphic Rock", definition: "Rock changed by heat and pressure" },
+                { word: "Natural Resource", definition: "Materials from Earth that people use" },
+                { word: "Renewable Resource", definition: "A resource that can be replaced naturally" },
+                { word: "Non-renewable Resource", definition: "A resource that cannot be replaced once used" },
+                { word: "Soil", definition: "A mixture of rock particles, organic matter, water, and air" },
+                { word: "Humus", definition: "Decayed organic matter in soil" },
+                { word: "Topsoil", definition: "The top layer of soil that contains the most nutrients" },
+                { word: "Subsoil", definition: "The layer of soil below the topsoil" },
+                { word: "Bedrock", definition: "The solid rock layer beneath the soil" },
+                { word: "Crust", definition: "The outermost layer of Earth" },
+                { word: "Mantle", definition: "The layer of Earth between the crust and core" },
+                { word: "Core", definition: "The center layer of Earth, made of iron and nickel" },
+                { word: "Plate Tectonics", definition: "The theory that Earth's crust is made of moving plates" },
+                { word: "Continental Drift", definition: "The slow movement of continents over time" },
+                { word: "Volcano", definition: "An opening in Earth's crust where lava erupts" },
+                { word: "Mountain", definition: "A high landform that rises above surrounding areas" },
+                { word: "Valley", definition: "A low area between mountains or hills" },
+                { word: "Plain", definition: "A large, flat area of land" },
+                { word: "Plateau", definition: "A high, flat area of land" },
+                { word: "Canyon", definition: "A deep valley with steep sides" },
+                { word: "Delta", definition: "Land formed by sediment deposited at a river's mouth" },
+                { word: "Glacier", definition: "A large mass of ice that moves slowly over land" },
+                { word: "Ice Age", definition: "A period when Earth's climate was much colder" },
+                { word: "Geological Time", definition: "The long history of Earth divided into periods" },
+                { word: "Paleontologist", definition: "A scientist who studies fossils" },
+                { word: "Archaeologist", definition: "A scientist who studies ancient human artifacts" },
+                { word: "Geologist", definition: "A scientist who studies rocks and Earth's structure" },
+                { word: "Meteorologist", definition: "A scientist who studies weather and climate" },
+                { word: "Weather", definition: "The condition of the atmosphere at a specific time" },
+                { word: "Climate", definition: "The average weather conditions over a long period" },
+                { word: "Atmosphere", definition: "The layer of gases surrounding Earth" },
+                { word: "Water Cycle", definition: "The continuous movement of water through Earth's systems" },
+                { word: "Evaporation", definition: "The process of liquid water changing to water vapor" },
+                { word: "Condensation", definition: "The process of water vapor changing to liquid water" },
+                { word: "Precipitation", definition: "Water that falls from clouds as rain, snow, or hail" },
+                { word: "Transpiration", definition: "The process of plants releasing water vapor" },
+                { word: "Groundwater", definition: "Water stored underground in soil and rock" },
+                { word: "Aquifer", definition: "An underground layer of rock that holds water" },
+                { word: "Watershed", definition: "An area of land that drains into a specific body of water" },
+                { word: "Pollution", definition: "Harmful substances in the environment" },
+                { word: "Conservation", definition: "The protection and preservation of natural resources" },
+                { word: "Recycling", definition: "The process of reusing materials to make new products" },
+                { word: "Composting", definition: "The process of breaking down organic matter into soil" },
+                { word: "Deforestation", definition: "The cutting down of forests" },
+                { word: "Desertification", definition: "The process of land becoming desert" },
+                { word: "Global Warming", definition: "The gradual increase in Earth's temperature" },
+                { word: "Climate Change", definition: "Long-term changes in weather patterns" },
+                { word: "Greenhouse Effect", definition: "The trapping of heat in Earth's atmosphere" },
+                { word: "Carbon Footprint", definition: "The amount of carbon dioxide produced by activities" },
+                { word: "Sustainability", definition: "Using resources in a way that doesn't harm the environment" }
+            ],
+            bundle3: [
+                { word: "Energy", definition: "The ability to do work or cause change" },
+                { word: "Motion", definition: "A change in position over time" },
+                { word: "Force", definition: "A push or pull that can change motion" },
+                { word: "Gravity", definition: "The force that pulls objects toward Earth" },
+                { word: "Friction", definition: "A force that opposes motion between surfaces" },
+                { word: "Speed", definition: "How fast an object moves" },
+                { word: "Acceleration", definition: "A change in speed or direction" },
+                { word: "Momentum", definition: "The tendency of moving objects to keep moving" },
+                { word: "Potential Energy", definition: "Stored energy due to position or condition" },
+                { word: "Kinetic Energy", definition: "Energy of motion" },
+                { word: "Simple Machine", definition: "A tool that makes work easier" },
+                { word: "Lever", definition: "A simple machine with a fulcrum and effort" },
+                { word: "Pulley", definition: "A simple machine that uses a wheel and rope" },
+                { word: "Wheel and Axle", definition: "A simple machine with a wheel attached to a rod" },
+                { word: "Inclined Plane", definition: "A simple machine that is a sloping surface" },
+                { word: "Wedge", definition: "A simple machine that is a moving inclined plane" },
+                { word: "Screw", definition: "A simple machine that is an inclined plane wrapped around a cylinder" },
+                { word: "Work", definition: "The use of force to move an object" },
+                { word: "Power", definition: "The rate at which work is done" },
+                { word: "Mechanical Advantage", definition: "The number of times a machine multiplies force" },
+                { word: "Efficiency", definition: "How well a machine converts input energy to useful work" },
+                { word: "Mass", definition: "The amount of matter in an object" },
+                { word: "Weight", definition: "The force of gravity on an object" },
+                { word: "Volume", definition: "The amount of space an object takes up" },
+                { word: "Density", definition: "The amount of mass in a given volume" },
+                { word: "Buoyancy", definition: "The upward force of water on objects" },
+                { word: "Pressure", definition: "Force applied over an area" },
+                { word: "Temperature", definition: "A measure of how hot or cold something is" },
+                { word: "Heat", definition: "The transfer of thermal energy" },
+                { word: "Thermal Energy", definition: "The total energy of all particles in an object" },
+                { word: "Conduction", definition: "The transfer of heat through direct contact" },
+                { word: "Convection", definition: "The transfer of heat through fluid movement" },
+                { word: "Radiation", definition: "The transfer of heat through electromagnetic waves" },
+                { word: "Insulator", definition: "A material that does not conduct heat or electricity well" },
+                { word: "Conductor", definition: "A material that conducts heat or electricity well" },
+                { word: "Electricity", definition: "The flow of electric charge" },
+                { word: "Electric Current", definition: "The flow of electric charge through a conductor" },
+                { word: "Circuit", definition: "A closed path through which electricity flows" },
+                { word: "Battery", definition: "A device that stores chemical energy and converts it to electrical energy" },
+                { word: "Magnet", definition: "An object that attracts certain metals" },
+                { word: "Magnetic Field", definition: "The area around a magnet where magnetic forces act" },
+                { word: "Electromagnet", definition: "A magnet created by electric current" },
+                { word: "Light", definition: "A form of energy that travels in waves" },
+                { word: "Reflection", definition: "The bouncing back of light from a surface" },
+                { word: "Refraction", definition: "The bending of light as it passes through different materials" },
+                { word: "Absorption", definition: "The taking in of light by a material" },
+                { word: "Transmission", definition: "The passing of light through a material" },
+                { word: "Prism", definition: "A transparent object that separates white light into colors" },
+                { word: "Spectrum", definition: "The range of colors in visible light" },
+                { word: "Sound", definition: "A form of energy that travels in waves through matter" },
+                { word: "Vibration", definition: "A rapid back-and-forth movement" },
+                { word: "Frequency", definition: "The number of vibrations per second" },
+                { word: "Amplitude", definition: "The height of a sound wave" },
+                { word: "Pitch", definition: "How high or low a sound is" },
+                { word: "Volume", definition: "How loud or soft a sound is" },
+                { word: "Echo", definition: "A reflected sound wave" },
+                { word: "Wavelength", definition: "The distance between wave peaks" },
+                { word: "Wave", definition: "A disturbance that carries energy through matter or space" },
+                { word: "Medium", definition: "The material through which waves travel" },
+                { word: "Transverse Wave", definition: "A wave that moves perpendicular to the direction of energy" },
+                { word: "Longitudinal Wave", definition: "A wave that moves parallel to the direction of energy" },
+                { word: "Newton's First Law", definition: "An object at rest stays at rest unless acted upon by a force" },
+                { word: "Newton's Second Law", definition: "Force equals mass times acceleration" },
+                { word: "Newton's Third Law", definition: "For every action, there is an equal and opposite reaction" },
+                { word: "Inertia", definition: "The tendency of objects to resist changes in motion" },
+                { word: "Centripetal Force", definition: "A force that keeps objects moving in a circular path" },
+                { word: "Centrifugal Force", definition: "The apparent outward force on objects in circular motion" },
+                { word: "Momentum", definition: "The product of an object's mass and velocity" },
+                { word: "Collision", definition: "When two objects come into contact and exchange energy" },
+                { word: "Elastic Collision", definition: "A collision where objects bounce off each other" },
+                { word: "Inelastic Collision", definition: "A collision where objects stick together" },
+                { word: "Conservation of Energy", definition: "Energy cannot be created or destroyed, only transformed" },
+                { word: "Conservation of Momentum", definition: "Momentum is conserved in collisions" },
+                { word: "Renewable Energy", definition: "Energy from sources that can be replenished" },
+                { word: "Non-renewable Energy", definition: "Energy from sources that cannot be replenished" },
+                { word: "Solar Energy", definition: "Energy from the sun" },
+                { word: "Wind Energy", definition: "Energy from moving air" },
+                { word: "Hydroelectric Energy", definition: "Energy from moving water" },
+                { word: "Geothermal Energy", definition: "Energy from heat within Earth" },
+                { word: "Nuclear Energy", definition: "Energy from splitting or combining atoms" },
+                { word: "Fossil Fuel", definition: "Energy from ancient plant and animal remains" },
+                { word: "Energy Efficiency", definition: "Using less energy to accomplish the same task" },
+                { word: "Energy Conservation", definition: "Reducing energy use to save resources" }
+            ],
+            bundle4: [
+                { word: "Engineering", definition: "Using science and math to solve problems" },
+                { word: "Design Process", definition: "Steps engineers follow to solve problems" },
+                { word: "Prototype", definition: "A first model or version of a design" },
+                { word: "Constraint", definition: "A limitation or restriction in a design" },
+                { word: "Criteria", definition: "Standards used to judge a design" },
+                { word: "Iteration", definition: "Repeating a process to improve a design" },
+                { word: "Technology", definition: "Tools and methods used to solve problems" },
+                { word: "Innovation", definition: "A new or improved way of doing something" },
+                { word: "Problem", definition: "A situation that needs to be solved" },
+                { word: "Solution", definition: "An answer to a problem" },
+                { word: "Testing", definition: "Checking if a design works as intended" },
+                { word: "Improvement", definition: "Making something better" },
+                { word: "Research", definition: "Gathering information to understand a problem" },
+                { word: "Brainstorming", definition: "Generating many ideas to solve a problem" },
+                { word: "Sketching", definition: "Drawing quick ideas on paper" },
+                { word: "Modeling", definition: "Creating a representation of a design" },
+                { word: "Materials", definition: "Substances used to build or make something" },
+                { word: "Tools", definition: "Instruments used to build or create" },
+                { word: "Safety", definition: "Protection from harm or danger" },
+                { word: "Quality", definition: "How good or well-made something is" },
+                { word: "Efficiency", definition: "Getting the most results with the least effort" },
+                { word: "Sustainability", definition: "Designing to meet needs without harming the environment" },
+                { word: "Biomimicry", definition: "Designing based on nature's solutions" },
+                { word: "Automation", definition: "Using machines to do work automatically" },
+                { word: "Robotics", definition: "The study and use of robots" },
+                { word: "Programming", definition: "Writing instructions for computers" },
+                { word: "Algorithm", definition: "A step-by-step set of instructions" },
+                { word: "Code", definition: "Instructions written in a programming language" },
+                { word: "Debugging", definition: "Finding and fixing errors in code" },
+                { word: "User Interface", definition: "How people interact with technology" },
+                { word: "Data", definition: "Information collected for analysis" },
+                { word: "Analysis", definition: "Examining data to find patterns or answers" },
+                { word: "Optimization", definition: "Making something work as well as possible" },
+                { word: "Scale", definition: "The size of something compared to its model" },
+                { word: "Proportion", definition: "The relationship between different parts" },
+                { word: "Balance", definition: "Even distribution of weight or forces" },
+                { word: "Stability", definition: "The ability to stay upright and steady" },
+                { word: "Durability", definition: "How long something lasts before breaking" },
+                { word: "Reliability", definition: "How consistently something works" },
+                { word: "Maintenance", definition: "Keeping something in good working condition" },
+                { word: "Repair", definition: "Fixing something that is broken" },
+                { word: "Upgrade", definition: "Improving something with newer technology" },
+                { word: "Compatibility", definition: "How well different things work together" },
+                { word: "Integration", definition: "Combining different parts into a whole" },
+                { word: "Modularity", definition: "Designing parts that can be easily replaced" },
+                { word: "Flexibility", definition: "The ability to adapt to different situations" },
+                { word: "Versatility", definition: "The ability to be used in many ways" },
+                { word: "Portability", definition: "How easy it is to move something" },
+                { word: "Accessibility", definition: "How easy it is for everyone to use" },
+                { word: "Usability", definition: "How easy something is to use" },
+                { word: "Functionality", definition: "What something is designed to do" },
+                { word: "Performance", definition: "How well something does its job" },
+                { word: "Capacity", definition: "The maximum amount something can hold or do" },
+                { word: "Load", definition: "The weight or force something must support" },
+                { word: "Stress", definition: "Force applied to a material" },
+                { word: "Strain", definition: "How much a material stretches under stress" },
+                { word: "Tension", definition: "A pulling force" },
+                { word: "Compression", definition: "A pushing force" },
+                { word: "Shear", definition: "A force that causes sliding" },
+                { word: "Torsion", definition: "A twisting force" },
+                { word: "Elasticity", definition: "The ability to return to original shape" },
+                { word: "Plasticity", definition: "The ability to be shaped without breaking" },
+                { word: "Hardness", definition: "How resistant a material is to scratching" },
+                { word: "Toughness", definition: "How resistant a material is to breaking" },
+                { word: "Brittleness", definition: "How easily a material breaks" },
+                { word: "Malleability", definition: "How easily a material can be hammered into shape" },
+                { word: "Ductility", definition: "How easily a material can be drawn into wire" },
+                { word: "Conductivity", definition: "How well a material conducts heat or electricity" },
+                { word: "Insulation", definition: "Material that prevents heat or electricity transfer" },
+                { word: "Corrosion", definition: "The gradual destruction of materials by chemical reactions" },
+                { word: "Oxidation", definition: "A chemical reaction with oxygen" },
+                { word: "Alloy", definition: "A mixture of metals" },
+                { word: "Composite", definition: "A material made from two or more different materials" },
+                { word: "Synthetic", definition: "Made by humans, not found in nature" },
+                { word: "Biodegradable", definition: "Able to be broken down by natural processes" },
+                { word: "Recyclable", definition: "Able to be processed and used again" },
+                { word: "Renewable", definition: "Able to be replaced naturally" },
+                { word: "Non-renewable", definition: "Cannot be replaced once used up" },
+                { word: "Life Cycle", definition: "All stages of a product from creation to disposal" },
+                { word: "Environmental Impact", definition: "The effect something has on the environment" },
+                { word: "Carbon Footprint", definition: "The amount of carbon dioxide produced by activities" },
+                { word: "Green Technology", definition: "Technology designed to be environmentally friendly" },
+                { word: "Clean Energy", definition: "Energy that doesn't pollute the environment" },
+                { word: "Energy Efficiency", definition: "Using less energy to accomplish the same task" },
+                { word: "Waste Reduction", definition: "Minimizing the amount of waste produced" },
+                { word: "Resource Conservation", definition: "Using resources wisely to make them last longer" }
+            ]
+        };
+        
+        let currentBundle = 'bundle1';
+        let studiedCards = new Set();
+        let allCards = [];
+        
+        function showBundle(bundle) {
+            currentBundle = bundle;
+            
+            // Update active button
+            document.querySelectorAll('.bundle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Generate cards
+            generateCards();
+            updateStats();
+        }
+        
+        function generateCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+            
+            let cards = [];
+            
+            if (currentBundle === 'mixed') {
+                // Combine all bundles and shuffle
+                cards = [...vocabularyData.bundle1, ...vocabularyData.bundle2, ...vocabularyData.bundle3, ...vocabularyData.bundle4];
+                shuffleArray(cards);
+                // Show all cards from all bundles, not just 20
+            } else {
+                cards = vocabularyData[currentBundle] || [];
+            }
+            
+            allCards = cards;
+            
+            cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'vocab-card';
+                cardElement.innerHTML = `
+                    <div class="card-front">
+                        <div class="vocab-word">${card.word}</div>
+                        <div class="vocab-definition">Click to reveal definition</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="vocab-word">${card.word}</div>
+                        <div class="vocab-definition">${card.definition}</div>
+                    </div>
+                `;
+                
+                cardElement.addEventListener('click', () => flipCard(cardElement, index));
+                container.appendChild(cardElement);
+            });
+        }
+        
+        function flipCard(cardElement, index) {
+            cardElement.classList.toggle('flipped');
+            studiedCards.add(index);
+            updateStats();
+        }
+        
+        function shuffleCards() {
+            generateCards();
+        }
+        
+        function resetProgress() {
+            studiedCards.clear();
+            document.querySelectorAll('.vocab-card').forEach(card => {
+                card.classList.remove('flipped');
+            });
+            updateStats();
+        }
+        
+        function flipAllCards() {
+            document.querySelectorAll('.vocab-card').forEach(card => {
+                card.classList.toggle('flipped');
+            });
+        }
+        
+        function updateStats() {
+            const totalCards = allCards.length;
+            const studiedCount = studiedCards.size;
+            const percentage = totalCards > 0 ? (studiedCount / totalCards) * 100 : 0;
+            
+            document.getElementById('cardsStudied').textContent = studiedCount;
+            document.getElementById('totalCards').textContent = totalCards;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+        
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        // Navigation function
+        function goBack() {
+            if (window.parent && window.parent !== window) {
+                // If we're in an iframe, close the modal
+                window.parent.closeTool();
+            } else {
+                // If we're in a standalone page, go back
+                window.history.back();
+            }
+        }
+        
+        // Initialize
+        generateCards();
+    </script>
+</body>
+</html>

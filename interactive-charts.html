@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Charts - 4th Grade STEM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            font-family: 'Lexend', sans-serif;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .chart-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .chart-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        .chart-btn:hover, .chart-btn.active {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.6);
+            transform: translateY(-2px);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            min-height: calc(100vh - 200px);
+            height: calc(100vh - 200px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chart-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .chart-canvas {
+            width: 100%;
+            flex: 1;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            position: relative;
+            background: #fafafa;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .chart-display {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .chart-display.hidden {
+            display: none;
+        }
+        
+        .bar-chart {
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            height: 100%;
+            padding: 20px;
+        }
+        
+        .bar {
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 5px 5px 0 0;
+            min-width: 40px;
+            margin: 0 5px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .bar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .pie-chart {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: conic-gradient(
+                #667eea 0deg 72deg,
+                #764ba2 72deg 144deg,
+                #28a745 144deg 216deg,
+                #ff6b35 216deg 288deg,
+                #ffc107 288deg 360deg
+            );
+        }
+        
+        .pie-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .line-chart {
+            position: relative;
+            height: 100%;
+            padding: 20px;
+        }
+        
+        .line-path {
+            fill: none;
+            stroke: #667eea;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        .data-point {
+            fill: #667eea;
+            stroke: white;
+            stroke-width: 2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .data-point:hover {
+            fill: #764ba2;
+            transform: scale(1.2);
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .control-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin: 0 5px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .chart-type-selector {
+            margin-bottom: 15px;
+        }
+        
+        .chart-type-selector label {
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        .chart-type-selector select {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Lexend', sans-serif;
+            background: white;
+        }
+        
+        .chart-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .chart-actions .control-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+        }
+        
+        .chart-actions .control-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        
+        .data-input {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .input-group input {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Lexend', sans-serif;
+        }
+        
+        .add-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Lexend', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .add-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back to Portal
+            </button>
+            <div class="header-text">
+                <h1><i class="fas fa-chart-bar"></i> Interactive Charts</h1>
+                <p>Dynamic data visualization tools for STEM learning</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="chart-selector">
+            <button class="chart-btn active" onclick="showChart('bar')">Bar Chart</button>
+            <button class="chart-btn" onclick="showChart('pie')">Pie Chart</button>
+            <button class="chart-btn" onclick="showChart('line')">Line Graph</button>
+            <button class="chart-btn" onclick="showChart('custom')">Custom Data</button>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title" id="chartTitle">Plant Growth Over Time</div>
+            
+            <!-- Bar Chart -->
+            <div id="barChart" class="chart-display">
+                <div class="controls">
+                    <button class="control-btn" onclick="animateBars()">Animate</button>
+                    <button class="control-btn" onclick="randomizeData()">Randomize</button>
+                </div>
+                <div class="chart-canvas">
+                    <div class="bar-chart" id="barChartContainer">
+                        <!-- Bars will be generated here -->
+                    </div>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #667eea;"></div>
+                        <span>Week 1</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #764ba2;"></div>
+                        <span>Week 2</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #28a745;"></div>
+                        <span>Week 3</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #ff6b35;"></div>
+                        <span>Week 4</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pie Chart -->
+            <div id="pieChart" class="chart-display hidden">
+                <div class="controls">
+                    <button class="control-btn" onclick="rotatePie()">Rotate</button>
+                    <button class="control-btn" onclick="changePieData()">Change Data</button>
+                </div>
+                <div class="chart-canvas">
+                    <div class="pie-chart" id="pieChartContainer">
+                        <div class="pie-center">Total<br>100%</div>
+                    </div>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #667eea;"></div>
+                        <span>Plants (40%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #764ba2;"></div>
+                        <span>Animals (30%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #28a745;"></div>
+                        <span>Fungi (20%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #ff6b35;"></div>
+                        <span>Bacteria (10%)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Line Chart -->
+            <div id="lineChart" class="chart-display hidden">
+                <div class="controls">
+                    <button class="control-btn" onclick="animateLine()">Animate Line</button>
+                    <button class="control-btn" onclick="addDataPoint()">Add Point</button>
+                </div>
+                <div class="chart-canvas">
+                    <svg class="line-chart" id="lineChartContainer" viewBox="0 0 400 200">
+                        <!-- Line chart will be drawn here -->
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Custom Data Input -->
+            <div id="customChart" class="chart-display hidden">
+                <div class="data-input">
+                    <h3>Create Your Own Chart</h3>
+                    <div class="chart-type-selector">
+                        <label>Chart Type:</label>
+                        <select id="customChartType" onchange="updateCustomChartType()">
+                            <option value="bar">Bar Chart</option>
+                            <option value="pie">Pie Chart</option>
+                            <option value="line">Line Chart</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="dataLabel" placeholder="Label">
+                        <input type="number" id="dataValue" placeholder="Value">
+                        <input type="color" id="dataColor" value="#667eea">
+                        <button class="add-btn" onclick="addCustomData()">Add</button>
+                    </div>
+                    <div id="customDataList"></div>
+                    <div class="chart-actions">
+                        <button class="control-btn" onclick="clearCustomData()">Clear All</button>
+                        <button class="control-btn" onclick="loadSampleData()">Load Sample</button>
+                        <button class="control-btn" onclick="exportCustomData()">Export Data</button>
+                    </div>
+                </div>
+                <div class="chart-canvas" id="customChartContainer">
+                    <!-- Custom chart will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentChart = 'bar';
+        let customData = [];
+        
+        // Sample data
+        const barData = [
+            { label: 'Week 1', value: 5 },
+            { label: 'Week 2', value: 12 },
+            { label: 'Week 3', value: 18 },
+            { label: 'Week 4', value: 25 }
+        ];
+        
+        const lineData = [
+            { x: 50, y: 150 },
+            { x: 100, y: 120 },
+            { x: 150, y: 90 },
+            { x: 200, y: 70 },
+            { x: 250, y: 50 },
+            { x: 300, y: 30 }
+        ];
+        
+        function showChart(chartType) {
+            currentChart = chartType;
+            
+            // Update active button
+            document.querySelectorAll('.chart-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Hide all charts
+            document.querySelectorAll('.chart-display').forEach(chart => chart.classList.add('hidden'));
+            
+            // Show selected chart
+            document.getElementById(chartType + 'Chart').classList.remove('hidden');
+            
+            // Update title
+            const titles = {
+                'bar': 'Plant Growth Over Time',
+                'pie': 'Ecosystem Composition',
+                'line': 'Temperature Changes',
+                'custom': 'Custom Data Visualization'
+            };
+            document.getElementById('chartTitle').textContent = titles[chartType];
+            
+            // Generate chart
+            if (chartType === 'bar') generateBarChart();
+            else if (chartType === 'line') generateLineChart();
+        }
+        
+        function generateBarChart() {
+            const container = document.getElementById('barChartContainer');
+            container.innerHTML = '';
+            
+            const maxValue = Math.max(...barData.map(d => d.value));
+            
+            barData.forEach((item, index) => {
+                const bar = document.createElement('div');
+                const height = (item.value / maxValue) * 200;
+                
+                bar.className = 'bar';
+                bar.style.height = height + 'px';
+                bar.innerHTML = `
+                    <div class="bar-value">${item.value}</div>
+                    <div class="bar-label">${item.label}</div>
+                `;
+                
+                bar.addEventListener('click', () => {
+                    alert(`${item.label}: ${item.value} cm growth`);
+                });
+                
+                container.appendChild(bar);
+            });
+        }
+        
+        function generateLineChart() {
+            const svg = document.getElementById('lineChartContainer');
+            svg.innerHTML = '';
+            
+            // Create line path
+            let pathData = `M ${lineData[0].x} ${lineData[0].y}`;
+            for (let i = 1; i < lineData.length; i++) {
+                pathData += ` L ${lineData[i].x} ${lineData[i].y}`;
+            }
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', pathData);
+            path.setAttribute('class', 'line-path');
+            svg.appendChild(path);
+            
+            // Create data points
+            lineData.forEach((point, index) => {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', point.x);
+                circle.setAttribute('cy', point.y);
+                circle.setAttribute('r', '6');
+                circle.setAttribute('class', 'data-point');
+                circle.addEventListener('click', () => {
+                    alert(`Point ${index + 1}: Temperature ${30 - (point.y / 10)}°C`);
+                });
+                svg.appendChild(circle);
+            });
+        }
+        
+        function animateBars() {
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach((bar, index) => {
+                bar.style.height = '0px';
+                setTimeout(() => {
+                    bar.style.transition = 'height 1s ease';
+                    bar.style.height = bar.dataset.height || '200px';
+                }, index * 200);
+            });
+        }
+        
+        function randomizeData() {
+            barData.forEach(item => {
+                item.value = Math.floor(Math.random() * 30) + 1;
+            });
+            generateBarChart();
+        }
+        
+        function rotatePie() {
+            const pie = document.getElementById('pieChartContainer');
+            pie.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                pie.style.transform = 'rotate(0deg)';
+            }, 1000);
+        }
+        
+        function changePieData() {
+            const pie = document.getElementById('pieChartContainer');
+            const colors = ['#667eea', '#764ba2', '#28a745', '#ff6b35', '#ffc107'];
+            const randomColors = colors.sort(() => Math.random() - 0.5);
+            
+            pie.style.background = `conic-gradient(
+                ${randomColors[0]} 0deg 72deg,
+                ${randomColors[1]} 72deg 144deg,
+                ${randomColors[2]} 144deg 216deg,
+                ${randomColors[3]} 216deg 288deg,
+                ${randomColors[4]} 288deg 360deg
+            )`;
+        }
+        
+        function animateLine() {
+            const path = document.querySelector('.line-path');
+            const length = path.getTotalLength();
+            path.style.strokeDasharray = length;
+            path.style.strokeDashoffset = length;
+            path.style.animation = 'drawLine 2s ease-in-out forwards';
+        }
+        
+        function addDataPoint() {
+            const newX = Math.random() * 300 + 50;
+            const newY = Math.random() * 150 + 30;
+            lineData.push({ x: newX, y: newY });
+            generateLineChart();
+        }
+        
+        function addCustomData() {
+            const label = document.getElementById('dataLabel').value;
+            const value = parseInt(document.getElementById('dataValue').value);
+            const color = document.getElementById('dataColor').value;
+            
+            if (label && value) {
+                customData.push({ label, value, color });
+                updateCustomDataList();
+                generateCustomChart();
+                
+                // Clear inputs
+                document.getElementById('dataLabel').value = '';
+                document.getElementById('dataValue').value = '';
+            }
+        }
+        
+        function updateCustomDataList() {
+            const list = document.getElementById('customDataList');
+            list.innerHTML = customData.map((item, index) => 
+                `<div style="display: flex; justify-content: space-between; align-items: center; margin: 5px 0; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 5px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 20px; height: 20px; background: ${item.color}; border-radius: 3px;"></div>
+                        <span>${item.label}: ${item.value}</span>
+                    </div>
+                    <button onclick="removeCustomData(${index})" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Remove</button>
+                </div>`
+            ).join('');
+        }
+        
+        function removeCustomData(index) {
+            customData.splice(index, 1);
+            updateCustomDataList();
+            generateCustomChart();
+        }
+        
+        function generateCustomChart() {
+            const container = document.getElementById('customChartContainer');
+            container.innerHTML = '';
+            
+            if (customData.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">Add some data to create your chart!</div>';
+                return;
+            }
+            
+            const chartType = document.getElementById('customChartType').value;
+            
+            if (chartType === 'bar') {
+                generateCustomBarChart(container);
+            } else if (chartType === 'pie') {
+                generateCustomPieChart(container);
+            } else if (chartType === 'line') {
+                generateCustomLineChart(container);
+            }
+        }
+        
+        function generateCustomBarChart(container) {
+            const maxValue = Math.max(...customData.map(d => d.value));
+            const chart = document.createElement('div');
+            chart.className = 'bar-chart';
+            
+            customData.forEach((item, index) => {
+                const bar = document.createElement('div');
+                const height = (item.value / maxValue) * 200;
+                
+                bar.className = 'bar';
+                bar.style.height = height + 'px';
+                bar.style.background = `linear-gradient(180deg, ${item.color}, ${adjustColor(item.color, -20)})`;
+                bar.innerHTML = `
+                    <div class="bar-value">${item.value}</div>
+                    <div class="bar-label">${item.label}</div>
+                `;
+                
+                chart.appendChild(bar);
+            });
+            
+            container.appendChild(chart);
+        }
+        
+        function generateCustomPieChart(container) {
+            const total = customData.reduce((sum, item) => sum + item.value, 0);
+            let currentAngle = 0;
+            
+            const pieChart = document.createElement('div');
+            pieChart.className = 'pie-chart';
+            pieChart.style.background = 'conic-gradient(' + 
+                customData.map(item => {
+                    const percentage = (item.value / total) * 100;
+                    const angle = (item.value / total) * 360;
+                    const startAngle = currentAngle;
+                    currentAngle += angle;
+                    return `${item.color} ${startAngle}deg ${currentAngle}deg`;
+                }).join(', ') + ')';
+            
+            const center = document.createElement('div');
+            center.className = 'pie-center';
+            center.textContent = `Total\n${total}`;
+            pieChart.appendChild(center);
+            
+            container.appendChild(pieChart);
+        }
+        
+        function generateCustomLineChart(container) {
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('viewBox', '0 0 400 200');
+            svg.className = 'line-chart';
+            
+            const maxValue = Math.max(...customData.map(d => d.value));
+            const points = customData.map((item, index) => ({
+                x: (index / (customData.length - 1)) * 350 + 25,
+                y: 175 - (item.value / maxValue) * 150
+            }));
+            
+            // Create line path
+            let pathData = `M ${points[0].x} ${points[0].y}`;
+            for (let i = 1; i < points.length; i++) {
+                pathData += ` L ${points[i].x} ${points[i].y}`;
+            }
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', pathData);
+            path.setAttribute('class', 'line-path');
+            path.setAttribute('stroke', customData[0]?.color || '#667eea');
+            svg.appendChild(path);
+            
+            // Create data points
+            points.forEach((point, index) => {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', point.x);
+                circle.setAttribute('cy', point.y);
+                circle.setAttribute('r', '6');
+                circle.setAttribute('class', 'data-point');
+                circle.setAttribute('fill', customData[index]?.color || '#667eea');
+                svg.appendChild(circle);
+            });
+            
+            container.appendChild(svg);
+        }
+        
+        function updateCustomChartType() {
+            generateCustomChart();
+        }
+        
+        function clearCustomData() {
+            customData = [];
+            updateCustomDataList();
+            generateCustomChart();
+        }
+        
+        function loadSampleData() {
+            customData = [
+                { label: 'Plants', value: 40, color: '#28a745' },
+                { label: 'Animals', value: 30, color: '#ffc107' },
+                { label: 'Fungi', value: 20, color: '#fd7e14' },
+                { label: 'Bacteria', value: 10, color: '#dc3545' }
+            ];
+            updateCustomDataList();
+            generateCustomChart();
+        }
+        
+        function exportCustomData() {
+            const data = {
+                chartType: document.getElementById('customChartType').value,
+                data: customData,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chart-data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function adjustColor(color, amount) {
+            const num = parseInt(color.replace("#", ""), 16);
+            const amt = Math.round(2.55 * amount);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+        
+        // Add CSS animation for line drawing
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes drawLine {
+                to {
+                    stroke-dashoffset: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Navigation function
+        function goBack() {
+            if (window.parent && window.parent !== window) {
+                // If we're in an iframe, close the modal
+                window.parent.closeTool();
+            } else {
+                // If we're in a standalone page, go back
+                window.history.back();
+            }
+        }
+        
+        // Initialize
+        generateBarChart();
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "name": "stem-4th-grade-portal",
+  "version": "1.0.0",
+  "description": "Interactive STEM Learning Portal for 4th Grade Students and Teachers",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server . -p 3000 -o",
+    "dev": "npx live-server --port=3000 --open=/teacher-portal.html",
+    "build": "echo 'No build process needed for static HTML files'",
+    "deploy": "gh-pages -d .",
+    "test": "echo 'No tests specified'",
+    "lint": "npx htmlhint *.html",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "stem",
+    "education",
+    "4th-grade",
+    "interactive",
+    "learning",
+    "portal",
+    "teacher",
+    "student",
+    "assessment",
+    "curriculum"
+  ],
+  "author": "STEM Education Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2",
+    "gh-pages": "^6.0.0",
+    "htmlhint": "^1.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/stem-4th-grade-portal.git"
+  },
+  "homepage": "https://yourusername.github.io/stem-4th-grade-portal",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
