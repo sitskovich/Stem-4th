@@ -244,7 +244,7 @@
                 <label for="videoUpload">Upload Video (Optional)</label>
                 <input type="file" id="videoUpload" accept="video/*" onchange="handleVideoUpload(event)">
                 <div id="videoPreview" style="display: none; margin-top: 10px;">
-                    <video id="videoPreview" controls style="max-width: 300px; max-height: 200px; border-radius: 10px;">
+                    <video id="previewVideo" controls style="max-width: 300px; max-height: 200px; border-radius: 10px;">
                         Your browser does not support the video tag.
                     </video>
                 </div>
@@ -495,9 +495,9 @@
             // Create preview
             const reader = new FileReader();
             reader.onload = function(e) {
-                const videoPreview = document.getElementById('videoPreview');
+                const videoPreview = document.getElementById('previewVideo');
                 videoPreview.src = e.target.result;
-                videoPreview.style.display = 'block';
+                document.getElementById('videoPreview').style.display = 'block';
             };
             reader.readAsDataURL(file);
             
