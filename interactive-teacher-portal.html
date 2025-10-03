@@ -176,7 +176,7 @@
         .slide {
             min-width: 100%;
             height: 100%;
-            padding: 10px 15px 60px 15px;
+            padding: 10px 15px 150px 15px;
             text-align: center;
             color: white;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -193,25 +193,25 @@
         }
 
         .slide-title {
-            font-size: 3rem;
-            margin-bottom: 30px;
+            font-size: 3.2rem;
+            margin-bottom: 25px;
             font-weight: 700;
             line-height: 1.1;
         }
-
+        
         .slide-content {
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            max-width: 900px;
+            font-size: 2.1rem;
+            margin-bottom: 20px;
+            max-width: 1400px;
             line-height: 1.4;
             font-weight: 500;
             text-align: left;
-            padding: 0 20px;
+            padding: 0 60px;
         }
 
         .interactive-question {
-            font-size: 1.4rem;
-            margin: 5px 0;
+            font-size: 2.2rem;
+            margin: 10px 0;
             font-weight: 600;
             color: #fff;
         }
@@ -220,8 +220,8 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 1300px;
+            margin: 5px auto 0 auto;
         }
         
         .reveal-item {
@@ -243,7 +243,7 @@
         }
 
         .reveal-emoji {
-            font-size: 2rem;
+            font-size: 3rem;
             margin-right: 15px;
             cursor: pointer;
             transition: transform 0.3s ease;
@@ -254,7 +254,7 @@
         }
 
         .reveal-answer {
-            font-size: 1.4rem;
+            font-size: 2rem;
             color: #00d4aa;
             font-weight: 500;
             opacity: 0;
@@ -304,7 +304,7 @@
         }
 
         .reveal-question {
-            font-size: 1.5rem;
+            font-size: 2.2rem;
             color: #fff;
             font-weight: 500;
         }
@@ -407,22 +407,22 @@
 
         .vocab-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 15px;
-            margin: 20px 0;
-            max-width: 700px;
-            padding: 0 20px;
+            margin: 5px 0;
+            max-width: 1200px;
+            padding: 0 40px;
         }
 
         .vocab-card {
             background: rgba(255,255,255,0.2);
             border-radius: 15px;
-            padding: 15px;
+            padding: 20px;
             cursor: pointer;
             transition: transform 0.3s ease;
             perspective: 1000px;
-            min-height: 90px;
-            max-height: 120px;
+            min-height: 140px;
+            max-height: 180px;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -463,17 +463,17 @@
         }
 
         .card-front {
-            font-size: 1.3rem;
+            font-size: 1.9rem;
             word-wrap: break-word;
             font-weight: 600;
             text-align: center;
         }
-
+        
         .card-back {
-            font-size: 1.1rem;
+            font-size: 1.7rem;
             transform: rotateY(180deg);
             word-wrap: break-word;
-            line-height: 1.2;
+            line-height: 1.3;
             font-weight: 500;
             text-align: center;
         }
@@ -481,7 +481,8 @@
         .timer-bar {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -925,9 +926,37 @@
                         <button class="timer-btn" onclick="resetCountdown()">Reset</button>
                     </div>
                     <input type="range" class="timer-slider" id="timerSlider" min="0" max="600" value="0" step="30">
+                    <span id="timerDisplay" style="font-weight: 600; color: white; min-width: 80px; font-size: 1.1rem;">0:00</span>
                     <span id="countdownDisplay" style="font-weight: 600; color: #00d4aa; min-width: 100px; font-size: 1.2rem; display: none;"></span>
                 `;
                 document.querySelector('.modal-content').appendChild(bar);
+                
+                // Initialize timer display with slider value
+                setTimeout(() => {
+                    const slider = document.getElementById('timerSlider');
+                    if (slider) {
+                        countdown = parseInt(slider.value, 10) || 0;
+                        updateTimerDisplay();
+                        
+                        // Add event listeners for real-time updates
+                        slider.addEventListener('input', function() {
+                            countdown = parseInt(this.value, 10) || 0;
+                            updateTimerDisplay();
+                        });
+                        
+                        slider.addEventListener('change', function() {
+                            countdown = parseInt(this.value, 10) || 0;
+                            updateTimerDisplay();
+                        });
+                        
+                        slider.addEventListener('mousemove', function() {
+                            if (this.matches(':hover')) {
+                                countdown = parseInt(this.value, 10) || 0;
+                                updateTimerDisplay();
+                            }
+                        });
+                    }
+                }, 100);
             }
         }
 
@@ -975,6 +1004,7 @@
             countdown = 0;
             isTimerRunning = false;
             updateCountdownDisplay();
+            updateTimerDisplay();
         }
 
         function updateCountdownDisplay() {
@@ -989,6 +1019,16 @@
                 } else {
                     el.style.display = 'none';
                 }
+            }
+        }
+
+        function updateTimerDisplay() {
+            const el = document.getElementById('timerDisplay');
+            
+            if (el) {
+                const minutes = Math.floor(countdown / 60);
+                const seconds = countdown % 60;
+                el.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
             }
         }
 
@@ -1348,37 +1388,28 @@
                     title: 'Adaptation and Evolution',
                     slides: [
                         {
-                            title: 'Adaptation and Evolution',
-                            content: 'Today we will understand adaptation mechanisms and explore natural selection concepts.'
+                            title: '🔥 Warm-up: Adaptation Challenge',
+                            content: '🦅🐧🐘🦒 Look at these amazing animals! Can you spot how they might be different from each other? What do you think helps them survive in their environment?\n\n<div class="interactive-question">Quick Thinking Challenge!</div>\n\n<div class="structure-grid">\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🦅</span>\n    <span class="reveal-question">Eagle</span>\n    <span class="reveal-answer">Sharp talons and excellent eyesight for hunting</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🐧</span>\n    <span class="reveal-question">Penguin</span>\n    <span class="reveal-answer">Flippers for swimming, thick feathers for warmth</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🐘</span>\n    <span class="reveal-question">Elephant</span>\n    <span class="reveal-answer">Large ears for cooling, trunk for grabbing food</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🦒</span>\n    <span class="reveal-question">Giraffe</span>\n    <span class="reveal-answer">Long neck to reach leaves high in trees</span>\n</div>\n</div>'
                         },
                         {
-                            title: 'Warm-up: Adaptation Matching Game',
-                            content: 'Match each organism with its adaptation. How do these adaptations help them survive?',
-                            image: 'https://via.placeholder.com/800x600/667eea/ffffff?text=Adaptation+Game'
-                        },
-                        {
-                            title: 'Learning Objectives',
-                            content: 'By the end of this lesson, you will be able to:\n• Understand adaptation mechanisms\n• Explore natural selection concepts\n• Analyze evolutionary changes'
-                        },
-                        {
-                            title: 'Vocabulary Cards',
-                            content: 'Let\'s learn evolution vocabulary!',
+                            title: '🎯 Learning Objectives & Vocabulary',
+                            content: 'By the end of this lesson, you will be able to:\n• Identify different types of adaptations that help organisms survive\n• Explain how organisms change over time through natural selection\n• Describe how environmental changes can lead to new adaptations\n• Compare and contrast different adaptation strategies\n\n📚 Key Vocabulary:',
                             vocabulary: [
+                                { term: 'Adaptation', definition: 'A trait that helps an organism survive in its environment' },
                                 { term: 'Evolution', definition: 'The gradual change in species over time' },
-                                { term: 'Natural Selection', definition: 'The process where organisms with helpful traits survive' },
-                                { term: 'Mutation', definition: 'A change in an organism\'s genetic material' },
-                                { term: 'Trait', definition: 'A characteristic of an organism' }
+                                { term: 'Natural Selection', definition: 'The process where organisms with helpful traits survive and reproduce' },
+                                { term: 'Camouflage', definition: 'An adaptation that helps organisms blend in with their surroundings' },
+                                { term: 'Mimicry', definition: 'When one organism looks like another to avoid predators' },
+                                { term: 'Survival', definition: 'The ability to stay alive and reproduce in a specific environment' }
                             ]
                         },
                         {
                             title: 'Content: Adaptation Mechanisms',
-                            content: 'Organisms adapt to their environment over time. Those with helpful traits survive and reproduce.',
-                            image: 'https://via.placeholder.com/800x600/667eea/ffffff?text=Adaptation+Mechanisms'
+                            content: 'Organisms adapt to their environment over time. Those with helpful traits survive and reproduce.\n\n<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 5px; width: 100%; max-height: 55vh; overflow: visible; justify-items: center;">\n<div class="flip-card" onclick="flipAdaptationCard(this)" style="width: 270px; height: 270px; perspective: 1000px; cursor: pointer;">\n    <div class="flip-card-inner" style="position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d;">\n        <div class="flip-card-front" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">\n            <img src="images/camo.png" alt="Camouflage" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">\n        </div>\n        <div class="flip-card-back" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: white; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box;">\n            <h3 style="color: #667eea; margin-bottom: 8px; font-size: 2.2rem;">🦎 Camouflage</h3>\n            <p style="color: #666; text-align: center; line-height: 1.3; font-size: 1.6rem;">Blending in with surroundings to avoid predators</p>\n        </div>\n    </div>\n</div>\n<div class="flip-card" onclick="flipAdaptationCard(this)" style="width: 270px; height: 270px; perspective: 1000px; cursor: pointer;">\n    <div class="flip-card-inner" style="position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d;">\n        <div class="flip-card-front" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">\n            <img src="images/mimicry.png" alt="Mimicry" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">\n        </div>\n        <div class="flip-card-back" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: white; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box;">\n            <h3 style="color: #667eea; margin-bottom: 8px; font-size: 2.2rem;">🦋 Mimicry</h3>\n            <p style="color: #666; text-align: center; line-height: 1.3; font-size: 1.6rem;">Looking like another organism to avoid predators</p>\n        </div>\n    </div>\n</div>\n<div class="flip-card" onclick="flipAdaptationCard(this)" style="width: 270px; height: 270px; perspective: 1000px; cursor: pointer;">\n    <div class="flip-card-inner" style="position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d;">\n        <div class="flip-card-front" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">\n            <img src="images/coloration.png" alt="Coloration" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">\n        </div>\n        <div class="flip-card-back" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: white; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box;">\n            <h3 style="color: #667eea; margin-bottom: 8px; font-size: 2.2rem;">🌈 Coloration</h3>\n            <p style="color: #666; text-align: center; line-height: 1.3; font-size: 1.6rem;">Warning colors and patterns to signal danger</p>\n        </div>\n    </div>\n</div>\n</div>'
                         },
                         {
-                            title: 'Deep Dive: Natural Selection Process',
-                            content: 'Natural selection works like this: variation exists, some traits are helpful, helpful traits are passed on.',
-                            image: 'https://via.placeholder.com/800x600/ff6b35/ffffff?text=Natural+Selection'
+                            title: 'Evolution Examples: Finch & Peppered Moth',
+                            content: 'Let\'s explore famous examples of evolution in action!\n\n<div style="display: flex; justify-content: space-around; align-items: flex-start; gap: 40px; margin-top: 20px; flex-wrap: wrap; width: 100%; max-height: 70vh; overflow: visible;">\n<div class="flip-card" onclick="flipAdaptationCard(this)" style="width: 450px; height: 450px; perspective: 1000px; cursor: pointer;">\n    <div class="flip-card-inner" style="position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d;">\n        <div class="flip-card-front" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">\n            <img src="images/finch.png" alt="Finch" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">\n        </div>\n        <div class="flip-card-back" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: white; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">\n            <h3 style="color: #667eea; margin-bottom: 10px; font-size: 3.5rem;">🐦 Darwin\'s Finches</h3>\n            <p style="color: #666; text-align: center; line-height: 1.4; font-size: 2.2rem;">Different beak shapes evolved for different food sources on different islands</p>\n        </div>\n    </div>\n</div>\n<div class="flip-card" onclick="flipAdaptationCard(this)" style="width: 450px; height: 450px; perspective: 1000px; cursor: pointer;">\n    <div class="flip-card-inner" style="position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d;">\n        <div class="flip-card-front" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">\n            <img src="images/pepperedMoth.png" alt="Peppered Moth" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">\n        </div>\n        <div class="flip-card-back" style="position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: white; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">\n            <h3 style="color: #667eea; margin-bottom: 10px; font-size: 3.5rem;">🦋 Peppered Moth</h3>\n            <p style="color: #666; text-align: center; line-height: 1.4; font-size: 2.2rem;">Moths changed from light to dark color when pollution darkened tree bark</p>\n        </div>\n    </div>\n</div>\n</div>'
                         },
                         {
                             title: 'Digital Citizenship: Scientific Research Ethics',
@@ -2462,15 +2493,7 @@
 
             updateSlidePosition();
             
-            // Add slider event listener
-            const slider = document.getElementById('timerSlider');
-            if (slider) {
-                slider.addEventListener('input', function() {
-                    if (!isTimerRunning) {
-                        countdown = parseInt(this.value, 10) || 0;
-                    }
-                });
-            }
+            // Timer event listeners are now handled in renderTimerBar()
         }
 
         function generateSlideNavigation(totalSlides) {
@@ -2558,6 +2581,13 @@
 
         function flipCard(card) {
             card.classList.toggle('flipped');
+        }
+
+        function flipAdaptationCard(card) {
+            const flipInner = card.querySelector('.flip-card-inner');
+            if (flipInner) {
+                flipInner.style.transform = flipInner.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
+            }
         }
 
         // Keyboard navigation
