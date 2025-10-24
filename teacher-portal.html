@@ -2540,8 +2540,14 @@
         }
 
         .section-content {
-            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
             padding: 0;
+        }
+
+        .section-content.expanded {
+            max-height: 3000px;
         }
 
         .section-item {
@@ -2758,14 +2764,14 @@
                             title: 'Assessments & Quizzes',
                             icon: 'clipboard-check',
                             items: [
+                                { name: 'Bundle 1 - Life Science Test (100 pts)', type: 'test', file: 'Bundle 1 - Life Science Test.md' },
                                 { name: 'Bundle 1 Vocabulary Quiz', type: 'quiz' },
                                 { name: 'Structure-Function Assessment', type: 'assessment' },
                                 { name: 'Plant vs Animal Comparison', type: 'activity' },
                                 { name: 'Food Chain Analysis Quiz', type: 'quiz' },
                                 { name: 'Ecosystem Interactions Assessment', type: 'assessment' },
                                 { name: 'Environmental Impact Project', type: 'project' },
-                                { name: 'Conservation Strategies Activity', type: 'activity' },
-                                { name: 'Bundle 1 Final Exam', type: 'exam' }
+                                { name: 'Conservation Strategies Activity', type: 'activity' }
                             ]
                         },
                         {
@@ -3066,7 +3072,7 @@
                     </div>
                     <div class="section-content">
                         ${section.items.map(item => `
-                            <div class="section-item" onclick="openItem('${item.type}', '${item.id || item.name}')">
+                            <div class="section-item" onclick="openItem('${item.type}', '${item.id || item.name}', '${item.file || ''}')">
                                 <div class="item-icon">
                                     ${getItemIcon(item.type)}
                                 </div>
@@ -3086,8 +3092,16 @@
                 'lesson': '🎯',
                 'quiz': '❓',
                 'assessment': '📝',
+                'test': '📋',
                 'activity': '🎨',
-                'game': '🎮'
+                'project': '🎯',
+                'game': '🎮',
+                'lab': '🧪',
+                'reading': '📖',
+                'math': '🔢',
+                'rubric': '📊',
+                'template': '📄',
+                'video': '🎬'
             };
             return icons[type] || '📄';
         }
@@ -3097,19 +3111,26 @@
             const content = section.querySelector('.section-content');
             const arrow = header.querySelector('.section-arrow');
             
-            if (content.style.display === 'none' || content.style.display === '') {
-                content.style.display = 'block';
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                content.style.display = 'none';
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
                 arrow.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('expanded');
+                arrow.style.transform = 'rotate(180deg)';
             }
         }
 
-        function openItem(type, id) {
+        function openItem(type, id, file) {
             switch(type) {
                 case 'lesson':
                     window.open(`interactive-teacher-portal.html#${id}`, '_blank');
+                    break;
+                case 'test':
+                    if (file) {
+                        window.open(file, '_blank');
+                    } else {
+                        openTool('assessment-tools');
+                    }
                     break;
                 case 'game':
                     if (id.includes('Vocabulary Cards')) {
