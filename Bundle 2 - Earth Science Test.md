@@ -11,7 +11,7 @@ PART 1: VOCABULARY MATCHING (10 points, 1 point each)
 Match each term with its correct definition. Write the letter in the blank.
 
 1. _____ Weathering            A. The dropping of sediments in a new location
-2. _____ Erosion               B. A huge, powerful ocean wave caused by an underwater disturbance
+2. _____ Erosion               B. The movement of weathered rock pieces to a new place
 3. _____ Deposition            C. The breaking down of rock into smaller pieces
 4. _____ Sediment              D. An action to reduce harmful effects from natural processes
 5. _____ Natural Hazard        E. Small pieces of rock, soil, or organic material
@@ -68,17 +68,17 @@ Circle the BEST answer for each question.
     C) Paving over wetlands
     D) Removing curved sections of a river
 
-18. On a weather map, a cold front is MOST often followed by:
-    A) Warmer temperatures and clear skies
-    B) Cooler temperatures and possible precipitation
-    C) Strong earthquakes
-    D) A tsunami warning
+18. A map shows a narrow band of volcanoes and earthquakes along the edge of an oceanic plate. What does this pattern MOST likely indicate?
+    A) A stable continental interior
+    B) A convergent plate boundary with subduction
+    C) A transform fault where plates slide past each other
+    D) A region where no plate motion occurs
 
-19. Which statement best compares WEATHER and CLIMATE?
-    A) Weather is long-term patterns; climate is today’s conditions
-    B) Weather and climate mean the same thing
-    C) Weather is daily conditions; climate is long-term patterns
-    D) Climate only describes rainfall
+19. Which evidence BEST supports that a mid-ocean ridge is a divergent boundary?
+    A) The newest seafloor rocks are found farthest from the ridge
+    B) Earthquakes occur in a wide random pattern across the ocean
+    C) Rock ages get older the farther you move away from the ridge
+    D) Volcanoes form only on the continents across from the ridge
 
 20. According to 4-ESS3-1, which statement is MOST accurate?
     A) Energy and fuels come only from renewable resources
@@ -142,22 +142,27 @@ ______________________________________________________________
 ______________________________________________________________
 
 
-PART 6: WATER CYCLE (12 points)
+PART 6: PLATE TECTONICS & EARTH FEATURES (12 points)
 
-39-42. Put these water cycle processes in the CORRECT ORDER to model rain formation over land. Number 1–4. (6 points)
+Review this simplified map description:
+• Line XY marks a boundary where two plates move apart beneath the ocean.
+• Zone Z shows many earthquakes and volcanoes along the edge of a continent.
+• Area W lies in the center of a plate with very few earthquakes.
 
-_____ Warmth from the Sun causes water to evaporate
-_____ Water vapor condenses into clouds
-_____ Clouds release precipitation
-_____ Water collects as runoff/groundwater
-
-43. Define “transpiration.” (3 points)
+39. Which feature (XY, Z, or W) represents a divergent boundary? Explain your choice using map evidence. (3 points)
 
 ______________________________________________________________
 
-44. Explain how the Sun’s energy drives TWO processes in the water cycle. (3 points)
+40. Which feature represents a convergent boundary? Explain your choice using map evidence. (3 points)
 
 ______________________________________________________________
+
+41. Describe one evidence pattern a scientist could map near Line XY to show seafloor spreading is occurring. (3 points)
+
+______________________________________________________________
+
+42. Why would people living in Zone Z need a mitigation plan? Give one reason based on the map pattern. (3 points)
+
 ______________________________________________________________
 
 
@@ -243,7 +248,7 @@ ANSWER KEY - TEACHER USE ONLY
 
 PART 1: VOCABULARY MATCHING (10 points)
 
-1. C  2. G  3. A  4. E  5. F  6. D  7. I  8. H  9. G  10. J
+1. C  2. B  3. A  4. E  5. F  6. D  7. I  8. H  9. G  10. J
 
 Notes:
 - Weathering = breaking down; Erosion = movement; Deposition = dropping.
@@ -272,11 +277,12 @@ PART 5: WEATHERING & EROSION ANALYSIS (12 points)
 37. Plant vegetation, mulch, terraces, silt fences, riprap (any one)
 38. Mechanism explanation (anchors soil, slows water, reduces slope length/velocity, dissipates energy)
 
-PART 6: WATER CYCLE (12 points)
+PART 6: PLATE TECTONICS & EARTH FEATURES (12 points)
 
-39–42: 1) Evaporation  2) Condensation  3) Precipitation  4) Runoff/groundwater
-43. Transpiration: Plants releasing water vapor from leaves
-44. Sun powers evaporation and drives convection leading to condensation/precipitation (any two with explanation)
+39. Feature XY; explanation mentions plates moving apart/mid-ocean ridge evidence
+40. Feature Z; explanation notes subduction indicators (quiet interior at W)
+41. Accept: symmetrical rock ages, magnetic striping, youngest rocks at ridge, rising magma, ridge topography, etc.
+42. Zone Z has clustered quakes/volcanoes → risks from earthquakes, eruptions, tsunamis; mitigation reduces those impacts
 
 PART 7: NATURAL HAZARDS & MITIGATION (12 points)
 
