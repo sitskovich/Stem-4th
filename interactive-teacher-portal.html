@@ -193,15 +193,15 @@
         }
 
         .slide-title {
-            font-size: 3.2rem;
-            margin-bottom: 25px;
+            font-size: 3.8rem;
+            margin-bottom: 20px;
             font-weight: 700;
             line-height: 1.1;
         }
         
         .slide-content {
-            font-size: 2.1rem;
-            margin-bottom: 20px;
+            font-size: 2.4rem;
+            margin-bottom: 15px;
             max-width: 1400px;
             line-height: 1.4;
             font-weight: 500;
@@ -210,8 +210,8 @@
         }
 
         .interactive-question {
-            font-size: 2.2rem;
-            margin: 10px 0;
+            font-size: 2.6rem;
+            margin: 8px 0;
             font-weight: 600;
             color: #fff;
         }
@@ -243,7 +243,7 @@
         }
 
         .reveal-emoji {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-right: 15px;
             cursor: pointer;
             transition: transform 0.3s ease;
@@ -254,7 +254,7 @@
         }
 
         .reveal-answer {
-            font-size: 2rem;
+            font-size: 2.3rem;
             color: #00d4aa;
             font-weight: 500;
             opacity: 0;
@@ -304,7 +304,7 @@
         }
 
         .reveal-question {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             color: #fff;
             font-weight: 500;
         }
@@ -331,7 +331,7 @@
             text-align: center;
             padding: 30px;
             color: #fff;
-            font-size: 1.3rem;
+            font-size: 1.6rem;
             gap: 12px;
         }
 
@@ -490,14 +490,14 @@
         }
 
         .card-front {
-            font-size: 1.9rem;
+            font-size: 2.2rem;
             word-wrap: break-word;
             font-weight: 600;
             text-align: center;
         }
         
         .card-back {
-            font-size: 1.7rem;
+            font-size: 2.0rem;
             transform: rotateY(180deg);
             word-wrap: break-word;
             line-height: 1.3;
@@ -953,8 +953,8 @@
                         <button class="timer-btn" onclick="resetCountdown()">Reset</button>
                     </div>
                     <input type="range" class="timer-slider" id="timerSlider" min="0" max="600" value="0" step="30">
-                    <span id="timerDisplay" style="font-weight: 600; color: white; min-width: 80px; font-size: 1.1rem;">0:00</span>
-                    <span id="countdownDisplay" style="font-weight: 600; color: #00d4aa; min-width: 100px; font-size: 1.2rem; display: none;"></span>
+                    <span id="timerDisplay" style="font-weight: 600; color: white; min-width: 80px; font-size: 1.3rem;">0:00</span>
+                    <span id="countdownDisplay" style="font-weight: 600; color: #00d4aa; min-width: 100px; font-size: 1.4rem; display: none;"></span>
                 `;
                 document.querySelector('.modal-content').appendChild(bar);
                 
@@ -1644,32 +1644,32 @@
                             ]
                         },
                         {
-                            title: '🧩 Engage Review: Graphic Organizer',
-                            content: 'Distribute the four-quadrant organizer (Cause • Evidence • Result • Time Scale).\n1. “Cause”: choose one process (earthquake faulting, wave erosion, river deposition).\n2. “Evidence”: draw or list the clue—offset clay layers, marine fossil on land, rounded sediments, etc.\n3. “Result”: describe the landscape change (cliff fractures, new delta, eroded hillside).\n4. “Time Scale”: mark rapid or slow and explain why. Share one square with a shoulder partner.'
+                            title: '🧩 Journal Activity: Four-Quadrant Organizer',
+                            content: '📓 <strong>In your science journal, draw a large cross (+) to divide your page into 4 sections.</strong>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong>Label each section:</strong><br><br>\n<div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:20px;margin-top:15px;">\n<div style="grid-column:1;grid-row:1;background:rgba(102,126,234,0.3);padding:15px;border-radius:8px;border:2px solid #667eea;">\n<strong>1️⃣ CAUSE (Top Left)</strong><br>\nChoose ONE process:<br>\n• Earthquake faulting<br>\n• Wave erosion<br>\n• River deposition\n</div>\n<div style="grid-column:2;grid-row:1;background:rgba(118,75,162,0.3);padding:15px;border-radius:8px;border:2px solid #764ba2;">\n<strong>2️⃣ EVIDENCE (Top Right)</strong><br>\nWhat clues prove it?<br>\n• Draw or describe<br>\n• Examples: offset layers, marine fossils on land, rounded sediments\n</div>\n<div style="grid-column:1;grid-row:2;background:rgba(40,167,69,0.3);padding:15px;border-radius:8px;border:2px solid #28a745;">\n<strong>3️⃣ RESULT (Bottom Left)</strong><br>\nWhat changed?<br>\n• Cliff fractures<br>\n• New delta formed<br>\n• Eroded hillside\n</div>\n<div style="grid-column:2;grid-row:2;background:rgba(220,53,69,0.3);padding:15px;border-radius:8px;border:2px solid #dc3545;">\n<strong>4️⃣ TIME SCALE (Bottom Right)</strong><br>\nHow fast?<br>\n• Mark: RAPID or SLOW<br>\n• Explain WHY you chose that speed\n</div>\n</div>\n</div>\n\n<div class="interactive-question">Example completed organizer:</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Earthquake Example</span>\n    <span class="reveal-answer"><strong>Cause:</strong> Earthquake faulting | <strong>Evidence:</strong> Clay layers are offset and don\'t line up | <strong>Result:</strong> Cliff has visible crack and shifted sections | <strong>Time Scale:</strong> RAPID - happens in seconds during earthquake</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Wave Erosion Example</span>\n    <span class="reveal-answer"><strong>Cause:</strong> Wave erosion | <strong>Evidence:</strong> Rounded sediments, carved cliff base | <strong>Result:</strong> Shoreline moved inland, beach formed | <strong>Time Scale:</strong> SLOW - takes hundreds/thousands of years</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏞️</span>\n    <span class="reveal-question">River Deposition Example</span>\n    <span class="reveal-answer"><strong>Cause:</strong> River deposition | <strong>Evidence:</strong> Fan-shaped sediment pile, sorted by size | <strong>Result:</strong> New delta extends into ocean | <strong>Time Scale:</strong> SLOW - builds up over many years of flooding</span>\n</div>\n\n<div style="margin-top:25px;padding:15px;background:rgba(255,193,7,0.2);border-left:4px solid #ffc107;border-radius:5px;">\n<strong>👥 TURN & TALK:</strong> After completing your organizer, share ONE quadrant with a shoulder partner. Explain your reasoning!\n</div>'
                         },
                         {
                             title: '🎲 Interactive: Fossil Layer Match',
-                            content: 'Display the fossil-layer board. Students move each fossil card to the matching layer:\n• Marine shell → layer covered by sea water.\n• Fern leaf → layer formed on land with plants.\n• Shark tooth → layer deposited in ocean. \nAfter each placement, ask: “What does this fossil tell us about the environment when this layer formed?” Record responses on chart paper.',
-                            image: 'images/Bundle2/Lesson 14/fossil_card_sort_board.png',
-                            imageDescription: 'Card sort board showing clay layers with fossil card placeholders.'
+                            content: '<div style="margin:20px 0;text-align:center;">\n<img src="images/Bundle2/Lesson 14/fossil_card_sort_board.png" style="max-width:70%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.3);" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:30px;background:rgba(255,255,255,0.1);border-radius:15px;margin:20px auto;max-width:600px;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Image Placeholder</div>\nExpected: fossil_card_sort_board.png<br>\nShows rock layers with fossil cards for sorting activity\n</div>\n</div>\n\n<div style="margin-top:20px;background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;">\n<strong style="font-size:1.5rem;">🤔 Discussion Question:</strong><br>\n"What does each fossil tell us about the environment when that layer formed?"\n</div>\n\n<div class="interactive-question" style="margin-top:15px;">Click to reveal what each fossil tells us:</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🐚</span>\n    <span class="reveal-question">Marine Shell</span>\n    <span class="reveal-answer">Found in layers covered by sea water → Ancient ocean was here</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌿</span>\n    <span class="reveal-question">Fern Leaf</span>\n    <span class="reveal-answer">Found in layers formed on land with plants → Area was above water with vegetation</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🦈</span>\n    <span class="reveal-question">Shark Tooth</span>\n    <span class="reveal-answer">Found in layers deposited in ocean → Marine environment existed here</span>\n</div>\n\n<div style="margin-top:20px;padding:15px;background:rgba(40,167,69,0.2);border-left:4px solid #28a745;border-radius:5px;">\n<strong>💭 Think About It:</strong> If you found a marine shell fossil on top of a mountain, what does that tell you about Earth\'s history?\n</div>'
                         },
                         {
                             title: '🔬 Investigation Recap: Earthquake Evidence',
-                            content: 'Hands-on model directions (materials: four colors of clay, craft stick, plastic tray):\n1. Flatten each clay color and stack: red (oldest) → yellow → green → blue (youngest). Press gently so layers stick without blending.\n2. Place small shells or paper “fossils” between yellow and green.\n3. Slice vertically through the block with the craft stick to create a fault plane.\n4. Push the right block upward and slide the left block downward to mimic an earthquake.\n5. Record observations in the organizer: Which layers offset? What happened to the embedded fossils?',
-                            image: 'images/Bundle2/Lesson 14/clay_fault_model.png',
-                            imageDescription: 'Students pressing layered clay to show fault movement.'
+                            content: '<strong>🔙 Let\'s review what we discovered in our previous lesson\'s clay model investigation!</strong>\n\n<div style="margin:20px 0;text-align:center;">\n<img src="images/Bundle2/Lesson 14/clay_fault_model.png" style="max-width:70%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.3);" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:30px;background:rgba(255,255,255,0.1);border-radius:15px;margin:20px auto;max-width:600px;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Image Placeholder</div>\nExpected: clay_fault_model.png<br>\nShows before and after clay layers with earthquake fault\n</div>\n</div>\n\n<div class="interactive-question" style="margin-top:20px;">What did we observe when we modeled an earthquake?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📐</span>\n    <span class="reveal-question">Layer Offset</span>\n    <span class="reveal-answer">The clay layers that were once lined up became offset and no longer matched across the fault</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🐚</span>\n    <span class="reveal-question">Fossil Movement</span>\n    <span class="reveal-answer">The embedded "fossils" between layers shifted and separated from each other</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Rapid Change</span>\n    <span class="reveal-answer">The earthquake caused INSTANT change - layers moved in seconds, not millions of years</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🔍</span>\n    <span class="reveal-question">Evidence in Nature</span>\n    <span class="reveal-answer">Scientists see this same pattern in real rock formations - proof that earthquakes happened in Earth\'s past</span>\n</div>\n\n<div style="margin-top:20px;padding:15px;background:rgba(255,193,7,0.2);border-left:4px solid #ffc107;border-radius:5px;">\n<strong>💭 Key Takeaway:</strong> When rock layers are offset and don\'t line up, this is evidence that an earthquake occurred. The "BEFORE" shows aligned layers, the "AFTER" shows how earthquakes create visible breaks and shifts!\n</div>'
                         },
                         {
-                            title: '📚 Literacy & Math Connections',
-                            content: 'READ: STEMscopedia “Layers Tell the Story” (pages 3–4). Highlight vocabulary in context and answer: “How did fossils help scientists reconstruct Grand Canyon history?”\nWRITE: Using the Reading Science article “The Changing Surface of Earth,” students summarize one rapid and one slow change.\nMATH: From Math Connections, graph thickness (cm) vs. deposition time (years) using the provided table. Discuss slope of the line: “What does the steepness tell us about deposition rate?”'
+                            title: '📚 How Fossils Tell Earth\'s Story',
+                            content: '🔍 Scientists use fossils to understand what environments looked like millions of years ago.\n\n<div class="interactive-question" style="margin-bottom:8px;">How did scientists reconstruct the Grand Canyon\'s history?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🐚</span>\n    <span class="reveal-question">Marine fossils in upper layers</span>\n    <span class="reveal-answer">Show the area was once covered by an ancient ocean</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌿</span>\n    <span class="reveal-question">Plant fossils in middle layers</span>\n    <span class="reveal-answer">Indicate periods when the land was above water with vegetation</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📏</span>\n    <span class="reveal-question">Layer thickness and position</span>\n    <span class="reveal-answer">Bottom layers are oldest; thicker layers show longer deposition periods</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Offset and tilted layers</span>\n    <span class="reveal-answer">Evidence of earthquakes and tectonic movement over time</span>\n</div>\n\n<div style="margin-top:10px;padding:15px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong>✍️ COMPARE & WRITE:</strong>\n• <strong>RAPID Change:</strong> Earthquake suddenly shifts rock layers and creates faults<br>\n• <strong>SLOW Change:</strong> Sediment gradually builds up layer by layer over millions of years<br><br>\n<strong>Discussion:</strong> Which type of change is easier to observe in rock layers? Why?\n</div>'
+                        },
+                        {
+                            title: '📊 Math Connection: Deposition Rate',
+                            content: '📈 <strong>Analyze how quickly rock layers formed!</strong>\n\n<div style="margin:8px 0;padding:15px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong>Data Table: Rock Layer Formation</strong><br>\n<table style="width:100%;margin-top:10px;border-collapse:collapse;background:rgba(255,255,255,0.9);color:#333;border-radius:8px;overflow:hidden;">\n<tr style="background:#667eea;color:white;"><th style="padding:10px;border:2px solid white;">Layer Thickness (cm)</th><th style="padding:10px;border:2px solid white;">Deposition Time (years)</th></tr>\n<tr><td style="padding:8px;border:2px solid #ddd;text-align:center;">10 cm</td><td style="padding:8px;border:2px solid #ddd;text-align:center;">1,000 years</td></tr>\n<tr style="background:#f8f9fa;"><td style="padding:8px;border:2px solid #ddd;text-align:center;">20 cm</td><td style="padding:8px;border:2px solid #ddd;text-align:center;">2,000 years</td></tr>\n<tr><td style="padding:8px;border:2px solid #ddd;text-align:center;">30 cm</td><td style="padding:8px;border:2px solid #ddd;text-align:center;">3,000 years</td></tr>\n<tr style="background:#f8f9fa;"><td style="padding:8px;border:2px solid #ddd;text-align:center;">40 cm</td><td style="padding:8px;border:2px solid #ddd;text-align:center;">4,000 years</td></tr>\n<tr><td style="padding:8px;border:2px solid #ddd;text-align:center;">50 cm</td><td style="padding:8px;border:2px solid #ddd;text-align:center;">5,000 years</td></tr>\n</table>\n</div>\n\n<div class="interactive-question" style="margin-top:8px;margin-bottom:8px;">What does the slope of this data tell us?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📈</span>\n    <span class="reveal-question">Steeper slope</span>\n    <span class="reveal-answer">Faster deposition - more sediment in less time</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📉</span>\n    <span class="reveal-question">Gentler slope</span>\n    <span class="reveal-answer">Slower deposition - less sediment over longer time</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🧮</span>\n    <span class="reveal-question">This data\'s pattern</span>\n    <span class="reveal-answer">Constant rate: 10 cm per 1,000 years = 0.01 cm/year (very slow!)</span>\n</div>\n\n<div style="margin-top:12px;padding:12px;background:rgba(40,167,69,0.2);border-left:4px solid #28a745;border-radius:5px;">\n<strong>💡 Think About It:</strong> If a rock layer is 100 cm thick and formed at this rate, how long did it take to form?\n</div>'
                         },
                         {
                             title: '📝 CER Practice: Highway Cutaway',
-                            content: 'Display the Evaluate prompt illustration (highway cut with fossil layers labeled A–F). Prompt:\nClaim – Describe the environment during the formation of Layer C.\nEvidence – Cite at least two observations (fossil type, sediment texture, position).\nReasoning – Explain how these clues prove your claim. Model annotating the diagram (draw arrows, label fossils) before writing.'
+                            content: '<strong>🔬 Let\'s practice using evidence to make scientific claims!</strong>\n\nWhen highway construction crews cut through hills, they reveal layers of rock and fossils. Scientists use these "windows into the past" to understand Earth\'s history.\n\n<div style="margin:15px 0;padding:15px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong>📋 CER Framework:</strong><br>\n• <strong>CLAIM</strong> - Your statement about what you observe<br>\n• <strong>EVIDENCE</strong> - Specific facts and observations that support your claim<br>\n• <strong>REASONING</strong> - Explanation of how the evidence proves your claim\n</div>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">Study the highway cutaway diagram - what can we learn about each layer?</div>\n\n<div style="text-align:center;margin:20px auto;">\n<div class="vocab-card" onclick="flipCard(this)" style="cursor:pointer;max-width:900px;min-height:550px;margin:0 auto;">\n<div class="card-inner">\n<div class="card-front" style="padding:20px;display:flex;align-items:center;justify-content:center;flex-direction:column;">\n<div style="font-size:2.5rem;margin-bottom:20px;">🗻 Highway Cutaway</div>\n<img src="images/Bundle2/Lesson 14/highway_cutaway.png" style="max-width:100%;height:auto;border-radius:10px;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:20px;text-align:center;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Image Placeholder</div>\nExpected: highway_cutaway.png<br>\nShows rock layers A-F exposed in highway cut\n</div>\n<div style="padding:20px;font-size:2rem;margin-top:10px;">👆 Click to see what each layer tells us!</div>\n</div>\n<div class="card-back" style="padding:20px;display:flex;align-items:center;justify-content:center;">\n<img src="images/Bundle2/Lesson 14/highway_cutaway_answers.png" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:10px;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">\n<div style="display:none;padding:20px;text-align:center;flex-direction:column;justify-content:center;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Image Placeholder</div>\nExpected: highway_cutaway_answers.png<br>\nShows annotated layers with environment descriptions\n</div>\n</div>\n</div>\n</div>\n</div>\n\n<div style="margin-top:20px;background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;max-width:1200px;margin-left:auto;margin-right:auto;">\n<strong style="font-size:2.2rem;">🤔 Example CER Analysis:</strong><br><br>\n\n<div style="margin:12px 0;padding:15px;background:rgba(0,212,170,0.2);border-radius:8px;">\n<strong style="color:#00d4aa;font-size:2rem;">CLAIM:</strong><br>\n<span style="font-size:1.9rem;">Layer C formed in a shallow ocean environment.</span>\n</div>\n\n<div style="margin:12px 0;padding:15px;background:rgba(255,193,7,0.2);border-radius:8px;">\n<strong style="color:#ffc107;font-size:2rem;">EVIDENCE:</strong><br>\n<span style="font-size:1.9rem;">\n• Marine shell fossils present<br>\n• Fine-grained sediment (deposited slowly in calm water)<br>\n• Layer positioned between deeper ocean layer below and land layer above\n</span>\n</div>\n\n<div style="margin:12px 0;padding:15px;background:rgba(255,107,53,0.2);border-radius:8px;">\n<strong style="color:#ff6b35;font-size:2rem;">REASONING:</strong><br>\n<span style="font-size:1.9rem;">Marine shells only live in ocean water. The fine sediment shows calm, shallow conditions. The layer\'s position indicates sea levels were rising, covering previously dry land.</span>\n</div>\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(102,126,234,0.2);border-left:4px solid #667eea;border-radius:5px;">\n<strong>✍️ Your Turn:</strong> Choose a different layer (A, B, D, E, or F) and write your own CER statement about what environment existed when that layer formed!\n</div>'
                         },
                         {
-                            title: 'Digital Citizenship: DC.LAW Card — Cite Your Sources',
-                            content: 'Launch the DC.LAW “Credit the Creator” card. Walk through the checklist:\n1. Record the title and creator of every rock-layer image you reuse.\n2. Note the URL or resource number from STEMscopes.\n3. Add a citation slide to the mission storyboard. Have students practice citing one image together.'
+                            title: '💻 Digital Citizenship: Credit the Creator',
+                            content: '<strong>🌐 Why is giving credit important?</strong>\n\nWhen we use someone else\'s work, we must give them credit! This shows respect for their time, effort, and creativity. It\'s also the LAW - using someone\'s work without permission or credit is stealing.\n\n<div style="margin:15px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2.2rem;">📋 DC.LAW Rule: CREDIT THE CREATOR</strong><br><br>\nAlways cite (give credit to) the person who created the work you\'re using.\n</div>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">What types of work need to be credited?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📝</span>\n    <span class="reveal-question">Written Words</span>\n    <span class="reveal-answer">Books, articles, blog posts, quotes - always credit the author!</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📸</span>\n    <span class="reveal-question">Photos & Images</span>\n    <span class="reveal-answer">Photographs, illustrations, diagrams - credit the photographer or artist</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🎵</span>\n    <span class="reveal-question">Music & Songs</span>\n    <span class="reveal-answer">Songs, beats, instrumental tracks - credit the musician or composer</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🎥</span>\n    <span class="reveal-question">Videos</span>\n    <span class="reveal-answer">YouTube videos, movie clips, documentaries - credit the creator or production company</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💡</span>\n    <span class="reveal-question">Ideas & Research</span>\n    <span class="reveal-answer">Scientific discoveries, theories, data - credit the researcher or scientist</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🎨</span>\n    <span class="reveal-question">Artwork & Designs</span>\n    <span class="reveal-answer">Paintings, drawings, logos, graphics - credit the artist or designer</span>\n</div>\n\n<div style="margin-top:20px;padding:20px;background:rgba(102,126,234,0.2);border-radius:10px;">\n<strong style="font-size:2rem;">✅ How to Give Credit:</strong><br><br>\n<strong>1. Name the Creator</strong> - Who made it?<br>\n<strong>2. Title of the Work</strong> - What is it called?<br>\n<strong>3. Source</strong> - Where did you find it? (Website, book, etc.)<br>\n<strong>4. Date</strong> - When was it created or published?<br><br>\n<strong>Example:</strong><br>\n<em>"Grand Canyon Layers" photograph by Jane Smith, National Geographic, 2020</em>\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(220,53,69,0.2);border-left:4px solid #dc3545;border-radius:5px;">\n<strong>⚠️ Remember:</strong> Using someone\'s work without giving credit is called PLAGIARISM - it\'s dishonest and against the rules in school, college, and professional life!\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(40,167,69,0.2);border-left:4px solid #28a745;border-radius:5px;">\n<strong>🎯 Practice:</strong> Think of something you used or shared recently (a meme, video, quote, image). Who created it? How would you give them proper credit?\n</div>'
                         },
                         {
                             title: '🚪 Exit Ticket',
@@ -2947,10 +2947,10 @@
             placeholder.style.width = mode === 'gallery' ? '90%' : '80%';
             placeholder.style.height = 'auto';
             placeholder.innerHTML = `
-                <div style="font-size: 1.6rem; font-weight: 700;">Image Placeholder</div>
-                <div style="font-size: 1.1rem;">${description}</div>
+                <div style="font-size: 2.0rem; font-weight: 700;">Image Placeholder</div>
+                <div style="font-size: 1.4rem;">${description}</div>
                 <div class="expected-file">Expected file: ${expected || srcPath}</div>
-                <div style="font-size: 0.95rem; opacity: 0.85;">Add the image file at the path shown above to replace this placeholder automatically.</div>
+                <div style="font-size: 1.2rem; opacity: 0.85;">Add the image file at the path shown above to replace this placeholder automatically.</div>
             `;
 
             const wrapper = img.parentElement;
@@ -2979,7 +2979,7 @@
                                 <div class="card-front" style="width: 100%; height: 100%; padding: 0 !important; margin: 0 !important;">
                                     <img src="${item.term}" alt="Life cycle stage" style="width: 100%; height: 100%; object-fit: cover; display: block; padding: 0; margin: 0;">
                                 </div>
-                                <div class="card-back" style="width: 100%; height: 100%; padding: 30px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">${item.definition}</div>
+                                <div class="card-back" style="width: 100%; height: 100%; padding: 30px; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">${item.definition}</div>
                             </div>
                         </div>
                     `;
@@ -3053,7 +3053,7 @@
                                 color: white;
                                 border-radius: 15px;
                             ">
-                                <h3 style="font-size: 1.5rem; text-align: center;">${card.back}</h3>
+                                <h3 style="font-size: 1.8rem; text-align: center;">${card.back}</h3>
                             </div>
                         </div>
                     </div>
