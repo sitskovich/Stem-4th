@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson Data Test</title>
+</head>
+<body>
+    <h1>Testing Lesson Data</h1>
+    <div id="output"></div>
+    
+    <script>
+        let lessonData = {};
+        
+        function loadLessonData(lessonId) {
+            // Copy the EXACT lessonData assignment from interactive-teacher-portal.html
+            // This is just the lesson13-15 portion
+            lessonData = {
+                'lesson13': { title: 'Test 13', slides: [{title: 'Slide 1', content: 'Content 1'}] },
+                'lesson14': { title: 'Test 14', slides: [{title: 'Slide 1', content: 'Content 1'}] },
+                'lesson15': { title: 'Test 15', slides: [{title: 'Slide 1', content: 'Content 1'}] }
+            };
+            
+            return lessonData[lessonId];
+        }
+        
+        // Test
+        const output = document.getElementById('output');
+        const lesson13 = loadLessonData('lesson13');
+        const lesson14 = loadLessonData('lesson14');
+        const lesson15 = loadLessonData('lesson15');
+        
+        output.innerHTML = `
+            <p>Lesson 13: ${lesson13 ? '✅ LOADED' : '❌ FAILED'}</p>
+            <p>Lesson 14: ${lesson14 ? '✅ LOADED' : '❌ FAILED'}</p>
+            <p>Lesson 15: ${lesson15 ? '✅ LOADED' : '❌ FAILED'}</p>
+        `;
+    </script>
+</body>
+</html>
+
