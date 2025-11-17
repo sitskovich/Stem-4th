@@ -316,6 +316,33 @@
             margin: 20px 0;
         }
 
+        .image-placeholder-card {
+            width: 80%;
+            max-width: 800px;
+            min-height: 320px;
+            border-radius: 20px;
+            border: 3px dashed rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+            color: #fff;
+            font-size: 1.3rem;
+            gap: 12px;
+        }
+
+        .image-placeholder-card .expected-file {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            background: rgba(0,0,0,0.25);
+            padding: 8px 16px;
+            border-radius: 12px;
+            letter-spacing: 0.03em;
+        }
+
         .slide-nav {
             display: none;
         }
@@ -429,7 +456,7 @@
             justify-content: center;
             text-align: center;
             word-wrap: break-word;
-            hyphens: auto;
+            hyphens: none;
         }
 
         .vocab-card:hover {
@@ -449,7 +476,7 @@
             transform-style: preserve-3d;
         }
 
-        .card-front, .card-back {
+.card-front, .card-back {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -467,16 +494,38 @@
             word-wrap: break-word;
             font-weight: 600;
             text-align: center;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 15px;
         }
         
         .card-back {
-            font-size: 1.7rem;
             transform: rotateY(180deg);
             word-wrap: break-word;
-            line-height: 1.3;
+            line-height: 1.4;
             font-weight: 500;
-            text-align: center;
+            text-align: left;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 18px;
+            font-size: 1.4rem;
         }
+        
+        .card-term {
+            font-size: 1.9rem;
+            font-weight: 700;
+            text-align: center;
+            display: block;
+            line-height: 1.2;
+            text-decoration: none;
+        }
+        
+        .card-definition {
+            font-size: 1.45rem;
+            text-align: left;
+            line-height: 1.4;
+            width: 100%;
+}
 
         .timer-bar {
             position: fixed;
@@ -866,6 +915,7 @@
         let slideTimer = null;
         let currentTime = 0;
         let countdown = 0;
+        let countdownTotal = 0;
         let countdownTimer = null;
         let isTimerRunning = false;
 
@@ -880,6 +930,7 @@
             showSlide(0);
             startTimer();
             renderTimerBar();
+            updateScrollState();
         }
 
         function closeLesson() {
@@ -889,6 +940,7 @@
             currentTime = 0;
             stopTimer();
             stopCountdown();
+            document.body.style.overflowY = 'auto';
         }
 
         function startTimer() {
@@ -927,7 +979,6 @@
                     </div>
                     <input type="range" class="timer-slider" id="timerSlider" min="0" max="600" value="0" step="30">
                     <span id="timerDisplay" style="font-weight: 600; color: white; min-width: 80px; font-size: 1.1rem;">0:00</span>
-                    <span id="countdownDisplay" style="font-weight: 600; color: #00d4aa; min-width: 100px; font-size: 1.2rem; display: none;"></span>
                 `;
                 document.querySelector('.modal-content').appendChild(bar);
                 
@@ -936,28 +987,24 @@
                     const slider = document.getElementById('timerSlider');
                     if (slider) {
                         countdown = parseInt(slider.value, 10) || 0;
+                        countdownTotal = countdown;
                         updateTimerDisplay();
+                        updateTimerBar(countdown);
                         
                         // Add event listeners for real-time updates
-                        slider.addEventListener('input', function() {
+                        const handleSliderChange = function() {
                             countdown = parseInt(this.value, 10) || 0;
+                            countdownTotal = countdown;
                             updateTimerDisplay();
-                        });
+                            updateTimerBar(countdown);
+                        };
                         
-                        slider.addEventListener('change', function() {
-                            countdown = parseInt(this.value, 10) || 0;
-                            updateTimerDisplay();
-                        });
-                        
-                        slider.addEventListener('mousemove', function() {
-                            if (this.matches(':hover')) {
-                                countdown = parseInt(this.value, 10) || 0;
-                                updateTimerDisplay();
-                            }
-                        });
+                        slider.addEventListener('input', handleSliderChange);
+                        slider.addEventListener('change', handleSliderChange);
                     }
                 }, 100);
             }
+            updateScrollState();
         }
 
         function startCountdown() {
@@ -971,21 +1018,27 @@
             }
             
             countdown = parseInt(slider.value, 10) || 0;
+            countdownTotal = countdown;
             isTimerRunning = true;
-            updateCountdownDisplay();
-            
+            slider.disabled = true;
+            updateTimerDisplay();
+            updateTimerBar(countdown);
             if (countdown > 0) {
                 countdownTimer = setInterval(() => {
                     countdown--;
-                    updateCountdownDisplay();
+                    updateTimerDisplay();
+                    updateTimerBar(countdown);
                     if (countdown <= 0) {
                         clearInterval(countdownTimer);
                         countdownTimer = null;
                         isTimerRunning = false;
                         alert('Timer complete!');
-                        updateCountdownDisplay();
+                        slider.disabled = false;
+                        updateScrollState();
                     }
                 }, 1000);
+            } else {
+                slider.disabled = false;
             }
         }
 
@@ -994,32 +1047,23 @@
                 clearInterval(countdownTimer);
                 countdownTimer = null;
                 isTimerRunning = false;
+                const slider = document.getElementById('timerSlider');
+                if (slider) slider.disabled = false;
             }
         }
 
         function resetCountdown() {
             stopCountdown();
             const slider = document.getElementById('timerSlider');
-            if (slider) slider.value = 0;
-            countdown = 0;
-            isTimerRunning = false;
-            updateCountdownDisplay();
-            updateTimerDisplay();
-        }
-
-        function updateCountdownDisplay() {
-            const el = document.getElementById('countdownDisplay');
-            
-            if (el) {
-                if (isTimerRunning && countdown > 0) {
-                    const m = Math.floor(countdown / 60);
-                    const s = countdown % 60;
-                    el.textContent = `Timer: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                    el.style.display = 'inline';
-                } else {
-                    el.style.display = 'none';
-                }
+            if (slider) {
+                slider.value = 0;
+                slider.disabled = false;
             }
+            countdown = 0;
+            countdownTotal = 0;
+            isTimerRunning = false;
+            updateTimerDisplay();
+            updateTimerBar(countdown);
         }
 
         function updateTimerDisplay() {
@@ -1030,6 +1074,13 @@
                 const seconds = countdown % 60;
                 el.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
             }
+        }
+        
+        function updateTimerBar(value) {
+            const slider = document.getElementById('timerSlider');
+            if (!slider || countdownTotal <= 0) return;
+            slider.value = value;
+            slider.style.setProperty('--slider-progress', `${(value / slider.max) * 100}%`);
         }
 
         function loadLessonData(lessonId) {
@@ -1545,229 +1596,545 @@
                     ]
                 },
                 'lesson13': {
-                    title: 'Accessing Prior Knowledge - Natural Processes',
+                    title: "Rock Patterns: Evidence of Earth's Past",
                     slides: [
                         {
-                            title: '🌅 Warm-up: Natural Process Selection',
-                            content: '🌍 Choose the natural process you think could cause the most damage to businesses, homes, and other locations.\n\n<div class="interactive-question">Which natural process would be most damaging?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Tsunami</span>\n    <span class="reveal-answer">Huge waves that can destroy coastal areas</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌧️</span>\n    <span class="reveal-question">Flood</span>\n    <span class="reveal-answer">Excessive water that can damage buildings and crops</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌋</span>\n    <span class="reveal-question">Volcanic Eruption</span>\n    <span class="reveal-answer">Hot lava and ash that can destroy everything in its path</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Earthquake</span>\n    <span class="reveal-answer">Ground shaking that can collapse buildings</span>\n</div>\n\n💭 Think about which one you would choose and be ready to explain why!'
+                            title: '🌅 Warm-up: Reading the Canyon Walls',
+                            content: 'Look closely at the canyon layers.\n1. Jot one observation about color, thickness, or tilting.\n2. Next to it, write what that clue tells you about the past environment.\n3. Share your idea with a partner and be ready to report out.',
+                            image: 'images/Bundle2/Lesson 13/grand_canyon_layers.png',
+                            imageDescription: 'Stratified canyon wall with labeled rock layers.'
                         },
                         {
-                            title: '🎯 Learning Objectives & Vocabulary',
-                            content: 'By the end of this lesson, you will be able to:\n• Identify different natural processes and hazards\n• Understand how natural processes can affect humans\n• Explore ways to reduce the impact of natural hazards\n• Use scientific vocabulary to describe Earth processes\n\n📚 Key Vocabulary:',
+                            title: '🎯 Objectives & Vocabulary',
+                            content: 'By the end of this lesson you will:\n• Identify evidence in rock layers that reveals past environments\n• Describe how earthquakes can disturb rock patterns\n• Support explanations with Claim-Evidence-Reasoning\n\n📚 Key Vocabulary:',
                             vocabulary: [
-                                { term: 'Natural Process', definition: 'A process produced by nature that can be sudden or gradual' },
-                                { term: 'Natural Hazard', definition: 'A naturally occurring event that may have a negative effect on people or the environment' },
-                                { term: 'Natural Disaster', definition: 'When a natural hazard causes significant damage to lives and property' },
-                                { term: 'Tsunami', definition: 'A huge wave caused by underwater earthquakes or volcanic eruptions' },
-                                { term: 'Flood', definition: 'An event that produces excessive water, drowning plants and washing away soil' },
-                                { term: 'Earthquake', definition: 'A sudden movement of the ground that can cause major cracks in Earth\'s surface' },
-                                { term: 'Volcanic Eruption', definition: 'When hot rocks and gases are released from a volcano' }
+                                { term: 'Rock Layer', definition: 'A level of rock that formed during the same time period' },
+                                { term: 'Fossil', definition: 'Remains or impressions of organisms preserved in rock' },
+                                { term: 'Sediment', definition: 'Small pieces of rock, shell, or organic material' },
+                                { term: 'Fault', definition: 'A crack in Earth\'s crust where movement occurs' },
+                                { term: 'Relative Age', definition: 'The age of something compared to other things around it' }
                             ]
                         },
                         {
-                            title: '📊 Graphic Organizer: Natural Processes Chart',
-                            content: '📋 Complete this chart as you learn about natural processes:\n\n<div class="interactive-question">For each natural process, define the process and list ways to reduce its impact:</div>\n\n<div class="structure-grid">\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Tsunami</span>\n    <span class="reveal-answer">Huge ocean wave caused by underwater earthquakes or volcanic eruptions. Build seawalls, early warning systems, and move communities inland.</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌧️</span>\n    <span class="reveal-question">Flood</span>\n    <span class="reveal-answer">Excessive water that can damage buildings and crops. Build levees, drainage systems, and avoid building in flood-prone areas.</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Earthquake</span>\n    <span class="reveal-answer">Sudden ground shaking that can collapse buildings. Build earthquake-resistant structures and have emergency plans.</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌋</span>\n    <span class="reveal-question">Volcanic Eruption</span>\n    <span class="reveal-answer">Hot lava and ash released from volcanoes. Monitor volcanic activity, build protective barriers, and evacuate when necessary.</span>\n</div>\n</div>\n\n📝 Use this organizer to track what you learn throughout the lesson!'
+                            title: '🔍 Concept: Reading Rock Stories',
+                            content: 'Analyze the canyon cross-section together:\n• Relative age: lowest layer is oldest; each higher layer formed later.\n• Fossil clues: marine shell in an upper layer = ancient ocean covered the area; plant fossils mark land periods.\n• Disturbances: when matching layers do not line up, a fault or uplift moved them—draw arrows to show the shift.',
+                            image: 'images/Bundle2/Lesson 13/rock_layers_cross_section.png',
+                            imageDescription: 'Cross-section showing fossil evidence and tilted layers.'
                         },
                         {
-                            title: '🔬 Explore 1: Safety First Activity',
-                            content: '⚠️ Students will identify the hazards of earthquakes, floods, tsunamis, and volcanic eruptions, then create posters with suggestions on how to reduce their impact.\n\n<div class="interactive-question">What safety suggestions can you think of for each natural hazard?</div>\n\n<div class="structure-grid">\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Earthquake Safety</span>\n    <span class="reveal-answer">Drop, cover, and hold on. Have emergency supplies ready.</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌧️</span>\n    <span class="reveal-question">Flood Safety</span>\n    <span class="reveal-answer">Move to higher ground. Avoid walking through floodwaters.</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Tsunami Safety</span>\n    <span class="reveal-answer">Move inland and to higher ground immediately.</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌋</span>\n    <span class="reveal-question">Volcano Safety</span>\n    <span class="reveal-answer">Evacuate when warned. Protect yourself from ash.</span>\n</div>\n</div>\n\n📋 Materials needed: Construction paper, markers, safety cards, timer'
+                            title: '🧱 Clay Fault Model Build',
+                            content: 'Materials to prep: four clay colors, craft stick or plastic knife, shallow tray or mat, small paper “fossils”.\n\nBuild steps:\n1. Stack the clay colors with the oldest on the bottom and tuck a paper fossil between two middle layers.\n2. Press gently so the layers stick without blending.\n3. Slice straight down with the craft stick to create the fault plane.\n4. Slide one side up and the other side down so students notice the offset layers.\n\nStudent task:\n• Ask: What happened to the fossil pieces? Which side moved up? How can you tell?\n• Students sketch a “Before” and “After” view in journals (two labeled boxes) and annotate evidence of relative age and fault movement.'
                         },
                         {
-                            title: '📖 Reading Science: Amazing Earth',
-                            content: '📚 Earth is amazing! It can grow a seed into a tree, fill rivers with water, create storms and rainbows. But Earth can also be harsh.\n\n<div class="interactive-question">What natural disasters can Earth create?</div>\n\n<div class="structure-grid">\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌋</span>\n    <span class="reveal-question">Volcanoes</span>\n    <span class="reveal-answer">Form from cracks in Earth where magma and ash escape</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Earthquakes</span>\n    <span class="reveal-answer">Earth\'s plates slip and slide, like pulling a tablecloth</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Tsunamis</span>\n    <span class="reveal-answer">Huge waves caused by underwater volcanic eruptions or earthquakes</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌧️</span>\n    <span class="reveal-question">Floods</span>\n    <span class="reveal-answer">Excessive water that can damage buildings and crops</span>\n</div>\n</div>\n\n💡 Remember: We cannot stop natural disasters, but we can prepare for them!'
+                            title: '🧠 Guided Practice: Pattern Detective',
+                            content: 'Display the two rock diagrams. Discuss:\n• Circle the layer offset by a fault and label the direction of movement.\n• Match each fossil to “ocean” or “land” conditions.\n• Identify any depositional features (e.g., delta, sandbar) and explain the process.',
+                            image: 'images/Bundle2/Lesson 13/rock_patterns_compare.png',
+                            imageDescription: 'Side-by-side diagrams with labeled layers and fossils.'
                         },
                         {
-                            title: '🔢 Math Connections: Seawall Construction',
-                            content: '📐 A seawall is being constructed from concrete blocks to protect a stretch of shoreline from waves.\n\n<div class="interactive-question">Solve these multiplication problems:</div>\n\n<div class="structure-grid">\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📏</span>\n    <span class="reveal-question">Problem 1</span>\n    <span class="reveal-answer">The seawall is 2 times longer than the original 50-meter seawall. New length: 50 × 2 = 100 meters</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📊</span>\n    <span class="reveal-question">Problem 2</span>\n    <span class="reveal-answer">Write the multiplication equation: 100 = 2 × 50</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📝</span>\n    <span class="reveal-question">Problem 3</span>\n    <span class="reveal-answer">Comparison statement: 100 meters is 2 times as many as 50 meters</span>\n</div>\n</div>\n\n💡 This helps engineers calculate materials needed for protection structures!'
+                            title: '✍️ Application: CER Mini-Task',
+                            content: 'Claim: Something changed Layer C.\nEvidence: Use at least two observations from the evaluate prompt drawing on this slide.\nReasoning: Connect the evidence to the process (deposition, earthquake, erosion).',
+                            image: 'images/Bundle2/Lesson 13/highway_cutaway_prompt.png',
+                            imageDescription: 'Highway cliff cutaway showing rock layers labeled A–F with fossils and fault lines for students to analyze.',
+                            expectedImage: 'images/Bundle2/Lesson 13/highway_cutaway_prompt.png'
                         },
                         {
-                            title: '🏗️ Engineering Design: Volcano Island Challenge',
-                            content: '🏝️ Students have just won an island! Unfortunately, there are dangers: it\'s located on top of a volcano, surrounded by an ocean with possible tsunamis and floods.\n\n<div class="interactive-question">What challenges must students solve?</div>\n\n<div class="structure-grid">\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌋</span>\n    <span class="reveal-question">Volcano Dangers</span>\n    <span class="reveal-answer">Earthquakes, lava flows, ash clouds</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Ocean Dangers</span>\n    <span class="reveal-answer">Tsunamis, floods from major storms</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏠</span>\n    <span class="reveal-question">Design Challenge</span>\n    <span class="reveal-answer">Build a structure that keeps family safe from all hazards</span>\n</div>\n</div>\n\n📋 Materials: Cardboard, craft sticks, clay, construction paper, toothpicks, plastic wrap, aluminum foil, glue, tape'
+                            title: 'Digital Citizenship: Credibility Checklist',
+                            content: 'Use this three-step checklist before you cite a geology website:\n• Confirm the author and the date the source was updated.\n• Cross-check the fact with at least one additional reliable source.\n• Record the title and URL in your organizer so you can credit the source later.'
                         },
                         {
-                            title: 'Digital Citizenship: Cyber Hygiene',
-                            content: '🧼 Keep your digital devices clean and secure!\n\n<div class="interactive-question">How can you practice good cyber hygiene?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🔄</span>\n    <span class="reveal-question">Update regularly</span>\n    <span class="reveal-answer">Keep apps and software updated for security</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🧹</span>\n    <span class="reveal-question">Clean up</span>\n    <span class="reveal-answer">Delete old files and apps you don\'t use</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🔒</span>\n    <span class="reveal-question">Lock devices</span>\n    <span class="reveal-answer">Always lock your devices when not using them</span>\n</div>'
+                            title: '🚪 Exit Ticket',
+                            content: 'Write one piece of evidence that shows an environment changed and identify the process that caused it.'
                         }
                     ]
                 },
                 'lesson14': {
-                    title: 'Weathering and Erosion',
+                    title: 'Rock Patterns Deep Dive',
                     slides: [
                         {
-                            title: 'Warm-up: Changing Earth',
-                            content: '🌍 Have you ever seen a rock that looks different from when you first saw it? What might have changed it?\n\n<div class="interactive-question">What changes rocks over time?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌧️</span>\n    <span class="reveal-question">Rain and water</span>\n    <span class="reveal-answer">Water can dissolve and break down rocks</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌡️</span>\n    <span class="reveal-question">Temperature changes</span>\n    <span class="reveal-answer">Heat and cold can crack and break rocks</span>\n</div>'
+                            title: '🌄 Warm-up: Then and Now',
+                            content: 'Project the before/after landscape photos. Pairs:\n• Write three observations about what changed.\n• Next to each observation, name the process that caused it (wind, water, or tectonics).\n• Share one observation-process pair with the class.',
+                            image: 'images/Bundle2/Lesson 14/landscape_before_after.png',
+                            imageDescription: 'Before and after landscape photos that show erosion, deposition, or uplift.'
                         },
                         {
-                            title: 'Objectives',
-                            content: '🎯 By the end of this lesson, you will be able to:\n\n<div class="interactive-question">What will we learn about Earth changes?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Define weathering</span>\n    <span class="reveal-answer">The breaking down of rocks into smaller pieces</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Define erosion</span>\n    <span class="reveal-answer">The movement of weathered rock material</span>\n</div>'
+                            title: '🎯 Objectives & Vocabulary Refresh',
+                            content: 'Today we will:\n• Use fossil and rock evidence to explain landscape changes over time\n• Interpret rock layer diagrams and timelines to support claims\n• Prepare evidence for our Rock Patterns mission board\n\nVocabulary:',
+                            vocabulary: [
+                                { term: 'Sedimentary Rock', definition: 'Rock formed when sediment is pressed and cemented together' },
+                                { term: 'Uplift', definition: 'Upward movement of rock layers' },
+                                { term: 'Seismic Wave', definition: 'Energy released during an earthquake' }
+                            ]
                         },
                         {
-                            title: 'Vocabulary',
-                            content: '📚 Key Terms:\n\n<div class="interactive-question">Click each term to reveal its definition:</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Weathering</span>\n    <span class="reveal-answer">The breaking down of rocks into smaller pieces</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Erosion</span>\n    <span class="reveal-answer">The movement of weathered rock material</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏔️</span>\n    <span class="reveal-question">Deposition</span>\n    <span class="reveal-answer">The dropping of eroded material in new places</span>\n</div>'
+                            title: '🧩 Engage Review: Graphic Organizer',
+                            content: 'Have students draw a four-quadrant organizer in their science journals (Cause • Evidence • Result • Time Scale).\n1. “Cause”: choose one process (earthquake faulting, wave erosion, river deposition).\n2. “Evidence”: sketch or list the clue—offset clay layers, marine fossil on land, rounded sediments, etc.\n3. “Result”: describe the landscape change (cliff fractures, new delta, eroded hillside).\n4. “Time Scale”: mark rapid or slow and explain why. Share one square with a shoulder partner.'
                         },
                         {
-                            title: 'Content: Types of Weathering',
-                            content: '⚡ Weathering breaks down rocks in different ways:\n\n<div class="interactive-question">What are the types of weathering?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌡️</span>\n    <span class="reveal-question">Physical Weathering</span>\n    <span class="reveal-answer">Rocks break apart without changing composition</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🧪</span>\n    <span class="reveal-question">Chemical Weathering</span>\n    <span class="reveal-answer">Rocks change composition through chemical reactions</span>\n</div>'
+                            title: '🎲 Interactive: Fossil Layer Match',
+                            content: 'Display the fossil-layer board. Students move each fossil card to the matching layer:\n• Marine shell → layer covered by sea water.\n• Fern leaf → layer formed on land with plants.\n• Shark tooth → layer deposited in ocean. \nAfter each placement, ask: “What does this fossil tell us about the environment when this layer formed?” Record responses on chart paper.',
+                            image: 'images/Bundle2/Lesson 14/fossil_card_sort_board.png',
+                            imageDescription: 'Card sort board showing clay layers with fossil card placeholders.'
                         },
                         {
-                            title: 'Deep Dive: Agents of Erosion',
-                            content: '🌊 Different forces move weathered material:\n\n<div class="interactive-question">What forces cause erosion?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💧</span>\n    <span class="reveal-question">Water</span>\n    <span class="reveal-answer">Rivers, rain, and waves move sediment</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💨</span>\n    <span class="reveal-question">Wind</span>\n    <span class="reveal-answer">Carries small particles long distances</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🧊</span>\n    <span class="reveal-question">Ice</span>\n    <span class="reveal-answer">Glaciers scrape and move large amounts of rock</span>\n</div>'
+                            title: '🔬 Investigation Debrief: Earthquake Evidence',
+                            content: 'Revisit yesterday’s clay fault demonstration:\n• Display the “before” and “after” photos from the model.\n• Prompt students to circle the offset layer and annotate arrows showing movement.\n• Discuss how the misplaced fossils prove the layers shifted and how scientists read that evidence in real rock.\n• Have pairs compare notes in their journals, adding one new detail about relative age or fault direction.',
+                            image: 'images/Bundle2/Lesson 14/clay_fault_model.png',
+                            imageDescription: 'Students pressing layered clay to show fault movement.'
                         },
                         {
-                            title: 'Erosion and Deposition Patterns',
-                            content: '🔄 Explore how erosion creates new landforms through deposition!\n\n<div class="interactive-question">How does erosion create new features?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏔️</span>\n    <span class="reveal-question">Mountains to valleys</span>\n    <span class="reveal-answer">Erosion wears down mountains and fills valleys</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏖️</span>\n    <span class="reveal-question">Beaches and deltas</span>\n    <span class="reveal-answer">Rivers deposit sediment to form beaches and deltas</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌾</span>\n    <span class="reveal-question">Fertile plains</span>\n    <span class="reveal-answer">Deposited sediment creates rich soil for farming</span>\n</div>'
+                            title: '📚 Literacy & Math Connections',
+                            content: 'READ: Display this on-slide passage titled "Layers Tell the Story."
+"Layer R is limestone full of shell fossils, proving a shallow sea once covered the canyon. Layer S is orange sandstone with cross-beds carved by strong desert winds. Layer T is dark mudstone with fern imprints from a floodplain that later dried and cracked. When the Colorado River sliced through, it revealed these chapters side by side." After reading, students highlight the fossil clues and respond: "How do fossils plus rock type help scientists reconstruct Grand Canyon history?"
+WRITE: Use the on-screen "Changing Surface" paragraph: "During a quake, two rock blocks shift in seconds, lifting one side of the canyon wall. In contrast, rainwater dissolves limestone grain by grain, widening cracks over thousands of years." Students write one comparison sentence naming the rapid change and one explaining the slow change, each using vocabulary from today’s lesson.
+MATH: Graph the data table below (thickness vs. deposition time) and note: "What does a steeper line tell us about deposition rate?"
+<table style="width:80%; margin:20px auto; border-collapse:collapse; font-size:1.4rem;">
+  <tr style="background:rgba(255,255,255,0.2);">
+    <th style="padding:8px; border:1px solid rgba(255,255,255,0.4);">Layer</th>
+    <th style="padding:8px; border:1px solid rgba(255,255,255,0.4);">Thickness (cm)</th>
+    <th style="padding:8px; border:1px solid rgba(255,255,255,0.4);">Deposition Time (years)</th>
+  </tr>
+  <tr>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">A</td>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">2</td>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">45</td>
+  </tr>
+  <tr>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">B</td>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">4</td>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">90</td>
+  </tr>
+  <tr>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">C</td>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">6</td>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">140</td>
+  </tr>
+  <tr>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">D</td>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">8</td>
+    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">200</td>
+  </tr>
+</table>'
                         },
                         {
-                            title: 'Digital Citizenship: Technology Over Time',
-                            content: '⏰ Technology changes rapidly - stay informed about digital trends!\n\n<div class="interactive-question">How can you keep up with technology changes?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📚</span>\n    <span class="reveal-question">Learn continuously</span>\n    <span class="reveal-answer">Stay curious about new technology and its impact</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🤔</span>\n    <span class="reveal-question">Think critically</span>\n    <span class="reveal-answer">Question how technology affects society and environment</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🛡️</span>\n    <span class="reveal-question">Stay safe</span>\n    <span class="reveal-answer">Understand security and privacy implications of new tech</span>\n</div>'
+                            title: '📝 CER Practice: Highway Cutaway',
+                            content: 'Display the Evaluate prompt illustration (highway cut with fossil layers labeled A–F). Prompt:\nClaim – Describe the environment during the formation of Layer C.\nEvidence – Cite at least two observations (fossil type, sediment texture, position).\nReasoning – Explain how these clues prove your claim. Model annotating the diagram (draw arrows, label fossils) before writing.'
+                        },
+                        {
+                            title: 'Digital Citizenship: Credit the Creator',
+                            content: 'Model how to credit visuals in your mission storyboard:\n1. Record the title and creator/photographer for every rock-layer image you reuse.\n2. Note where you found it (URL, book title, or resource number).\n3. Add a short “Image Credits” box on the storyboard. Practice citing one image together before students work independently.'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: 'Answer: “How could a scientist prove that Layer B is older than Layer D?” Include two pieces of evidence.'
                         }
                     ]
                 },
                 'lesson15': {
-                    title: 'Rocks and Minerals',
+                    title: 'Changing Land: Weathering & Erosion',
                     slides: [
                         {
-                            title: 'Warm-up: Rock Collection',
-                            content: '🪨 Look at different rocks around you. What do you notice about their colors, textures, and shapes?\n\n<div class="interactive-question">What makes rocks different from each other?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🎨</span>\n    <span class="reveal-question">Color</span>\n    <span class="reveal-answer">Different minerals give rocks different colors</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🤏</span>\n    <span class="reveal-question">Texture</span>\n    <span class="reveal-answer">Some rocks are smooth, others are rough</span>\n</div>'
+                            title: '🌊 Warm-up: Sugar Cube Challenge',
+                            content: '🖼️ Image Placeholder: Sugar cube under dripping water vs. crushing.\nPredict which method will change the cube faster and why. Connect to the Hook investigation.\n\n📷 Expected file: sugar_cube_weathering.png',
+                            image: 'images/Bundle2/Lesson 15/sugar_cube_weathering.png'
                         },
                         {
-                            title: 'Objectives',
-                            content: '🎯 By the end of this lesson, you will be able to:\n\n<div class="interactive-question">What will we learn about rocks and minerals?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🪨</span>\n    <span class="reveal-question">Identify rock types</span>\n    <span class="reveal-answer">Recognize igneous, sedimentary, and metamorphic rocks</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💎</span>\n    <span class="reveal-question">Identify minerals</span>\n    <span class="reveal-answer">Use properties to identify different minerals</span>\n</div>'
+                            title: '🎯 Objectives & Vocabulary',
+                            content: 'We will:\n• Compare weathering and erosion\n• Identify agents that reshape landforms\n• Plan data collection for erosion investigations\n\nKey terms:',
+                            vocabulary: [
+                                { term: 'Weathering', definition: 'Breaking down of rock into smaller pieces' },
+                                { term: 'Erosion', definition: 'Moving weathered material to a new location' },
+                                { term: 'Deposition', definition: 'Dropping sediment in a new place' },
+                                { term: 'Agent', definition: 'Force that causes weathering or erosion' }
+                            ]
                         },
                         {
-                            title: 'Vocabulary',
-                            content: '📚 Key Terms:\n\n<div class="interactive-question">Click each term to reveal its definition:</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🪨</span>\n    <span class="reveal-question">Rock</span>\n    <span class="reveal-answer">A solid mixture of minerals</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💎</span>\n    <span class="reveal-question">Mineral</span>\n    <span class="reveal-answer">A naturally occurring solid with a specific composition</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌋</span>\n    <span class="reveal-question">Igneous</span>\n    <span class="reveal-answer">Rocks formed from cooled magma or lava</span>\n</div>'
+                            title: '🧪 Explore Preview: Waves on the Beach',
+                            content: 'Outline the investigation steps: build a beach model, create waves with a tray, observe sediment movement, and complete the CER checkpoint.'
                         },
                         {
-                            title: 'Content: Three Types of Rocks',
-                            content: '🪨 Rocks are classified by how they form:\n\n<div class="interactive-question">How are the three rock types different?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌋</span>\n    <span class="reveal-question">Igneous Rocks</span>\n    <span class="reveal-answer">Formed from cooled magma or lava</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏔️</span>\n    <span class="reveal-question">Sedimentary Rocks</span>\n    <span class="reveal-answer">Formed from layers of sediment pressed together</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🔥</span>\n    <span class="reveal-question">Metamorphic Rocks</span>\n    <span class="reveal-answer">Formed when existing rocks are changed by heat and pressure</span>\n</div>'
+                            title: '🌬️ Concept: Agents of Change',
+                            content: 'Summarize how water, wind, ice, vegetation, and gravity change landforms (Scope Overview). Provide real-world examples for each agent.'
                         },
                         {
-                            title: 'Deep Dive: Mineral Properties',
-                            content: '💎 Minerals have specific properties:\n\n<div class="interactive-question">What properties help identify minerals?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🎨</span>\n    <span class="reveal-question">Color</span>\n    <span class="reveal-answer">The color of the mineral</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">✨</span>\n    <span class="reveal-question">Luster</span>\n    <span class="reveal-answer">How light reflects off the surface</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💪</span>\n    <span class="reveal-question">Hardness</span>\n    <span class="reveal-answer">How easily the mineral can be scratched</span>\n</div>'
+                            title: '🗂️ Guided Sort: Causes vs. Effects',
+                            content: 'Students drag cards into categories (weathering, erosion, deposition). Include prompts from Explore 4 “Agents of Weathering and Erosion”.'
                         },
                         {
-                            title: 'Digital Citizenship: Geology Research',
-                            content: '🪨 When researching geology online:\n\n<div class="interactive-question">How can you research geology responsibly?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📚</span>\n    <span class="reveal-question">Use scientific sources</span>\n    <span class="reveal-answer">Choose geological surveys and scientific websites</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌍</span>\n    <span class="reveal-question">Respect natural sites</span>\n    <span class="reveal-answer">Learn about protecting geological formations</span>\n</div>'
+                            title: '📈 Math Connection: Erosion Rates',
+                            content: 'Analyze a simple table showing slope angle vs. sediment moved (ties to Explore 3 “Rushing Water”). Students describe the pattern.'
+                        },
+                        {
+                            title: 'Digital Citizenship: Don’t Fall for Fake',
+                            content: 'Use the “Don’t Fall for Fake” activity to evaluate online erosion videos. Checklist: verify source, read comments critically, confirm with a trusted site.'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: '“Which agent of erosion changed the shoreline most in Explore 1? Explain using evidence.”'
                         }
                     ]
                 },
                 'lesson16': {
-                    title: 'Rock and Mineral Investigation Lab',
+                    title: 'Changing Land Investigation Lab',
                     slides: [
                         {
-                            title: '🪨 Rock and Mineral Investigation Lab',
-                            content: 'Today we will identify rocks and minerals using scientific tests and classification charts.'
+                            title: '🧪 Lab Overview & Safety',
+                            content: 'Review safety: goggles on, trays stay flat, clean spills immediately, follow timing directions. Discuss lab roles (engineer, timer, recorder).' 
                         },
                         {
-                            title: '🧪 Lab Setup and Sample Collection',
-                            content: '🪨 Collect rock and mineral samples:\n\n• Various igneous rocks (granite, basalt)\n• Sedimentary rocks (sandstone, limestone)\n• Metamorphic rocks (marble, slate)\n• Common minerals (quartz, feldspar, mica)\n\n📋 Setup your investigation station:\n• Prepare identification tools\n• Set up testing equipment\n• Create data collection sheets'
-                        },
-                        {
-                            title: '📋 Learning Objectives',
-                            content: 'By the end of this lab, you will be able to:\n\n• Use physical properties to identify rocks\n• Perform mineral identification tests\n• Classify rocks by formation process\n• Create detailed rock and mineral reports'
-                        },
-                        {
-                            title: '📚 Vocabulary Cards',
-                            content: 'Let\'s learn geology vocabulary!',
+                            title: '🎯 Objectives & Vocabulary Focus',
+                            content: 'Today we will:\n• Measure the effects of waves, wind, and slope\n• Record data to support claims about erosion\n• Recommend ways to slow erosion\n\nVocabulary boost:',
                             vocabulary: [
-                                { term: 'Hardness', definition: 'How easily a mineral can be scratched' },
-                                { term: 'Luster', definition: 'How light reflects off a mineral\'s surface' },
-                                { term: 'Streak', definition: 'The color of a mineral\'s powder' },
-                                { term: 'Cleavage', definition: 'How a mineral breaks along flat surfaces' }
+                                { term: 'Slope', definition: 'Steepness of a surface' },
+                                { term: 'Variable', definition: 'Factor that can change in an investigation' },
+                                { term: 'Runoff', definition: 'Water that flows over land surfaces' }
                             ]
                         },
                         {
-                            title: '🧪 Lab Supplies Needed',
-                            content: '📦 Required Materials:\n\n• Rock and mineral samples\n• Magnifying glasses\n• Streak plates\n• Nail or penny (hardness test)\n• Identification charts\n• Data collection sheets\n• Colored pencils\n• Rulers\n• Digital scales\n• Acid test solution (vinegar)\n• Safety goggles\n• Gloves'
+                            title: '🧰 Materials & Lab Sheets',
+                            content: 'Prep each station before class:\n• Station A (Waves): plastic trays, sand, small pebbles, water pitchers, timer, sponge\n• Station B (Processes): index cards, spray bottle, fan, scoops, colored chalk dust\n• Station C (Rushing Water): foil pan, graduated cylinders, plastic cups with drilled holes, protractors, measuring spoons\n• General: safety goggles (all students), towels, brooms/dustpans\n\nNotebook setup:\n• Have every team open science journals to a fresh spread titled “Changing Land Lab.”\n• Students draw a three-column data table (Station | Variable Tested | Observations/Evidence) and leave room for sketches.'
                         },
                         {
-                            title: '📝 Lab Procedure: Identification Tests',
-                            content: '🔬 Step-by-Step Instructions:\n\n1. 👀 Observe color, texture, and shape\n2. 🔍 Use magnifying glass for details\n3. ✨ Test luster (metallic or non-metallic)\n4. 💪 Test hardness with nail/penny\n5. 🎨 Test streak color on streak plate\n6. 🧪 Test reaction with vinegar\n7. 📊 Record all observations\n8. 📋 Use charts to identify samples'
+                            title: '🔬 Station Instructions',
+                            content: 'Review steps aloud before rotations:\n• Station A – Waves on the Beach: form a shoreline, create consistent waves for 60 seconds, note how sand moves.\n• Station B – Processes That Change Land: test wind (fan), water spray, and vegetation roots (index cards with “grass”) to see which prevents erosion best.\n• Station C – Rushing Water: adjust slope using protractor, pour 250 mL of water, measure sediment collected at bottom.\nStudents record observations and quick sketches in the journal table they created.'
                         },
                         {
-                            title: '📊 Lab Rubric - 3 Category System',
-                            content: '🏆 Grading Rubric:\n\n📋 PROCEDURE (40 points):\n• Follows testing protocol (15 pts)\n• Uses tools correctly (10 pts)\n• Maintains organized workspace (15 pts)\n\n🔬 OBSERVATIONS (35 points):\n• Accurate property descriptions (15 pts)\n• Complete test results (10 pts)\n• Detailed drawings (10 pts)\n\n📝 ANALYSIS (25 points):\n• Correct identifications (15 pts)\n• Explains reasoning (10 pts)'
+                            title: '📊 Data Table Template',
+                            content: '<table style="width:90%; margin:0 auto; border-collapse:collapse; font-size:1.4rem;">\n  <tr style="background:rgba(255,255,255,0.2);">\n    <th style="padding:8px; border:1px solid rgba(255,255,255,0.4);">Station</th>\n    <th style="padding:8px; border:1px solid rgba(255,255,255,0.4);">Variable Tested</th>\n    <th style="padding:8px; border:1px solid rgba(255,255,255,0.4);">Observations & Evidence</th>\n  </tr>\n  <tr>\n    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">A – Waves</td>\n    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">Wave force & frequency</td>\n    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">Describe shoreline change; sketch “before vs. after.”</td>\n  </tr>\n  <tr>\n    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">B – Processes</td>\n    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">Agent (wind, water spray, roots)</td>\n    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">Record which agent removed most sediment and why.</td>\n  </tr>\n  <tr>\n    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">C – Rushing Water</td>\n    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">Slope angle</td>\n    <td style="padding:8px; border:1px solid rgba(255,255,255,0.3);">Note sediment collected + erosion patterns.</td>\n  </tr>\n</table>\nRemind students to copy this layout into journals before rotation begins.'
                         },
                         {
-                            title: '🧹 Lab Cleanup Procedures',
-                            content: '⚠️ IMPORTANT: Proper cleanup ensures safe handling and organized workspace!\n\n<div class="interactive-question">What are the cleanup steps?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🧽</span>\n    <span class="reveal-question">Step 1</span>\n    <span class="reveal-answer">Clean and dry all rock samples</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📋</span>\n    <span class="reveal-question">Step 2</span>\n    <span class="reveal-answer">Return samples to proper containers</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🧽</span>\n    <span class="reveal-question">Step 3</span>\n    <span class="reveal-answer">Clean and sanitize all tools</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📊</span>\n    <span class="reveal-question">Step 4</span>\n    <span class="reveal-answer">Organize data sheets and charts</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">✅</span>\n    <span class="reveal-question">Step 5</span>\n    <span class="reveal-answer">Wash hands and sanitize workspace</span>\n</div>'
+                            title: '🧠 Mid-Lab Check-in',
+                            content: 'Prompt: “Which station shows the fastest land change so far? What evidence supports your answer?” Have teams post sticky notes on a class chart.'
+                        },
+                        {
+                            title: 'Digital Citizenship: Share with Care (Photo Use)',
+                            content: 'Before posting lab photos, follow the “Share with Care” checklist: get permission, avoid personal info in background, add accurate captions.'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: 'Complete a quick CER: Claim which factor (waves, wind, slope) changed land most, cite data, explain why.'
+                        },
+                        {
+                            title: '📊 Grading Rubric Reminder',
+                            content: 'Review scoring before collecting papers:\n• Procedure & Safety (10 pts): followed directions, used goggles, managed materials\n• Data & Evidence (10 pts): complete tables, sketches, measurements\n• Analysis & Reasoning (8 pts): CER quality, clear explanations\n• Collaboration & Cleanup (4 pts): roles fulfilled, station reset\nUse the “Bundle 2 - Lab Rubric.md” for detailed descriptors (Exceeds/Meets/Developing).' 
                         }
                     ]
                 },
                 'lesson17': {
-                    title: 'Soil Formation and Types',
+                    title: 'Plate Tectonics: Patterns of Earth’s Features',
                     slides: [
                         {
-                            title: 'Warm-up: Dirt Detective',
-                            content: '🌱 Look at the soil around you. What do you notice about its color, texture, and what might be living in it?\n\n<div class="interactive-question">What makes soil different from place to place?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🎨</span>\n    <span class="reveal-question">Color</span>\n    <span class="reveal-answer">Different minerals and organic matter create different colors</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🤏</span>\n    <span class="reveal-question">Texture</span>\n    <span class="reveal-answer">Amount of sand, silt, and clay determines texture</span>\n</div>'
+                            title: '🌍 Warm-up: Plate Pattern Hunt',
+                            content: '🖼️ Image Placeholder: World map showing mountain ranges, trenches, volcanoes.\nStudents mark where they see clusters of features. Which areas might be plate boundaries?\n\n📷 Expected file: plate_feature_map.png',
+                            image: 'images/Bundle2/Lesson 17/plate_feature_map.png'
                         },
                         {
-                            title: 'Objectives',
-                            content: '🎯 By the end of this lesson, you will be able to:\n\n<div class="interactive-question">What will we learn about soil?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏗️</span>\n    <span class="reveal-question">Understand formation</span>\n    <span class="reveal-answer">Learn how soil forms from weathered rock</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌱</span>\n    <span class="reveal-question">Identify soil types</span>\n    <span class="reveal-answer">Recognize different soil compositions</span>\n</div>'
+                            title: '🎯 Objectives & Vocabulary',
+                            content: 'We will:\n• Analyze maps to describe patterns of Earth\'s surface features\n• Model plate motion with a hands-on activity\n• Connect plate boundaries to natural hazards\n\nKey Vocabulary:',
+                            vocabulary: [
+                                { term: 'Tectonic Plate', definition: 'Large section of Earth\'s crust that moves over the mantle' },
+                                { term: 'Boundary', definition: 'Where two plates meet' },
+                                { term: 'Trench', definition: 'Deep valley in the ocean floor' },
+                                { term: 'Mid-Ocean Ridge', definition: 'Underwater mountain chain formed by plate movement' },
+                                { term: 'Ring of Fire', definition: 'Zone of frequent earthquakes and volcanoes around the Pacific' }
+                            ]
                         },
                         {
-                            title: 'Vocabulary',
-                            content: '📚 Key Terms:\n\n<div class="interactive-question">Click each term to reveal its definition:</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌱</span>\n    <span class="reveal-question">Soil</span>\n    <span class="reveal-answer">A mixture of weathered rock, organic matter, water, and air</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏗️</span>\n    <span class="reveal-question">Horizon</span>\n    <span class="reveal-answer">A layer of soil with different properties</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌿</span>\n    <span class="reveal-question">Organic Matter</span>\n    <span class="reveal-answer">Decayed plant and animal material in soil</span>\n</div>'
+                            title: '🗺️ Explore: Patterns in Land',
+                            content: 'Analyze the world map on this slide. Students annotate (on mini whiteboards or notebooks) where earthquakes, volcanoes, and mountains cluster near plate edges.'
                         },
                         {
-                            title: 'Content: Soil Formation Process',
-                            content: '🏗️ Soil forms through several steps:\n\n<div class="interactive-question">How does soil form from rock?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Step 1: Weathering</span>\n    <span class="reveal-answer">Rocks break down into smaller pieces</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌿</span>\n    <span class="reveal-question">Step 2: Organic Matter</span>\n    <span class="reveal-answer">Plants and animals add nutrients</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💧</span>\n    <span class="reveal-question">Step 3: Water & Air</span>\n    <span class="reveal-answer">Water and air fill spaces between particles</span>\n</div>'
+                            title: '🍪 Model: Tectonic Plates',
+                            content: 'Model with graham crackers and frosting: push together (convergent), pull apart (divergent), and slide past (transform). Students sketch the motion and record which landforms or hazards result.'
                         },
                         {
-                            title: 'Deep Dive: Soil Layers',
-                            content: '🏗️ Soil has distinct layers:\n\n<div class="interactive-question">What are the main soil horizons?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌿</span>\n    <span class="reveal-question">O Horizon</span>\n    <span class="reveal-answer">Top layer with organic matter and leaf litter</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌱</span>\n    <span class="reveal-question">A Horizon</span>\n    <span class="reveal-answer">Topsoil with most nutrients and plant roots</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏔️</span>\n    <span class="reveal-question">B Horizon</span>\n    <span class="reveal-answer">Subsoil with minerals washed down from above</span>\n</div>'
+                            title: '📊 Data Dive: Volcanoes Around the World',
+                            content: 'Share this data snapshot (counts from major regions). Students plot on a quick bar graph and answer: “Where do most eruptions occur, and how does that relate to plate boundaries?”\n<table style=\"width:70%; margin:18px auto; border-collapse:collapse; font-size:1.35rem;\">\n  <tr style=\"background:rgba(255,255,255,0.2);\">\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Region</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Active Volcanoes (last 100 yrs)</th>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Pacific Ring of Fire</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">78</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Mediterranean Belt</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">18</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Mid-Atlantic Ridge</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">9</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">African Rift Valley</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">6</td>\n  </tr>\n</table>'
                         },
                         {
-                            title: 'Soil Types and Plant Growth',
-                            content: '🌱 Different soil types support different plants!\n\n<div class="interactive-question">How do soil types affect plant growth?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏖️</span>\n    <span class="reveal-question">Sandy soil</span>\n    <span class="reveal-answer">Drains quickly, good for cacti and drought-resistant plants</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌾</span>\n    <span class="reveal-question">Clay soil</span>\n    <span class="reveal-answer">Holds water well, good for rice and water-loving plants</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌿</span>\n    <span class="reveal-question">Loamy soil</span>\n    <span class="reveal-answer">Perfect balance, ideal for most garden plants and crops</span>\n</div>'
+                            title: '🔄 Guided Practice: Boundary Scenarios',
+                            content: 'Present three scenarios (divergent, convergent, transform) and ask students to predict landforms and hazards.\n🖼️ Placeholder: Diagram showing arrows for each boundary type.\n\n📷 Expected file: boundary_scenarios_chart.png',
+                            image: 'images/Bundle2/Lesson 17/boundary_scenarios_chart.png'
                         },
                         {
-                            title: 'Digital Citizenship: Autonomous Cars',
-                            content: '🚗 Learn about the future of transportation and digital safety!\n\n<div class="interactive-question">What should you know about autonomous vehicles?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🤖</span>\n    <span class="reveal-question">Technology advances</span>\n    <span class="reveal-answer">Understand how AI and sensors work in cars</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🛡️</span>\n    <span class="reveal-question">Safety first</span>\n    <span class="reveal-answer">Always follow safety rules regardless of technology</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🤔</span>\n    <span class="reveal-question">Think critically</span>\n    <span class="reveal-answer">Consider benefits and challenges of new technology</span>\n</div>'
+                            title: 'Digital Citizenship: Don’t Fall for Fake (Hazard News)',
+                            content: 'Apply the “Don’t Fall for Fake” checklist when reading earthquake or volcano headlines. Verify with USGS or another reliable agency before sharing.'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: 'Label three regions on the map (e.g., Himalayas, San Andreas, Mid-Atlantic Ridge) and describe the boundary type and resulting landform/hazard.'
+                        }
+                    ]
+                },
+                'lesson18': {
+                    title: 'Plate Tectonics & Earth’s Interior',
+                    slides: [
+                        {
+                            title: '🌅 Warm-up: Interior Clues',
+                            content: '🖼️ Image Placeholder: Earth cross-section showing crust, mantle, outer core, inner core.\nAsk: How do movements inside Earth drive plate motion we observed yesterday?\n\n📷 Expected file: earth_interior_cutaway.png',
+                            image: 'images/Bundle2/Lesson 18/earth_interior_cutaway.png'
+                        },
+                        {
+                            title: '🎯 Objectives & Vocabulary Extension',
+                            content: 'Focus today on:\n• Connecting mantle convection to surface patterns\n• Using text features from “The Hiking Trip” reading\n• Calculating distances based on plate rates\n\nNew vocabulary:',
+                            vocabulary: [
+                                { term: 'Lithosphere', definition: 'Rigid outer layer made of crust and upper mantle' },
+                                { term: 'Asthenosphere', definition: 'Soft layer of the mantle that plates move on' },
+                                { term: 'Convection', definition: 'Movement caused by heated material rising and cooler material sinking' }
+                            ]
+                        },
+                        {
+                            title: '📚 Literacy Connection: Hiking Trip Highlights',
+                            content: 'Share this short field-journal excerpt on the slide: “Our hiking team followed a ridge where the ground suddenly rose a meter—fresh uplift from last year’s quake. Streams shifted direction, and warm springs bubbled near the fault line. Layered lava and ash told us eruptions once reshaped the valley.” Students highlight phrases showing plate motion evidence and list one clue in their notebooks.'
+                        },
+                        {
+                            title: '🌀 Concept: Convection Drives Plates',
+                            content: 'Explain how heat from the core causes mantle material to rise and sink, moving plates.\n🖼️ Placeholder: Arrow diagram showing convection cells beneath plates.\n\n📷 Expected file: mantle_convection_diagram.png',
+                            image: 'images/Bundle2/Lesson 18/mantle_convection_diagram.png'
+                        },
+                        {
+                            title: '🧮 Math Moment: How Far Do Plates Move?',
+                            content: 'If a plate moves 5 cm/year, how far does it travel in 100 years? 1,000 years? Connect to slow but significant change.'
+                        },
+                        {
+                            title: '🗺️ Mission Link',
+                            content: 'Discuss how understanding plate movement helps workers at the mining site predict risks and design safety plans.'
+                        },
+                        {
+                            title: 'Digital Citizenship: Website Credibility Checklist',
+                            content: 'Before citing a digital map, walk through these questions together:\n• URL ending – does it come from .gov, .edu, or another trusted domain?\n• Author expertise – who created the map and what makes them reliable?\n• Evidence – what data or references are provided to support the map?'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: 'Explain how mantle convection connects to one hazard miners must prepare for at the mission site.'
+                        }
+                    ]
+                },
+                'lesson19': {
+                    title: 'Renewable vs. Nonrenewable Resources',
+                    slides: [
+                        {
+                            title: '⚡ Warm-up: Energy Charades',
+                            content: 'Students act out assigned energy sources (wind turbine, coal plant, solar panel). Class guesses whether it\'s renewable or nonrenewable. Connect to Engage Hook.'
+                        },
+                        {
+                            title: '🎯 Objectives & Vocabulary',
+                            content: 'We will:\n• Classify natural resources by renewability\n• Explain environmental impacts of energy choices\n• Gather information to inform the mission ad\n\nVocabulary:',
+                            vocabulary: [
+                                { term: 'Renewable Resource', definition: 'Resource that can be replaced naturally in a short time' },
+                                { term: 'Nonrenewable Resource', definition: 'Resource that forms slowly and can run out' },
+                                { term: 'Fossil Fuel', definition: 'Fuel formed from ancient plants and animals' },
+                                { term: 'Sustainability', definition: 'Using resources without depleting them for future generations' }
+                            ]
+                        },
+                        {
+                            title: '🧩 Explore: Classify Natural Resources',
+                            content: 'Create a T-chart in notebooks labeled “Renewable” and “Nonrenewable.” Sort these cards (projected on slide): sunlight, wind, moving water, timber (replanting), natural gas, coal, uranium, petroleum, recycled aluminum.'
+                        },
+                        {
+                            title: '🎭 Effects of Energy Skits',
+                            content: 'Assign scenarios from Explore 2. Groups perform mini-skits showing how a resource is used and its impacts on people and wildlife.'
+                        },
+                        {
+                            title: '🔎 Research Station: Town of McCally',
+                            content: 'Share the mission scenario data below. Teams choose two resources and list benefits + challenges for the mining town.\n<table style=\"width:85%; margin:18px auto; border-collapse:collapse; font-size:1.35rem;\">\n  <tr style=\"background:rgba(255,255,255,0.2);\">\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Resource</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Energy Output</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Community Impact Notes</th>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Solar Array</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Enough for 120 homes</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">High daytime output, storage batteries required at night</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Wind Turbines</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Power for 85 homes</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Steady canyon winds; needs wildlife-safe siting</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Natural Gas Generator</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Power for 200 homes</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Fast start-up, releases CO₂ and requires pipeline</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Hydroelectric Micro-dam</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Power for 60 homes</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Reliable if river flow stays steady; fish ladder needed</td>\n  </tr>\n</table>'
+                        },
+                        {
+                            title: '📊 Data Talk: U.S. Energy Pie Chart',
+                            content: 'Display this simplified 2010 energy mix: Nonrenewable 83% (Coal 23%, Natural Gas 25%, Petroleum 35%), Renewable 12% (Hydro 6%, Wind 3%, Solar 1%, Biomass 2%), Other 5% (Nuclear). Students sketch a quick pie or bar model and answer: “Which category powered the nation most? What trend should change for sustainability?”'
+                        },
+                        {
+                            title: 'Digital Citizenship: Share With Care',
+                            content: 'Before students publish an energy infographic, review this checklist:\n• Double-check that every statistic comes from a reliable, current source.\n• Add a short citation or source note below the graphic.\n• Ask: “Could this post be misunderstood?” If yes, revise wording before sharing.'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: 'List one renewable resource you would feature in the mining company ad and explain how it protects the environment.'
                         }
                     ]
                 },
                 'lesson20': {
-                    title: 'Earth Changes Simulation Lab',
+                    title: 'Conservation & Mission Planning',
                     slides: [
                         {
-                            title: '🌋 Earth Changes Simulation Lab',
-                            content: 'Today we will model volcanic eruptions, earthquakes, and erosion to understand how Earth\'s surface changes.'
+                            title: '🌱 Warm-up: Conservation Quick Poll',
+                            content: 'Students respond to three statements (turn off lights, recycle paper, ride bikes). Tally results to connect to Math Connections practice.'
                         },
                         {
-                            title: '🧪 Lab Setup and Materials',
-                            content: '🌋 Prepare simulation materials:\n\n• Baking soda and vinegar (volcano)\n• Sand, rocks, and water (erosion)\n• Jello or gelatin (earthquake simulation)\n• Plastic containers and trays\n• Measuring cups and spoons\n• Food coloring\n• Safety goggles\n• Aprons or lab coats\n\n📋 Setup your simulation stations:\n• Volcano station\n• Erosion station\n• Earthquake station'
-                        },
-                        {
-                            title: '📋 Learning Objectives',
-                            content: 'By the end of this lab, you will be able to:\n\n• Model volcanic eruptions and their effects\n• Demonstrate erosion processes\n• Simulate earthquake effects on structures\n• Compare different Earth-changing processes'
-                        },
-                        {
-                            title: '📚 Vocabulary Cards',
-                            content: 'Let\'s learn Earth science vocabulary!',
+                            title: '🎯 Objectives & Vocabulary',
+                            content: 'Today we will:\n• Evaluate strategies that reduce resource use\n• Connect conservation ideas to the coal-mining mission\n• Draft talking points for the recruitment ad\n\nVocabulary additions:',
                             vocabulary: [
-                                { term: 'Volcano', definition: 'An opening in Earth\'s crust where lava erupts' },
-                                { term: 'Earthquake', definition: 'Shaking of Earth\'s surface caused by movement' },
-                                { term: 'Erosion', definition: 'The movement of weathered rock material' },
-                                { term: 'Deposition', definition: 'The dropping of eroded material in new places' }
+                                { term: 'Conservation', definition: 'Careful use and protection of natural resources' },
+                                { term: 'Efficiency', definition: 'Doing the same work with less energy or materials' },
+                                { term: 'Mitigation', definition: 'Actions that reduce negative impacts' }
                             ]
                         },
                         {
-                            title: '🧪 Lab Supplies Needed',
-                            content: '📦 Required Materials:\n\n• Baking soda (2 cups)\n• Vinegar (1 bottle)\n• Red food coloring\n• Sand (2 cups)\n• Small rocks\n• Water\n• Jello or gelatin\n• Plastic containers\n• Measuring cups\n• Spoons\n• Safety goggles\n• Aprons\n• Data sheets\n• Stopwatch\n• Rulers'
+                            title: '📊 Analyze: Energy Use Graph',
+                            content: 'Share this data and have students sketch a quick bar graph comparing baseline vs. conserved usage.\n<table style=\"width:70%; margin:18px auto; border-collapse:collapse; font-size:1.35rem;\">\n  <tr style=\"background:rgba(255,255,255,0.2);\">\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Category</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Before Conservation (kWh/week)</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">After Conservation (kWh/week)</th>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Lighting</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">420</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">290</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">HVAC</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">610</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">520</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Computers</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">250</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">190</td>\n  </tr>\n</table>\nDiscuss: Which area saved the most energy? How might the mining mission replicate those strategies?'
                         },
                         {
-                            title: '📝 Lab Procedure: Earth Simulations',
-                            content: '🔬 Step-by-Step Instructions:\n\n🌋 VOLCANO SIMULATION:\n1. Build volcano with sand in container\n2. Add baking soda to center\n3. Add red food coloring\n4. Pour vinegar and observe eruption\n5. Record observations\n\n🏔️ EROSION SIMULATION:\n1. Build mountain with sand and rocks\n2. Pour water from different heights\n3. Observe material movement\n4. Record changes over time\n\n🌍 EARTHQUAKE SIMULATION:\n1. Make Jello in container\n2. Place small objects on top\n3. Shake container gently\n4. Observe effects on structures'
+                            title: '🛠️ Scenario Workshop',
+                            content: 'Review Explore 2 skit results. For each scenario, students propose one immediate fix and one long-term solution to reduce environmental impacts.'
                         },
                         {
-                            title: '📊 Lab Rubric - 3 Category System',
-                            content: '🏆 Grading Rubric:\n\n📋 PROCEDURE (40 points):\n• Follows safety protocols (15 pts)\n• Completes all simulations (15 pts)\n• Maintains clean workspace (10 pts)\n\n🔬 OBSERVATIONS (35 points):\n• Accurate descriptions (15 pts)\n• Detailed drawings (10 pts)\n• Time measurements (10 pts)\n\n📝 ANALYSIS (25 points):\n• Compares processes (15 pts)\n• Explains real-world connections (10 pts)'
+                            title: '📰 Mission Ad Planner',
+                            content: 'Template slide for planning the recruitment ad: sections for safety, stewardship, and community benefits. Connect to bundle anchor mission.'
                         },
                         {
-                            title: '🧹 Lab Cleanup Procedures',
-                            content: '⚠️ IMPORTANT: Proper cleanup ensures safety and environmental responsibility!\n\n<div class="interactive-question">What are the cleanup steps?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🧽</span>\n    <span class="reveal-question">Step 1</span>\n    <span class="reveal-answer">Dispose of used materials properly</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🧽</span>\n    <span class="reveal-question">Step 2</span>\n    <span class="reveal-answer">Clean and sanitize all containers</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📋</span>\n    <span class="reveal-question">Step 3</span>\n    <span class="reveal-answer">Return unused materials to storage</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📊</span>\n    <span class="reveal-question">Step 4</span>\n    <span class="reveal-answer">Organize data sheets and observations</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">✅</span>\n    <span class="reveal-question">Step 5</span>\n    <span class="reveal-answer">Wash hands and sanitize workspace</span>\n</div>'
+                            title: 'Digital Citizenship: Don’t Fall for Fake (Energy Myths)',
+                            content: 'Check claims about “clean coal” or “free energy devices” using the Don’t Fall for Fake steps: read beyond the headline, check the source, look for supporting evidence.'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: 'Write one sentence for the mission ad promising how the company will conserve resources, backed by evidence from today\'s lesson.'
+                        }
+                    ]
+                },
+                'lesson21': {
+                    title: 'Natural Processes: Hazard Identification',
+                    slides: [
+                        {
+                            title: '🌋 Warm-up: Shake Table Demo',
+                            content: 'Build a quick block tower and gently shake the desk. What failed? Introduce the Investigative Phenomena: “How could an architect design a house to withstand natural disasters?”'
+                        },
+                        {
+                            title: '🎯 Objectives & Vocabulary',
+                            content: 'We will:\n• Identify impacts of earthquakes, floods, tsunamis, and volcanic eruptions\n• Brainstorm strategies to reduce damage\n• Connect hazards to the mining mission\n\nVocabulary:',
+                            vocabulary: [
+                                { term: 'Natural Hazard', definition: 'A natural event that can cause damage to humans and property' },
+                                { term: 'Mitigation', definition: 'Steps taken to reduce harm from hazards' },
+                                { term: 'Criteria', definition: 'Requirements a solution must meet' },
+                                { term: 'Constraints', definition: 'Limits on materials, time, or cost' }
+                            ]
+                        },
+                        {
+                            title: '📚 Explore: Safety First!',
+                            content: 'Review the hazard snapshots on this slide. For each, students note impacts and one safety tip in their notebooks.\n• Earthquakes – cracked roads, falling debris → Drop, Cover, Hold On; secure heavy furniture.\n• Floods – rising water, washed-out bridges → Evacuate to higher ground; prepare sandbags.\n• Tsunamis – rapid shoreline retreat, incoming wall of water → Move 2+ miles inland or 100 ft uphill.\n• Volcanoes – ashfall, lava flows → Wear masks, follow evacuation routes.'
+                        },
+                        {
+                            title: '🧠 Guided Discussion',
+                            content: 'Students draw a four-quadrant chart in notebooks (Hazard • Impacts • Mitigation • Mission Connection). Rotate small groups to add examples from the hazard list, then share out patterns.'
+                        },
+                        {
+                            title: '📈 Data Connection',
+                            content: 'Share the table below representing last decade of events near the mission site. Ask: “Which hazard should the crew prepare for first?”\n<table style=\"width:70%; margin:18px auto; border-collapse:collapse; font-size:1.3rem;\">\n  <tr style=\"background:rgba(255,255,255,0.2);\">\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Hazard Type</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Events (10 yrs)</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Notable Impact</th>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Earthquakes</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">14 (M4-5)</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Rockfalls near canyon rim</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Seasonal Floods</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">7</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Road closures, contaminated wells</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Tsunami Alerts</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">2 (distant source)</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Evacuations of coastal workers</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Volcanic Ashfall</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">3 minor events</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Air quality alerts, equipment cleanup</td>\n  </tr>\n</table>'
+                        },
+                        {
+                            title: 'Digital Citizenship: “Don’t Fall for Fake” Alerts',
+                            content: 'Emphasize verifying emergency alerts and avoiding rumor-sharing during disasters. Practice checking official agencies before reposting.'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: 'Rank the four hazards from most to least concerning for the mission site. Explain the top choice with evidence.'
+                        }
+                    ]
+                },
+                'lesson22': {
+                    title: 'Engineering Challenge: Resilient Structures',
+                    slides: [
+                        {
+                            title: '🔧 Warm-up: Criteria & Constraints',
+                            content: 'List the design requirements from the Natural Processes scope (must resist earthquakes, floods, tsunamis, volcanic debris). Identify available materials and time limit.'
+                        },
+                        {
+                            title: '🎯 Objectives & Vocabulary',
+                            content: 'Engineers will:\n• Prototype a structure for Volcano Island (Explore 2)\n• Test against multiple hazards\n• Iterate using data\n\nVocabulary:',
+                            vocabulary: [
+                                { term: 'Prototype', definition: 'A first model built to test a design idea' },
+                                { term: 'Iteration', definition: 'A new version created after testing' },
+                                { term: 'Failure Point', definition: 'Where a design breaks or stops working' }
+                            ]
+                        },
+                        {
+                            title: '🛠️ Materials & Design Logs',
+                            content: 'Set up a supply table with: craft sticks, cardboard bases, plastic cups, clay, masking tape, string, paper clips, straws, aluminum foil, spray bottles (water), fans, tub of sand, small weights.\n• Limit each team to a fixed budget of materials (post the cost list).\n• Have students turn to the engineering section of their journals and title two pages “Volcano Island Prototype.” Page 1: planning sketch + materials budget. Page 2: testing log (table provided on next slide).'
+                        },
+                        {
+                            title: '🧱 Build Phase Instructions',
+                            content: 'Provide step-by-step build directions, including plan sketch, material budgeting, and teamwork roles (builder, recorder, tester).' 
+                        },
+                        {
+                            title: '📋 Testing Log Template',
+                            content: '<table style=\"width:90%; margin:0 auto; border-collapse:collapse; font-size:1.35rem;\">\n  <tr style=\"background:rgba(255,255,255,0.2);\">\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Hazard Test</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Trial #</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Observations</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Met Criteria? (Y/N)</th>\n    <th style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Improvement Ideas</th>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Shake (Earthquake)</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">1</td>\n    <td colspan=\"3\" style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Space for student notes</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Spray (Ash/Flood)</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">1</td>\n    <td colspan=\"3\" style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Space for student notes</td>\n  </tr>\n  <tr>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Wind (Storm Surge)</td>\n    <td style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">1</td>\n    <td colspan=\"3\" style=\"padding:8px; border:1px solid rgba(255,255,255,0.3);\">Space for student notes</td>\n  </tr>\n</table>\nStudents copy this table into journals before testing begins.'
+                        },
+                        {
+                            title: '🔄 Reflect & Improve',
+                            content: 'After each trial, teams complete the ETS1 reflection: What failed? Why? What change will you try next? Encourage sketches of revisions.'
+                        },
+                        {
+                            title: 'Digital Citizenship: Cyber Pop-Out — It’s Cool to Be Kind',
+                            content: 'Model respectful feedback during design critiques. Use the kindness checklist when offering suggestions to other teams.'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: 'Submit a quick reflection summarizing one successful design choice and one improvement still needed.'
+                        },
+                        {
+                            title: '📊 Grading Rubric Reminder',
+                            content: 'Explain scoring before prototype testing:\n• Design Process & Documentation (10 pts)\n• Structural Performance & Testing Data (10 pts)\n• Iteration & Problem Solving (8 pts)\n• Team Collaboration/Safety/Cleanup (4 pts)\nFull descriptors available in “Bundle 2 - Lab Rubric.md”.' 
+                        }
+                    ]
+                },
+                'lesson23': {
+                    title: 'Bundle Mission Workshop',
+                    slides: [
+                        {
+                            title: '🌟 Warm-up: Mission Recap',
+                            content: 'Restate the anchoring question: “What types of changes to Earth’s surface have occurred over time, and why?” Brainstorm evidence from each scope (Rock Patterns, Changing Land, Plate Tectonics, Resources, Natural Processes).' 
+                        },
+                        {
+                            title: '🎯 Objectives',
+                            content: 'We will:\n• Synthesize evidence from lessons 13–22\n• Draft recruitment ad components\n• Prepare for performance tasks'
+                        },
+                        {
+                            title: '🧠 Concept Review Slides',
+                            content: 'Provide one summary slide per scope with key bullet points and image placeholders (stratified rocks, eroding beach, plate map, energy pie chart, hazard map).'
+                        },
+                        {
+                            title: '📋 Assessment Prep Stations',
+                            content: 'Rotate through CER practice (Rock Patterns), data interpretation (Changing Land), mapping (Plate Tectonics), resource ranking (Scope 4), and hazard mitigation (Scope 5).'
+                        },
+                        {
+                            title: '📰 Mission Storyboard Template',
+                            content: 'Have teams fold a sheet of chart paper into four panels (or draw four boxes in journals):\n1. Intro & mission purpose.\n2. Evidence of Earth changes (rock layers, erosion, plate patterns).\n3. Resource stewardship & conservation pledge.\n4. Hazard mitigation & final call to action. Include space for citations.'
+                        },
+                        {
+                            title: 'Digital Citizenship: Cite & Credit',
+                            content: 'Use the DC.LAW “Credit the Creator” reminder when selecting images/data for the ad. Add a sources slide to the storyboard.'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: 'Submit storyboard draft or evidence list. Teacher provides quick feedback for final project day.'
+                        }
+                    ]
+                },
+                'lesson24': {
+                    title: 'Mission Showcase & Reflection',
+                    slides: [
+                        {
+                            title: '🎉 Warm-up: Peer Feedback Protocol',
+                            content: 'Review feedback sentence starters (I noticed…, I wondered…, One suggestion…). Set norms for respectful critique before presentations.'
+                        },
+                        {
+                            title: '🎯 Objectives',
+                            content: 'Students will:\n• Present recruitment ads grounded in scientific evidence\n• Demonstrate understanding of Earth surface changes and resource stewardship\n• Reflect on growth across Bundle 2'
+                        },
+                        {
+                            title: '🖥️ Presentation Order & Rubric',
+                            content: 'Outline rubric categories: Scientific Accuracy, Mission Connection, Hazard Mitigation, Visual Design, Digital Citizenship (citing sources). Include time limits.'
+                        },
+                        {
+                            title: '📝 Reflection & Self-Assessment',
+                            content: 'Provide reflection prompts: Which evidence was strongest? What would you improve next time? How will you continue to protect Earth’s resources?'
+                        },
+                        {
+                            title: 'Digital Citizenship: Final Check — Share with Care',
+                            content: 'Before publishing or sharing ads online, run through Share with Care: get permissions, credit images, ensure messaging is accurate and kind.'
+                        },
+                        {
+                            title: '🚪 Bundle Exit Survey',
+                            content: 'Students complete a quick survey or journal entry summarizing one new understanding about Earth’s surface and one action they can take in their community.'
                         }
                     ]
                 },
@@ -2496,15 +2863,19 @@
                 }
                 
                 if (slide.image) {
-                    slideHTML += `<div style="display: flex; justify-content: center; margin: 30px 0; height: 60vh;"><img src="${slide.image}" alt="${slide.title}" style="width: 80%; height: 100%; object-fit: cover; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);"></div>`;
+                    slideHTML += renderImageElement(slide.image, slide.title, slide.imageDescription || '', slide.expectedImage || '');
                 }
                 
                 if (slide.images) {
                     slideHTML += '<div style="display: flex; justify-content: center; gap: 30px; margin: 30px 0; height: 60vh;">';
                     slide.images.forEach(imageSrc => {
-                        slideHTML += `<img src="${imageSrc}" alt="${slide.title}" style="width: 45%; height: 100%; object-fit: cover; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);">`;
+                        slideHTML += renderImageElement(imageSrc, slide.title, slide.imageDescription || '', slide.expectedImage || '', true);
                     });
                     slideHTML += '</div>';
+                }
+
+                if (slide.extraContent) {
+                    slideHTML += slide.extraContent;
                 }
                 
                 if (slide.vocabulary) {
@@ -2517,6 +2888,7 @@
             });
 
             updateSlidePosition();
+            updateScrollState();
             
             // Timer event listeners are now handled in renderTimerBar()
         }
@@ -2537,6 +2909,18 @@
             const wrapper = document.getElementById('slidesWrapper');
             wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
         }
+
+        function updateScrollState() {
+            const modalContent = document.querySelector('.modal-content');
+            if (!modalContent) {
+                document.body.style.overflowY = 'auto';
+                return;
+            }
+            const needsScroll = modalContent.scrollHeight > window.innerHeight;
+            document.body.style.overflowY = needsScroll ? 'auto' : 'hidden';
+        }
+
+        window.addEventListener('resize', updateScrollState);
 
         function revealAnswer(element) {
             const answer = element.querySelector('.reveal-answer');
@@ -2566,6 +2950,7 @@
             
             currentSlide = slideIndex;
             updateSlidePosition();
+            updateScrollState();
             resetReveals();
             
             const navDots = document.querySelectorAll('.nav-dot');
@@ -2586,6 +2971,61 @@
             if (currentSlide > 0) {
                 showSlide(currentSlide - 1);
             }
+        }
+
+        function escapeAttribute(str = '') {
+            return str.replace(/"/g, '&quot;');
+        }
+
+        function renderImageElement(src, title, description = '', expected = '', isGallery = false) {
+            const containerClass = isGallery ? 'gallery-image-wrapper' : 'single-image-wrapper';
+            const widthStyle = isGallery
+                ? 'width: 100%; height: auto; max-height: 60vh;'
+                : 'width: 100%; height: auto; max-height: 65vh; max-width: 900px;';
+            const outerStyle = isGallery
+                ? 'display: flex; justify-content: center; align-items: center; width: 48%; padding: 10px; overflow: visible;'
+                : 'display: flex; justify-content: center; align-items: center; width: 100%; margin: 25px auto; padding: 10px; overflow: visible;';
+            
+            return `
+                <div class="${containerClass}" style="${outerStyle}">
+                    <img 
+                        src="${src}" 
+                        alt="${title}" 
+                        style="${widthStyle} object-fit: contain; border-radius: 15px; box-shadow: 0 6px 12px rgba(0,0,0,0.4);" 
+                        data-placeholder="${escapeAttribute(description)}" 
+                        data-expected="${escapeAttribute(expected)}"
+                        data-mode="${isGallery ? 'gallery' : 'single'}"
+                        onerror="handleImageError(this)">
+                </div>
+            `;
+        }
+
+        function handleImageError(img) {
+            if (!img || img.dataset.replaced === 'true') return;
+            img.dataset.replaced = 'true';
+
+            const description = img.getAttribute('data-placeholder') || 'Add your lesson image here.';
+            const expected = img.getAttribute('data-expected');
+            const srcPath = img.getAttribute('src') || '';
+            const mode = img.getAttribute('data-mode') || 'single';
+
+            const placeholder = document.createElement('div');
+            placeholder.className = 'image-placeholder-card';
+            placeholder.style.width = mode === 'gallery' ? '90%' : '80%';
+            placeholder.style.height = 'auto';
+            placeholder.innerHTML = `
+                <div style="font-size: 1.6rem; font-weight: 700;">Image Placeholder</div>
+                <div style="font-size: 1.1rem;">${description}</div>
+                <div class="expected-file">Expected file: ${expected || srcPath}</div>
+                <div style="font-size: 0.95rem; opacity: 0.85;">Add the image file at the path shown above to replace this placeholder automatically.</div>
+            `;
+
+            const wrapper = img.parentElement;
+            if (wrapper) {
+                wrapper.innerHTML = '';
+                wrapper.appendChild(placeholder);
+            }
+            updateScrollState();
         }
 
         function generateVocabularySection(vocabulary) {
@@ -2612,11 +3052,13 @@
                         </div>
                     `;
                 } else {
+                    const termHTML = `<span class="card-term">${item.term}</span>`;
+                    const definitionHTML = `<div class="card-definition"><u>${item.term}</u>: ${item.definition}</div>`;
                     html += `
                         <div class="vocab-card" onclick="flipCard(this)">
                             <div class="card-inner">
-                                <div class="card-front">${item.term}</div>
-                                <div class="card-back">${item.term}: ${item.definition}</div>
+                                <div class="card-front">${termHTML}</div>
+                                <div class="card-back">${definitionHTML}</div>
                             </div>
                         </div>
                     `;
@@ -2733,106 +3175,6 @@
             }
         });
 
-        // Touch/swipe support for carousel
-        let touchStartX = 0;
-        let touchEndX = 0;
-        let isDragging = false;
-        let dragStartX = 0;
-        let dragStartSlide = 0;
-
-        document.addEventListener('touchstart', function(event) {
-            if (document.getElementById('lessonModal').classList.contains('active')) {
-                touchStartX = event.changedTouches[0].screenX;
-            }
-        });
-
-        document.addEventListener('touchend', function(event) {
-            if (document.getElementById('lessonModal').classList.contains('active')) {
-                touchEndX = event.changedTouches[0].screenX;
-                handleSwipe();
-            }
-        });
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchStartX - touchEndX;
-            
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    // Swipe left - next slide
-                    nextSlide();
-                } else {
-                    // Swipe right - previous slide
-                    previousSlide();
-                }
-            }
-        }
-
-        // Draggable arrow functionality
-        document.addEventListener('mousedown', function(event) {
-            if (document.getElementById('lessonModal').classList.contains('active')) {
-                if (event.target.closest('.arrow-right')) {
-                    isDragging = true;
-                    dragStartX = event.clientX;
-                    dragStartSlide = currentSlide;
-                    event.target.closest('.arrow-right').classList.add('dragging');
-                    event.preventDefault();
-                } else if (event.target.closest('.arrow-left')) {
-                    isDragging = true;
-                    dragStartX = event.clientX;
-                    dragStartSlide = currentSlide;
-                    event.target.closest('.arrow-left').classList.add('dragging');
-                    event.preventDefault();
-                }
-            }
-        });
-
-        document.addEventListener('mousemove', function(event) {
-            if (isDragging && document.getElementById('lessonModal').classList.contains('active')) {
-                const diff = event.clientX - dragStartX;
-                const threshold = 100;
-                
-                if (Math.abs(diff) > threshold) {
-                    const rightArrow = document.querySelector('.arrow-right.dragging');
-                    const leftArrow = document.querySelector('.arrow-left.dragging');
-                    
-                    if (rightArrow) {
-                        if (diff > 0 && currentSlide > 0) {
-                            // Dragging right arrow right - go to previous slide
-                            showSlide(dragStartSlide - 1);
-                        } else if (diff < 0) {
-                            const lesson = lessonData[currentLesson];
-                            if (lesson && currentSlide < lesson.slides.length - 1) {
-                                // Dragging right arrow left - go to next slide
-                                showSlide(dragStartSlide + 1);
-                            }
-                        }
-                    } else if (leftArrow) {
-                        if (diff < 0 && currentSlide > 0) {
-                            // Dragging left arrow left - go to previous slide
-                            showSlide(dragStartSlide - 1);
-                        } else if (diff > 0) {
-                            const lesson = lessonData[currentLesson];
-                            if (lesson && currentSlide < lesson.slides.length - 1) {
-                                // Dragging left arrow right - go to next slide
-                                showSlide(dragStartSlide + 1);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        document.addEventListener('mouseup', function(event) {
-            if (isDragging) {
-                isDragging = false;
-                const arrowBtn = document.querySelector('.arrow-right.dragging, .arrow-left.dragging');
-                if (arrowBtn) {
-                    arrowBtn.classList.remove('dragging');
-                }
-            }
-        });
-        
         // Navigation function
         function goBack() {
             window.location.href = 'teacher-portal.html';
