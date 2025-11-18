@@ -207,13 +207,34 @@
             font-weight: 500;
             text-align: left;
             padding: 0 60px;
+            white-space: normal;
+        }
+        
+        .slide-content > * {
+            margin-top: 0;
+        }
+        
+        .slide-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        .vocab-card img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
         }
 
         .interactive-question {
             font-size: 2.6rem;
-            margin: 8px 0;
+            margin: 0 0 8px 0;
             font-weight: 600;
             color: #fff;
+            line-height: 1.2;
         }
 
         .reveal-items-container {
@@ -226,15 +247,17 @@
         
         .reveal-item {
             display: flex;
-            align-items: center;
-            margin: 1px 0;
-            padding: 3px 6px;
+            align-items: flex-start;
+            margin: 5px 0;
+            padding: 15px 20px;
             background: rgba(255,255,255,0.1);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
             max-width: 100%;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .reveal-item:hover {
@@ -261,6 +284,8 @@
             transition: opacity 0.5s ease;
             margin-left: 15px;
             display: none;
+            flex: 1 1 auto;
+            line-height: 1.4;
         }
 
         .reveal-answer.show {
@@ -307,6 +332,8 @@
             font-size: 2.5rem;
             color: #fff;
             font-weight: 500;
+            flex: 0 0 auto;
+            line-height: 1.3;
         }
 
         .slide-image {
@@ -434,29 +461,26 @@
 
         .vocab-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
             margin: 5px 0;
-            max-width: 1400px;
+            max-width: 1500px;
             padding: 0 40px;
         }
 
         .vocab-card {
             background: rgba(255,255,255,0.2);
             border-radius: 15px;
-            padding: 20px;
+            padding: 0;
             cursor: pointer;
             transition: transform 0.3s ease;
             perspective: 1000px;
-            min-height: 160px;
-            max-height: 200px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            min-height: 320px;
+            height: auto;
             text-align: center;
             word-wrap: break-word;
             hyphens: auto;
+            overflow: hidden;
         }
 
         .vocab-card:hover {
@@ -470,6 +494,7 @@
         .card-inner {
             position: relative;
             width: 100%;
+            min-height: 280px;
             height: 100%;
             text-align: center;
             transition: transform 0.6s;
@@ -479,14 +504,12 @@
         .card-front, .card-back {
             position: absolute;
             width: 100%;
-            height: 100%;
+            min-height: 100%;
+            height: auto;
             backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            padding: 10px;
+            padding: 30px;
             box-sizing: border-box;
+            border-radius: 15px;
         }
 
         .card-front {
@@ -494,15 +517,37 @@
             word-wrap: break-word;
             font-weight: 600;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .card-back {
             font-size: 2.0rem;
             transform: rotateY(180deg);
             word-wrap: break-word;
-            line-height: 1.3;
-            font-weight: 500;
+            line-height: 1.5;
+            font-weight: 400;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-front:has(img), .card-back:has(img) {
+            padding: 0 !important;
+            display: block !important;
+        }
+        
+        .card-front img, .card-back img {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: cover !important;
+            display: block !important;
+            border-radius: 15px !important;
+            margin: 0 !important;
         }
 
         .timer-bar {
@@ -708,48 +753,48 @@
                 <div class="lesson-description">Explore mountains, valleys, plains, and other landforms that shape our planet.</div>
             </div>
             <div class="lesson-card" onclick="openLesson('lesson14')">
-                <div class="lesson-title">Lesson 14: Weathering and Erosion</div>
-                <div class="lesson-description">Understand how wind, water, and ice change Earth's surface over time.</div>
+                <div class="lesson-title">Lesson 14: Rock Patterns Deep Dive</div>
+                <div class="lesson-description">Analyze fossil evidence and rock layers to understand Earth's changing surface over time.</div>
             </div>
             <div class="lesson-card" onclick="openLesson('lesson15')">
-                <div class="lesson-title">Lesson 15: Rocks and Minerals</div>
-                <div class="lesson-description">Identify different types of rocks and minerals and their formation processes.</div>
+                <div class="lesson-title">Lesson 15: Changing Land: Weathering & Erosion</div>
+                <div class="lesson-description">Understand how wind, water, and ice change Earth's surface over time.</div>
             </div>
             <div class="lesson-card lab" onclick="openLesson('lesson16')">
-                <div class="lesson-title">Lesson 16: Rock and Mineral Investigation Lab</div>
-                <div class="lesson-description">Hands-on identification using tools, tests, and classification charts.</div>
+                <div class="lesson-title">Lesson 16: Changing Land Investigation Lab</div>
+                <div class="lesson-description">Hands-on experiments testing waves, wind, and slope effects on erosion.</div>
             </div>
             <div class="lesson-card" onclick="openLesson('lesson17')">
-                <div class="lesson-title">Lesson 17: Soil Formation and Types</div>
-                <div class="lesson-description">Learn about soil layers, formation, and how different soils support plant life.</div>
+                <div class="lesson-title">Lesson 17: Plate Tectonics: Patterns of Earth's Features</div>
+                <div class="lesson-description">Analyze maps to discover patterns of earthquakes, volcanoes, and mountain ranges.</div>
             </div>
             <div class="lesson-card" onclick="openLesson('lesson18')">
-                <div class="lesson-title">Lesson 18: Water Cycle and Weather</div>
-                <div class="lesson-description">Explore evaporation, condensation, precipitation, and weather patterns.</div>
+                <div class="lesson-title">Lesson 18: Plate Tectonics & Earth's Interior</div>
+                <div class="lesson-description">Connect mantle convection to plate movement and Earth's changing surface.</div>
             </div>
             <div class="lesson-card" onclick="openLesson('lesson19')">
-                <div class="lesson-title">Lesson 19: Natural Disasters</div>
-                <div class="lesson-description">Study earthquakes, volcanoes, floods, and how they change the landscape.</div>
+                <div class="lesson-title">Lesson 19: Renewable vs. Nonrenewable Resources</div>
+                <div class="lesson-description">Classify energy sources and explore environmental impacts of resource use.</div>
             </div>
-            <div class="lesson-card lab" onclick="openLesson('lesson20')">
-                <div class="lesson-title">Lesson 20: Earth Changes Simulation Lab</div>
-                <div class="lesson-description">Model volcanic eruptions, earthquakes, and erosion using materials.</div>
+            <div class="lesson-card" onclick="openLesson('lesson20')">
+                <div class="lesson-title">Lesson 20: Conservation & Mission Planning</div>
+                <div class="lesson-description">Develop strategies to reduce resource use and plan the mining recruitment ad.</div>
             </div>
             <div class="lesson-card" onclick="openLesson('lesson21')">
-                <div class="lesson-title">Lesson 21: Fossil Formation and Evidence</div>
-                <div class="lesson-description">Discover how fossils form and what they tell us about Earth's history.</div>
+                <div class="lesson-title">Lesson 21: Natural Processes: Hazard Identification</div>
+                <div class="lesson-description">Study earthquakes, floods, tsunamis, and volcanic eruptions and their impacts.</div>
             </div>
-            <div class="lesson-card" onclick="openLesson('lesson22')">
-                <div class="lesson-title">Lesson 22: Natural Resources and Conservation</div>
-                <div class="lesson-description">Explore renewable vs. non-renewable resources and conservation practices.</div>
+            <div class="lesson-card lab" onclick="openLesson('lesson22')">
+                <div class="lesson-title">Lesson 22: Engineering Challenge: Resilient Structures</div>
+                <div class="lesson-description">Design and test structures that can withstand earthquakes, floods, and wind.</div>
             </div>
             <div class="lesson-card" onclick="openLesson('lesson23')">
-                <div class="lesson-title">Lesson 23: Human Impact on Earth</div>
-                <div class="lesson-description">Analyze pollution, deforestation, and environmental protection strategies.</div>
+                <div class="lesson-title">Lesson 23: Bundle Mission Workshop</div>
+                <div class="lesson-description">Synthesize evidence and draft the coal-mining recruitment ad with safety plans.</div>
             </div>
-            <div class="lesson-card lab" onclick="openLesson('lesson24')">
-                <div class="lesson-title">Lesson 24: Environmental Monitoring Lab</div>
-                <div class="lesson-description">Collect and analyze environmental data to assess local ecosystem health.</div>
+            <div class="lesson-card" onclick="openLesson('lesson24')">
+                <div class="lesson-title">Lesson 24: Mission Showcase & Reflection</div>
+                <div class="lesson-description">Present final recruitment ads and reflect on Bundle 2 learning journey.</div>
             </div>
             <div class="lesson-card" onclick="openLesson('lesson25')">
                 <div class="lesson-title">Lesson 25: Climate Change and Earth's Future</div>
@@ -1665,7 +1710,7 @@
                         },
                         {
                             title: '📝 CER Practice: Highway Cutaway',
-                            content: '<strong>🔬 Let\'s practice using evidence to make scientific claims!</strong>\n\nWhen highway construction crews cut through hills, they reveal layers of rock and fossils. Scientists use these "windows into the past" to understand Earth\'s history.\n\n<div style="margin:15px 0;padding:15px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong>📋 CER Framework:</strong><br>\n• <strong>CLAIM</strong> - Your statement about what you observe<br>\n• <strong>EVIDENCE</strong> - Specific facts and observations that support your claim<br>\n• <strong>REASONING</strong> - Explanation of how the evidence proves your claim\n</div>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">Study the highway cutaway diagram - what can we learn about each layer?</div>\n\n<div style="text-align:center;margin:20px auto;">\n<div class="vocab-card" onclick="flipCard(this)" style="cursor:pointer;max-width:900px;min-height:550px;margin:0 auto;">\n<div class="card-inner">\n<div class="card-front" style="padding:20px;display:flex;align-items:center;justify-content:center;flex-direction:column;">\n<div style="font-size:2.5rem;margin-bottom:20px;">🗻 Highway Cutaway</div>\n<img src="images/Bundle2/Lesson 14/highway_cutaway.png" style="max-width:100%;height:auto;border-radius:10px;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:20px;text-align:center;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Image Placeholder</div>\nExpected: highway_cutaway.png<br>\nShows rock layers A-F exposed in highway cut\n</div>\n<div style="padding:20px;font-size:2rem;margin-top:10px;">👆 Click to see what each layer tells us!</div>\n</div>\n<div class="card-back" style="padding:20px;display:flex;align-items:center;justify-content:center;">\n<img src="images/Bundle2/Lesson 14/highway_cutaway_answers.png" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:10px;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">\n<div style="display:none;padding:20px;text-align:center;flex-direction:column;justify-content:center;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Image Placeholder</div>\nExpected: highway_cutaway_answers.png<br>\nShows annotated layers with environment descriptions\n</div>\n</div>\n</div>\n</div>\n</div>\n\n<div style="margin-top:20px;background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;max-width:1200px;margin-left:auto;margin-right:auto;">\n<strong style="font-size:2.2rem;">🤔 Example CER Analysis:</strong><br><br>\n\n<div style="margin:12px 0;padding:15px;background:rgba(0,212,170,0.2);border-radius:8px;">\n<strong style="color:#00d4aa;font-size:2rem;">CLAIM:</strong><br>\n<span style="font-size:1.9rem;">Layer C formed in a shallow ocean environment.</span>\n</div>\n\n<div style="margin:12px 0;padding:15px;background:rgba(255,193,7,0.2);border-radius:8px;">\n<strong style="color:#ffc107;font-size:2rem;">EVIDENCE:</strong><br>\n<span style="font-size:1.9rem;">\n• Marine shell fossils present<br>\n• Fine-grained sediment (deposited slowly in calm water)<br>\n• Layer positioned between deeper ocean layer below and land layer above\n</span>\n</div>\n\n<div style="margin:12px 0;padding:15px;background:rgba(255,107,53,0.2);border-radius:8px;">\n<strong style="color:#ff6b35;font-size:2rem;">REASONING:</strong><br>\n<span style="font-size:1.9rem;">Marine shells only live in ocean water. The fine sediment shows calm, shallow conditions. The layer\'s position indicates sea levels were rising, covering previously dry land.</span>\n</div>\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(102,126,234,0.2);border-left:4px solid #667eea;border-radius:5px;">\n<strong>✍️ Your Turn:</strong> Choose a different layer (A, B, D, E, or F) and write your own CER statement about what environment existed when that layer formed!\n</div>'
+                            content: '<strong>🔬 Let\'s practice using evidence to make scientific claims!</strong>\n\nWhen highway construction crews cut through hills, they reveal layers of rock and fossils. Scientists use these "windows into the past" to understand Earth\'s history.\n\n<div style="margin:15px 0;padding:15px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong>📋 CER Framework:</strong><br>\n• <strong>CLAIM</strong> - Your statement about what you observe<br>\n• <strong>EVIDENCE</strong> - Specific facts and observations that support your claim<br>\n• <strong>REASONING</strong> - Explanation of how the evidence proves your claim\n</div>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">Study the highway cutaway diagram - what can we learn about each layer?</div>\n\n<div style="display:flex;gap:30px;justify-content:center;margin:30px auto;max-width:1600px;flex-wrap:wrap;">\n<div style="flex:1;min-width:650px;">\n<h3 style="text-align:center;font-size:2rem;margin-bottom:15px;color:#fff;">Highway Cutaway</h3>\n<img src="images/Bundle2/Lesson 14/highway_cutaway.png" style="width:100%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.4);" alt="Highway Cutaway">\n</div>\n<div style="flex:1;min-width:650px;">\n<h3 style="text-align:center;font-size:2rem;margin-bottom:15px;color:#fff;">What Each Layer Tells Us</h3>\n<img src="images/Bundle2/Lesson 14/highway_cutaway_answers.png" style="width:100%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.4);" alt="Highway Cutaway Answers">\n</div>\n</div>\n\n<div style="margin-top:20px;background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;max-width:1200px;margin-left:auto;margin-right:auto;">\n<strong style="font-size:2.2rem;">🤔 Example CER Analysis:</strong><br><br>\n\n<div style="margin:12px 0;padding:15px;background:rgba(0,212,170,0.2);border-radius:8px;">\n<strong style="color:#00d4aa;font-size:2rem;">CLAIM:</strong><br>\n<span style="font-size:1.9rem;">Layer C formed in a shallow ocean environment.</span>\n</div>\n\n<div style="margin:12px 0;padding:15px;background:rgba(255,193,7,0.2);border-radius:8px;">\n<strong style="color:#ffc107;font-size:2rem;">EVIDENCE:</strong><br>\n<span style="font-size:1.9rem;">\n• Marine shell fossils present<br>\n• Fine-grained sediment (deposited slowly in calm water)<br>\n• Layer positioned between deeper ocean layer below and land layer above\n</span>\n</div>\n\n<div style="margin:12px 0;padding:15px;background:rgba(255,107,53,0.2);border-radius:8px;">\n<strong style="color:#ff6b35;font-size:2rem;">REASONING:</strong><br>\n<span style="font-size:1.9rem;">Marine shells only live in ocean water. The fine sediment shows calm, shallow conditions. The layer\'s position indicates sea levels were rising, covering previously dry land.</span>\n</div>\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(102,126,234,0.2);border-left:4px solid #667eea;border-radius:5px;">\n<strong>✍️ Your Turn:</strong> Choose a different layer (A, B, D, E, or F) and write your own CER statement about what environment existed when that layer formed!\n</div>'
                         },
                         {
                             title: '💻 Digital Citizenship: Credit the Creator',
@@ -1682,42 +1727,46 @@
                     slides: [
                         {
                             title: '🌊 Warm-up: Sugar Cube Challenge',
-                            content: '🖼️ Image Placeholder: Sugar cube under dripping water vs. crushing.\nPredict which method will change the cube faster and why. Connect to the Hook investigation.\n\n📷 Expected file: sugar_cube_weathering.png',
-                            image: 'images/Bundle2/Lesson 15/sugar_cube_weathering.png'
+                            content: '<div style="margin:8px 0;padding:15px;background:rgba(255,193,7,0.2);border-radius:10px;text-align:center;"><strong style="font-size:2rem;">🤔 Look at the image below. What do you notice?</strong><br>What differences do you see between the LEFT and RIGHT methods?<br><strong style="font-size:1.9rem;color:#764ba2;">🌍 How does this connect to ROCKS?</strong></div><div style="margin:8px 0;text-align:center;"><img src="images/Bundle2/Lesson 15/sugar_cube_weathering.png" style="max-width:45%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.3);" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';"><div style="display:none;padding:20px;background:rgba(255,255,255,0.1);border-radius:15px;margin:10px auto;max-width:400px;font-size:1.5rem;">📷 sugar_cube_weathering.png</div></div><div style="margin:8px 0;padding:15px;background:rgba(255,255,255,0.1);border-radius:10px;"><strong style="font-size:1.9rem;">🧪 The Challenge:</strong> TWO ways to break down a sugar cube:<br><strong>LEFT - Chemical Weathering:</strong> Water dripping slowly dissolves it<br><strong>RIGHT - Mechanical Weathering:</strong> Physical force crushes it<br><br><strong style="color:#ffc107;">❓ Which method do YOU think works FASTER?</strong></div><div class="interactive-question" style="margin:8px 0 5px 0 !important;">💭 Turn & Talk: Share your prediction with a partner</div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">💧</span><span class="reveal-question">Chemical Method (Slow)</span><span class="reveal-answer">Water gradually dissolves sugar molecule by molecule - takes TIME but thoroughly breaks it down</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">💥</span><span class="reveal-question">Mechanical Method (Fast)</span><span class="reveal-answer">Physical force INSTANTLY breaks the cube into chunks - quick but pieces remain large</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🌍</span><span class="reveal-question">Real-World Connection</span><span class="reveal-answer">ROCKS break down the SAME way! Rain/acids dissolve them slowly (chemical), while earthquakes/ice wedging crack them fast (mechanical)</span></div><div style="margin-top:10px;padding:12px;background:rgba(102,126,234,0.2);border-left:4px solid #667eea;border-radius:5px;"><strong>✍️ In your journal:</strong> Predict which method is faster and explain WHY using evidence from the image!</div>'
                         },
                         {
                             title: '🎯 Objectives & Vocabulary',
-                            content: 'We will:\n• Compare weathering and erosion\n• Identify agents that reshape landforms\n• Plan data collection for erosion investigations\n\nKey terms:',
+                            content: '📚 <strong>Today we will:</strong><div style="margin:15px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;line-height:1.8;">✓ Compare weathering and erosion<br>✓ Identify agents that reshape landforms<br>✓ Understand how fast vs. slow changes shape Earth\'s surface<br>✓ Plan investigations to test erosion factors</div><strong style="font-size:2rem;">📖 Key Vocabulary:</strong>',
                             vocabulary: [
-                                { term: 'Weathering', definition: 'Breaking down of rock into smaller pieces' },
-                                { term: 'Erosion', definition: 'Moving weathered material to a new location' },
-                                { term: 'Deposition', definition: 'Dropping sediment in a new place' },
-                                { term: 'Agent', definition: 'Force that causes weathering or erosion' }
+                                { term: 'Weathering', definition: 'Breaking down rocks into smaller pieces without moving them' },
+                                { term: 'Erosion', definition: 'Moving weathered rock from one place to another' },
+                                { term: 'Deposition', definition: 'When sediment drops and settles in a new location' },
+                                { term: 'Agent', definition: 'A force that causes weathering or erosion (water, wind, ice, gravity)' },
+                                { term: 'Sediment', definition: 'Small pieces of rock, soil, and sand' }
                             ]
                         },
                         {
-                            title: '🧪 Explore Preview: Waves on the Beach',
-                            content: 'Outline the investigation steps: build a beach model, create waves with a tray, observe sediment movement, and complete the CER checkpoint.'
+                            title: '🔍 Concept: Weathering vs. Erosion',
+                            content: '<div style="margin:0 0 8px 0 !important;padding:15px;background:rgba(102,126,234,0.2);border-radius:10px;"><div style="margin-bottom:8px;"><strong style="font-size:2rem;">WEATHERING</strong> = Breaking Down (In Place)</div><div style="margin-bottom:8px;"><strong style="font-size:2rem;">EROSION</strong> = Moving Away</div><div><strong style="font-size:2rem;">DEPOSITION</strong> = Dropping Off</div></div><div class="interactive-question" style="margin:8px 0 5px 0 !important;">Real-World Examples:</div><div class="reveal-item" onclick="revealAnswer(this)" style="margin:5px 0 !important;"><span class="reveal-emoji">🪨</span><span class="reveal-question">Weathering Example 1</span><span class="reveal-answer">A rock on a mountain cracks when water freezes inside it and expands - the rock breaks but STAYS in the same spot</span></div><div class="reveal-item" onclick="revealAnswer(this)" style="margin:5px 0 !important;"><span class="reveal-emoji">🌿</span><span class="reveal-question">Weathering Example 2</span><span class="reveal-answer">Tree roots grow into cracks in a sidewalk and break the concrete apart - the pieces don\'t move yet</span></div><div class="reveal-item" onclick="revealAnswer(this)" style="margin:5px 0 !important;"><span class="reveal-emoji">🌊</span><span class="reveal-question">Erosion Example 1</span><span class="reveal-answer">A river carries broken rock pieces downstream, moving them miles away from where they started</span></div><div class="reveal-item" onclick="revealAnswer(this)" style="margin:5px 0 !important;"><span class="reveal-emoji">💨</span><span class="reveal-question">Erosion Example 2</span><span class="reveal-answer">Wind picks up sand from one side of the beach and blows it to create sand dunes on the other side</span></div><div class="reveal-item" onclick="revealAnswer(this)" style="margin:5px 0 !important;"><span class="reveal-emoji">🏖️</span><span class="reveal-question">Deposition Example 1</span><span class="reveal-answer">A river slows down as it enters the ocean, dropping sediment to form a DELTA (like the Mississippi River Delta)</span></div><div class="reveal-item" onclick="revealAnswer(this)" style="margin:5px 0 !important;"><span class="reveal-emoji">🏔️</span><span class="reveal-question">Deposition Example 2</span><span class="reveal-answer">Wind carrying sand loses speed at the base of a hill and drops the sand, building up a sand dune over time</span></div><div style="margin-top:8px !important;padding:12px;background:rgba(40,167,69,0.2);border-radius:5px;"><strong>🔑 Remember:</strong> Weathering → Erosion → Deposition is a THREE-STEP process! First rocks BREAK, then pieces MOVE, then they DROP in a new place.</div>'
                         },
                         {
-                            title: '🌬️ Concept: Agents of Change',
-                            content: 'Summarize how water, wind, ice, vegetation, and gravity change landforms (Scope Overview). Provide real-world examples for each agent.'
+                            title: '🌬️ Agents of Change: What Causes Weathering & Erosion?',
+                            content: '<div style="margin:8px 0;padding:15px;background:rgba(255,255,255,0.1);border-radius:10px;"><strong style="font-size:1.9rem;">🔬 Five forces that change Earth\'s surface:</strong></div><div class="reveal-item" onclick="revealAnswer(this)" style="margin-top:8px;"><span class="reveal-emoji">💧</span><span class="reveal-question">WATER (Most Powerful!)</span><span class="reveal-answer">Rivers carve canyons, waves create beaches, rain washes away soil, ice cracks rocks</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🌪️</span><span class="reveal-question">WIND (Desert Sculptor)</span><span class="reveal-answer">Sandblasts rocks smooth, builds sand dunes, creates arches and hoodoos</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🧊</span><span class="reveal-question">ICE (Slow but Mighty)</span><span class="reveal-answer">Glaciers carve valleys, freeze-thaw breaks rocks, carries huge boulders</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🌳</span><span class="reveal-question">LIVING THINGS (Life Changes Land)</span><span class="reveal-answer">Plant roots crack rocks, animals dig and move soil, humans farm and build</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">⬇️</span><span class="reveal-question">GRAVITY (Downhill Force)</span><span class="reveal-answer">Pulls everything downward - causes landslides, rockfalls, and mudslides</span></div><div style="margin-top:10px;padding:12px;background:rgba(255,193,7,0.2);border-radius:10px;"><strong style="font-size:1.8rem;">💡 Important:</strong> Multiple agents usually work TOGETHER!<br><strong>Example:</strong> Rain loosens soil → Gravity pulls it down → River carries it away → Deposits as delta<br>This is how the Grand Canyon formed!</div>'
                         },
                         {
-                            title: '🗂️ Guided Sort: Causes vs. Effects',
-                            content: 'Students drag cards into categories (weathering, erosion, deposition). Include prompts from Explore 4 “Agents of Weathering and Erosion”.'
+                            title: '⚡ Rapid vs. Slow Changes',
+                            content: '<div style="margin:8px 0;padding:15px;background:rgba(255,255,255,0.1);border-radius:10px;"><strong style="font-size:1.9rem;">⏰ Some changes are RAPID (fast)</strong><br><strong style="font-size:1.9rem;">🐌 Some changes are SLOW (gradual)</strong></div><div class="reveal-item" onclick="revealAnswer(this)" style="margin-top:8px;"><span class="reveal-emoji">⚡</span><span class="reveal-question">RAPID: Landslide</span><span class="reveal-answer">Hillside collapses in MINUTES after heavy rain</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🐌</span><span class="reveal-question">SLOW: Grand Canyon</span><span class="reveal-answer">Carved over 6 MILLION YEARS by the Colorado River</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">⚡</span><span class="reveal-question">RAPID: Flash Flood</span><span class="reveal-answer">Storm washes away beaches in HOURS</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🐌</span><span class="reveal-question">SLOW: Cave Formation</span><span class="reveal-answer">Water dissolves limestone over THOUSANDS of years</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">⚡</span><span class="reveal-question">RAPID: Hurricane Erosion</span><span class="reveal-answer">Waves erase 50 feet of beach in ONE NIGHT</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🐌</span><span class="reveal-question">SLOW: Mountain Weathering</span><span class="reveal-answer">Mountains wear down over MILLIONS of years</span></div><div style="margin-top:10px;padding:12px;background:rgba(220,53,69,0.2);border-radius:10px;"><strong>⚠️ Key Point:</strong> SLOW changes can create BIGGER results! The Grand Canyon is a MILE deep!</div><div style="margin-top:8px;padding:12px;background:rgba(40,167,69,0.2);border-radius:10px;"><strong>👥 TURN & TALK:</strong> What weathering or erosion have you seen in YOUR neighborhood? Fast or slow?</div>'
                         },
                         {
-                            title: '📈 Math Connection: Erosion Rates',
-                            content: 'Analyze a simple table showing slope angle vs. sediment moved (ties to Explore 3 “Rushing Water”). Students describe the pattern.'
+                            title: '📊 Math Connection: Erosion Rate',
+                            content: '<div style="margin:8px 0;padding:12px;background:rgba(255,255,255,0.1);border-radius:10px;"><strong style="font-size:1.8rem;">📈 Data Table: Rushing Water Experiment</strong><table style="width:100%;margin-top:8px;border-collapse:collapse;background:rgba(255,255,255,0.9);color:#333;border-radius:8px;overflow:hidden;"><tr style="background:#667eea;color:white;"><th style="padding:8px;border:2px solid white;font-size:1.6rem;">Slope Angle</th><th style="padding:8px;border:2px solid white;font-size:1.6rem;">Sediment Moved (grams)</th></tr><tr><td style="padding:6px;border:2px solid #ddd;text-align:center;font-size:1.5rem;">0° (Flat)</td><td style="padding:6px;border:2px solid #ddd;text-align:center;font-size:1.5rem;">2 grams</td></tr><tr style="background:#f8f9fa;"><td style="padding:6px;border:2px solid #ddd;text-align:center;font-size:1.5rem;">15° (Gentle)</td><td style="padding:6px;border:2px solid #ddd;text-align:center;font-size:1.5rem;">8 grams</td></tr><tr><td style="padding:6px;border:2px solid #ddd;text-align:center;font-size:1.5rem;">30° (Moderate)</td><td style="padding:6px;border:2px solid #ddd;text-align:center;font-size:1.5rem;">18 grams</td></tr><tr style="background:#f8f9fa;"><td style="padding:6px;border:2px solid #ddd;text-align:center;font-size:1.5rem;">45° (Steep)</td><td style="padding:6px;border:2px solid #ddd;text-align:center;font-size:1.5rem;">35 grams</td></tr></table></div><div class="interactive-question" style="margin-top:8px;margin-bottom:5px;">What patterns do you notice?</div><div class="reveal-item" onclick="revealAnswer(this)" style="margin-top:5px;"><span class="reveal-emoji">📈</span><span class="reveal-question">Pattern 1: As slope increases...</span><span class="reveal-answer">More sediment is moved! Steeper slopes = MORE erosion</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">⚡</span><span class="reveal-question">Pattern 2: Water speed</span><span class="reveal-answer">Water flows FASTER down steep slopes, giving it more energy to pick up and carry sediment</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🏔️</span><span class="reveal-question">Real-World Connection</span><span class="reveal-answer">This is why mountains erode faster than plains - steeper slopes mean faster water and more erosion!</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🧮</span><span class="reveal-question">Math Challenge</span><span class="reveal-answer">If we increased the slope to 60°, predict how much sediment would move. (Hint: The pattern shows doubling!)</span></div><div style="margin-top:8px;padding:10px;background:rgba(40,167,69,0.2);border-radius:5px;"><strong>💡 Engineering Connection:</strong> Civil engineers use this data to design roads, driveways, and drainage systems. They must prevent erosion by controlling slope angles and adding barriers!</div>'
                         },
                         {
-                            title: 'Digital Citizenship: Don’t Fall for Fake',
-                            content: 'Use the “Don’t Fall for Fake” activity to evaluate online erosion videos. Checklist: verify source, read comments critically, confirm with a trusted site.'
+                            title: '🗂️ Interactive: Sort the Processes',
+                            content: '<div style="margin:8px 0;padding:12px;background:rgba(255,255,255,0.1);border-radius:10px;"><strong style="font-size:1.8rem;">🎯 What process is each example?</strong></div><div class="reveal-item" onclick="revealAnswer(this)" style="margin-top:8px;"><span class="reveal-emoji">🪨</span><span class="reveal-question">Ice cracks a rock</span><span class="reveal-answer">WEATHERING - Breaks apart but stays in place</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🌿</span><span class="reveal-question">Tree roots break sidewalk</span><span class="reveal-answer">WEATHERING - Breaking but not moving yet</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🌊</span><span class="reveal-question">River carries sand downstream</span><span class="reveal-answer">EROSION - Sediment is being MOVED</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">💨</span><span class="reveal-question">Wind blows dust across field</span><span class="reveal-answer">EROSION - Soil is being TRANSPORTED</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🏖️</span><span class="reveal-question">Sand piles up forming delta</span><span class="reveal-answer">DEPOSITION - Sediment is DROPPED in new place</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🏜️</span><span class="reveal-question">Sand drops and builds dune</span><span class="reveal-answer">DEPOSITION - Wind slows and DEPOSITS sand</span></div><div style="margin-top:10px;padding:12px;background:rgba(255,193,7,0.2);border-radius:10px;"><strong>✍️ Journal Task:</strong> Create a 3-column chart: WEATHERING, EROSION, DEPOSITION. Write TWO examples of your own for each!</div>'
+                        },
+                        {
+                            title: '💻 Digital Citizenship: Share with Care',
+                            content: '<div style="margin:8px 0;padding:15px;background:rgba(255,255,255,0.1);border-radius:10px;text-align:center;"><strong style="font-size:1.9rem;">📸 Think Before You Share!</strong></div><div style="margin:8px 0;padding:15px;background:rgba(102,126,234,0.2);border-radius:10px;"><strong>💡 Key Idea:</strong> When using technology, ALWAYS think about what\'s safe to share online vs. what should stay private.</div><div class="reveal-item" onclick="revealAnswer(this)" style="margin-top:8px;"><span class="reveal-emoji">✅</span><span class="reveal-question">SAFE to Share</span><span class="reveal-answer">Science observations, rock photos, classroom experiments, your ideas about weathering & erosion</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">❌</span><span class="reveal-question">NOT Safe to Share</span><span class="reveal-answer">Your full name, home address, phone number, school location, photos showing faces without permission</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🤔</span><span class="reveal-question">Ask First!</span><span class="reveal-answer">Before posting photos of classmates or lab partners, ALWAYS ask their permission first!</span></div><div style="margin-top:10px;padding:12px;background:rgba(255,193,7,0.2);border-radius:10px;"><strong>🎯 Real-World Example:</strong> You can share a photo of your erosion experiment, but blur out name tags and faces!</div><div style="margin-top:8px;padding:12px;background:rgba(40,167,69,0.2);border-radius:10px;"><strong>✍️ Discussion:</strong> What are OTHER examples of things you should think carefully about before sharing online?</div>'
                         },
                         {
                             title: '🚪 Exit Ticket',
-                            content: '“Which agent of erosion changed the shoreline most in Explore 1? Explain using evidence.”'
+                            content: '<div style="margin:8px 0;padding:15px;background:rgba(255,255,255,0.1);border-radius:10px;text-align:center;"><strong style="font-size:1.9rem;">📝 Quick Check: Answer at your desk!</strong></div><div style="margin:8px 0;padding:15px;background:rgba(102,126,234,0.2);border-radius:10px;"><strong style="font-size:1.7rem;">1. What is the difference between WEATHERING and EROSION?</strong></div><div style="margin:8px 0;padding:15px;background:rgba(118,75,162,0.2);border-radius:10px;"><strong style="font-size:1.7rem;">2. Name TWO agents that cause weathering or erosion.</strong></div><div style="margin:8px 0;padding:15px;background:rgba(220,53,69,0.2);border-radius:10px;"><strong style="font-size:1.7rem;">3. Which happens FASTER: a landslide or the Grand Canyon forming? Why?</strong></div><div style="margin:8px 0;padding:15px;background:rgba(255,193,7,0.2);border-radius:10px;"><strong style="font-size:1.7rem;">4. VOCABULARY: What is DEPOSITION?</strong></div><div style="margin-top:12px;padding:12px;background:rgba(40,167,69,0.2);border-radius:10px;"><strong>🎉 Coming Up Next:</strong> Lesson 16 - Lab experiments with waves, wind, and slopes!</div>'
                         }
                     ]
                 },
@@ -1725,97 +1774,112 @@
                     title: 'Changing Land Investigation Lab',
                     slides: [
                         {
-                            title: '🧪 Lab Overview & Safety',
-                            content: 'Review safety: goggles on, trays stay flat, clean spills immediately, follow timing directions. Discuss lab roles (engineer, timer, recorder).' 
+                            title: '🧪 Warm-up: Lab Day!',
+                            content: '<div style="margin:8px 0;padding:12px;background:rgba(255,255,255,0.1);border-radius:10px;text-align:center;"><strong style="font-size:1.9rem;">🔬 Today: Test how forces change Earth\'s surface!</strong></div><div style="margin:8px 0;padding:12px;background:rgba(220,53,69,0.2);border-radius:8px;"><strong style="font-size:1.7rem;">⚠️ Safety Rules:</strong><br>• Goggles on at ALL times<br>• Keep water in trays<br>• Clean spills right away<br>• Stay at your station</div><div style="margin:8px 0;padding:12px;background:rgba(102,126,234,0.2);border-radius:8px;"><strong style="font-size:1.7rem;">👥 Team Roles (rotate each station):</strong><br><strong>🔧 Engineer:</strong> Builds & runs test<br><strong>⏱️ Timer:</strong> Tracks time<br><strong>📝 Recorder:</strong> Writes data<br><strong>🧹 Manager:</strong> Leads cleanup</div><div style="margin-top:8px;padding:10px;background:rgba(40,167,69,0.2);border-radius:5px;"><strong>💭 Prediction:</strong> Which will cause MORE erosion: waves, wind, or steep slopes? Write your guess!</div>'
                         },
                         {
-                            title: '🎯 Objectives & Vocabulary Focus',
-                            content: 'Today we will:\n• Measure the effects of waves, wind, and slope\n• Record data to support claims about erosion\n• Recommend ways to slow erosion\n\nVocabulary boost:',
+                            title: '🎯 Learning Objectives & Vocabulary',
+                            content: '<div style="margin:8px 0;padding:12px;background:rgba(102,126,234,0.2);border-radius:8px;line-height:1.8;"><strong style="font-size:1.8rem;">📋 Today We Will:</strong><br>• Test how waves, wind, and slope affect erosion<br>• Collect and record scientific data<br>• Analyze which factors cause fastest land changes<br>• Recommend ways to slow erosion</div>',
                             vocabulary: [
-                                { term: 'Slope', definition: 'Steepness of a surface' },
-                                { term: 'Variable', definition: 'Factor that can change in an investigation' },
-                                { term: 'Runoff', definition: 'Water that flows over land surfaces' }
+                                { term: 'Slope', definition: 'The steepness or angle of a surface' },
+                                { term: 'Variable', definition: 'A factor that changes in an experiment' },
+                                { term: 'Runoff', definition: 'Water that flows over land instead of soaking in' },
+                                { term: 'Rate', definition: 'How fast something happens' },
+                                { term: 'Evidence', definition: 'Scientific observations that support a claim' }
                             ]
                         },
                         {
-                            title: '🧰 Materials & Lab Sheets',
-                            content: 'Gather these before starting:\n• Station A (Waves): plastic trays, sand, small pebbles, water pitchers, timer, sponge\n• Station B (Processes): index cards, spray bottle, fan, scoops, colored chalk dust\n• Station C (Rushing Water): foil pan, graduated cylinders, plastic cups with drilled holes, protractors, measuring spoons\n• General: safety goggles (all students), towels, brooms/dustpans\n• 📄 Worksheets: Changing Land Lab Recording Sheet (one per group) + Station Checklists\nRemind students to write names on the worksheet before rotating.'
+                            title: '🌊 Station 1: Wave Erosion',
+                            content: '<strong>🌊 How do waves change a coastline?</strong>\n\n<div style="margin:20px 0;text-align:center;">\n<img src="images/Bundle2/Lesson 16/wave_station_setup.png" style="max-width:80%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.3);" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:30px;background:rgba(255,255,255,0.1);border-radius:15px;margin:20px auto;max-width:600px;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Wave Station Setup</div>\nShows tray with sand beach and water waves\n</div>\n</div>\n\n<div style="margin:15px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2rem;">📋 Procedure:</strong><br><br>\n<strong>1.</strong> Build a "beach" - pack sand to make a gentle slope in one end of tray<br>\n<strong>2.</strong> Pour water carefully into the other end (about 2 cm deep)<br>\n<strong>3.</strong> Use your hand to create 10 gentle waves toward the beach<br>\n<strong>4.</strong> Observe: What happens to the sand?<br>\n<strong>5.</strong> Create 10 MORE waves (stronger this time)<br>\n<strong>6.</strong> Measure how far the beach moved back\n</div>\n\n<div style="margin:15px 0;padding:20px;background:rgba(255,193,7,0.2);border-radius:10px;">\n<strong style="font-size:2rem;">📝 Record in Your Journal:</strong><br><br>\n• Draw "before" and "after" sketches<br>\n• How many cm did the beach erode?<br>\n• Where did the sand go?<br>\n• What would happen with BIGGER waves?\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(40,167,69,0.2);border-left:4px solid #28a745;border-radius:5px;">\n<strong>💡 Real World:</strong> This is exactly what happens on ocean coastlines during storms! Over time, waves reshape beaches and cliffs.\n</div>',
+                            image: 'images/Bundle2/Lesson 16/wave_station_setup.png',
+                            imageDescription: 'Tray with sand beach model and water for wave erosion testing'
                         },
                         {
-                            title: '🔬 Station Instructions',
-                            content: 'Provide step-by-step directions for:\n• Station A: Waves on the Beach (Explore 1)\n• Station B: Processes That Change Land (Explore 2 models)\n• Station C: Rushing Water slope test (Explore 3)\nStudents follow the instructions printed on each station card and log results in the Changing Land Lab Recording Sheet.'
+                            title: '💨 Station 2: Wind & Weathering',
+                            content: '<strong>💨 Can wind move Earth materials?</strong>\n\n<div style="margin:20px 0;text-align:center;">\n<img src="images/Bundle2/Lesson 16/wind_station_setup.png" style="max-width:80%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.3);" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:30px;background:rgba(255,255,255,0.1);border-radius:15px;margin:20px auto;max-width:600px;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Wind Station Setup</div>\nShows materials in trays with fan for wind simulation\n</div>\n</div>\n\n<div style="margin:15px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2rem;">📋 Procedure:</strong><br><br>\n<strong>Part A - Size Matters:</strong><br>\n1. Place three small piles in separate areas: fine sand, pebbles, larger rocks<br>\n2. Use fan on LOW setting - aim at each pile for 10 seconds<br>\n3. Observe: Which materials moved? Which stayed?<br>\n4. Try fan on HIGH - what changes?<br><br>\n<strong>Part B - Protection Test:</strong><br>\n1. Make two identical sand piles side by side<br>\n2. Place small "trees" (twigs) around ONE pile<br>\n3. Blow fan at both for 20 seconds<br>\n4. Compare: Which pile eroded more?\n</div>\n\n<div style="margin:15px 0;padding:20px;background:rgba(255,193,7,0.2);border-radius:10px;">\n<strong style="font-size:2rem;">📝 Record in Your Journal:</strong><br><br>\n• Which size particles moved easiest?<br>\n• How far did sand travel compared to pebbles?<br>\n• Did the "trees" protect the soil? How?<br>\n• Draw what the wind-blown area looks like\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(40,167,69,0.2);border-left:4px solid #28a745;border-radius:5px;">\n<strong>💡 Real World:</strong> Wind creates sand dunes and dust storms! Farmers plant trees as "windbreaks" to protect their soil, just like your model.\n</div>',
+                            image: 'images/Bundle2/Lesson 16/wind_station_setup.png',
+                            imageDescription: 'Materials in trays with fan for testing wind erosion'
                         },
                         {
-                            title: '📊 Data Table Template',
-                            content: '🗒️ Table Placeholder: Columns for Station, Variable Tested, Observation, Evidence of Change. Encourage drawing quick sketches of landforms before/after.\n\n📷 Expected file: erosion_data_table_template.png',
-                            image: 'images/Bundle2/Lesson 16/erosion_data_table_template.png'
+                            title: '🏔️ Station 3: Slope & Water Flow',
+                            content: '<strong>🏔️ Does slope steepness affect erosion?</strong>\n\n<div style="margin:20px 0;text-align:center;">\n<img src="images/Bundle2/Lesson 16/slope_station_setup.png" style="max-width:80%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.3);" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:30px;background:rgba(255,255,255,0.1);border-radius:15px;margin:20px auto;max-width:600px;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Slope Station Setup</div>\nShows elevated trays at different angles with collection cups\n</div>\n</div>\n\n<div style="margin:15px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2rem;">📋 Procedure:</strong><br><br>\n<strong>Test 1 - Gentle Slope (15°):</strong><br>\n1. Fill tray with loose soil/sand mix<br>\n2. Prop up one end with 1 book (gentle slope)<br>\n3. Place cup at bottom to catch sediment<br>\n4. Pour 200 mL water slowly from top<br>\n5. Measure sediment collected in cup<br><br>\n<strong>Test 2 - Steep Slope (45°):</strong><br>\n1. Refill tray with same amount of soil<br>\n2. Prop up with 3 books (steep slope)<br>\n3. Pour same amount of water<br>\n4. Measure sediment collected<br>\n5. Compare the results!\n</div>\n\n<div style="margin:15px 0;padding:20px;background:rgba(255,193,7,0.2);border-radius:10px;">\n<strong style="font-size:2rem;">📝 Record in Your Journal:</strong><br><br>\n<table style="width:100%;background:rgba(255,255,255,0.9);color:#333;border-radius:8px;border-collapse:collapse;">\n<tr style="background:#667eea;color:white;"><th style="padding:10px;">Slope Angle</th><th style="padding:10px;">Sediment (spoons)</th><th style="padding:10px;">Observations</th></tr>\n<tr><td style="padding:8px;border:2px solid #ddd;">15° (gentle)</td><td style="padding:8px;border:2px solid #ddd;">_______</td><td style="padding:8px;border:2px solid #ddd;">_____________</td></tr>\n<tr style="background:#f8f9fa;"><td style="padding:8px;border:2px solid #ddd;">45° (steep)</td><td style="padding:8px;border:2px solid #ddd;">_______</td><td style="padding:8px;border:2px solid #ddd;">_____________</td></tr>\n</table>\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(40,167,69,0.2);border-left:4px solid #28a745;border-radius:5px;">\n<strong>💡 Real World:</strong> Steep hillsides lose soil much faster than gentle slopes! This is why landslides happen on mountains after heavy rain.\n</div>',
+                            image: 'images/Bundle2/Lesson 16/slope_station_setup.png',
+                            imageDescription: 'Elevated trays at different angles with collection cups for slope testing'
                         },
                         {
-                            title: '🧠 Mid-Lab Check-in',
-                            content: 'Prompt: “Which station shows the fastest land change so far? What evidence supports your answer?” Have teams post sticky notes on a class chart.'
+                            title: '📊 Data Analysis: Comparing Our Results',
+                            content: '<strong>📈 Let\'s analyze what we discovered!</strong>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">Which station showed the FASTEST erosion?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Wave Station</span>\n    <span class="reveal-answer">Waves can move large amounts of sand quickly, especially with repeated action</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💨</span>\n    <span class="reveal-question">Wind Station</span>\n    <span class="reveal-answer">Wind moved small particles but struggled with larger materials</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏔️</span>\n    <span class="reveal-question">Slope Station</span>\n    <span class="reveal-answer">Steeper slopes = MUCH faster erosion and more sediment moved</span>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2.2rem;">🧮 Math Connection: Erosion Rate</strong><br><br>\n\nIf the gentle slope (15°) collected 2 spoons of sediment in 30 seconds, and the steep slope (45°) collected 8 spoons in 30 seconds...<br><br>\n\n<strong>Calculate the erosion RATE:</strong><br>\nGentle slope: 2 spoons ÷ 30 seconds = <strong>0.07 spoons per second</strong><br>\nSteep slope: 8 spoons ÷ 30 seconds = <strong>0.27 spoons per second</strong><br><br>\n\n<strong>💡 The steep slope erodes almost 4 times faster!</strong>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(102,126,234,0.2);border-radius:10px;">\n<strong style="font-size:2.2rem;">🤔 Critical Thinking Questions:</strong><br><br>\n\n1. <strong>Why did smaller particles move more easily than large rocks?</strong><br>\n<em>Hint: Think about weight and surface area!</em><br><br>\n\n2. <strong>How did "trees" (twigs) help prevent erosion?</strong><br>\n<em>Hint: What did their roots do?</em><br><br>\n\n3. <strong>Which real-world locations would erode fastest?</strong><br>\n<em>a) Flat desert with occasional rain</em><br>\n<em>b) Steep mountain during heavy storms</em><br>\n<em>c) Beach during hurricane season</em>\n</div>'
                         },
                         {
-                            title: 'Digital Citizenship: Share with Care (Photo Use)',
-                            content: 'Before posting lab photos, follow the “Share with Care” checklist: get permission, avoid personal info in background, add accurate captions.'
+                            title: '🛡️ Erosion Solutions: How Can We Slow It Down?',
+                            content: '<strong>🌍 Based on our tests, how can we protect Earth\'s surface?</strong>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">What are effective erosion prevention methods?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌳</span>\n    <span class="reveal-question">Plant Vegetation</span>\n    <span class="reveal-answer">Tree and plant roots anchor soil, slow water flow, and block wind - our "windbreak" test proved this!</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📐</span>\n    <span class="reveal-question">Create Terraces</span>\n    <span class="reveal-answer">Cut steep slopes into steps (terraces) to reduce angle and slow runoff</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🪨</span>\n    <span class="reveal-question">Add Rocks/Barriers</span>\n    <span class="reveal-answer">Place large rocks or barriers to break up wave action or water flow</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌾</span>\n    <span class="reveal-question">Use Mulch/Ground Cover</span>\n    <span class="reveal-answer">Cover bare soil with mulch, leaves, or low plants to protect from direct rain and wind</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏗️</span>\n    <span class="reveal-question">Build Retaining Walls</span>\n    <span class="reveal-answer">Strong walls hold soil in place on very steep areas</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💧</span>\n    <span class="reveal-question">Control Water Flow</span>\n    <span class="reveal-answer">Use drainage ditches to direct water away from vulnerable areas</span>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(40,167,69,0.2);border-radius:10px;">\n<strong style="font-size:2.2rem;">🏞️ Apply to Our Mining Mission:</strong><br><br>\nThe coal mine will be on a hillside near a river. Based on today\'s lab:<br><br>\n<strong>1. What erosion risks does this location face?</strong><br>\n• Steep slopes = rapid runoff during storms<br>\n• River nearby = potential flooding and sediment transport<br>\n• Bare soil from construction = no plant protection<br><br>\n<strong>2. What should the mining company do?</strong><br>\n• Plant trees and grass immediately after digging<br>\n• Build terraces on steep areas<br>\n• Create drainage systems to control water<br>\n• Use silt fences to catch sediment before it reaches the river\n</div>'
                         },
                         {
-                            title: '🚪 Exit Ticket',
-                            content: 'Complete a quick CER: Claim which factor (waves, wind, slope) changed land most, cite data, explain why.'
+                            title: '💻 Digital Citizenship: Share Lab Photos Safely',
+                            content: '<strong>📸 Sharing Science on Social Media!</strong>\n\n<div style="margin:15px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2.2rem;">📋 "Share with Care" Checklist</strong><br><br>\nBefore posting photos or videos of our lab:\n</div>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">What should we check before sharing?</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">✅</span>\n    <span class="reveal-question">Get Permission</span>\n    <span class="reveal-answer">Ask your teacher AND classmates if it\'s OK to post photos showing them</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🔍</span>\n    <span class="reveal-question">Check the Background</span>\n    <span class="reveal-answer">Make sure no personal info is visible (names on papers, school posters with addresses)</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📝</span>\n    <span class="reveal-question">Add Accurate Captions</span>\n    <span class="reveal-answer">Describe what the experiment tested - don\'t exaggerate or make fake claims</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🎯</span>\n    <span class="reveal-question">Share the Purpose</span>\n    <span class="reveal-answer">Explain what you learned, not just "cool pictures"</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">👥</span>\n    <span class="reveal-question">Tag Appropriately</span>\n    <span class="reveal-answer">Only tag people who gave permission to be in the photo</span>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(220,53,69,0.2);border-left:4px solid #dc3545;border-radius:5px;">\n<strong>⚠️ Never Share:</strong><br>\n• Close-ups of faces without permission<br>\n• School location details or addresses<br>\n• Failed experiments as "pranks" or "fails" - respect everyone\'s work!\n</div>\n\n<div style="margin-top:20px;padding:20px;background:rgba(40,167,69,0.2);border-radius:10px;">\n<strong>✨ Good Science Post Example:</strong><br><br>\n<em>"Today we tested how slope affects erosion! 🏔️💧 Steep hills (45°) eroded 4x faster than gentle slopes (15°). This explains why landslides happen on mountains! #4thGradeScience #ErosionLab"</em><br><br>\n✅ Describes the science<br>\n✅ Shares real data<br>\n✅ No personal information<br>\n✅ Educational and accurate\n</div>'
                         },
                         {
-                            title: '📊 Grading Rubric Reminder',
-                            content: 'Review scoring before collecting papers:\n• Procedure & Safety (10 pts): followed directions, used goggles, managed materials\n• Data & Evidence (10 pts): complete tables, sketches, measurements\n• Analysis & Reasoning (8 pts): CER quality, clear explanations\n• Collaboration & Cleanup (4 pts): roles fulfilled, station reset\nUse the “Bundle 2 - Lab Rubric.md” for detailed descriptors (Exceeds/Meets/Developing).' 
+                            title: '🚪 Exit Ticket: CER Challenge',
+                            content: '<strong>📝 Show what you learned today!</strong>\n\n<div style="margin:20px 0;padding:25px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2.2rem;">🎯 Your Task:</strong><br><br>\nWrite a complete CER (Claim-Evidence-Reasoning) answering this question:<br><br>\n<div style="font-size:2rem;padding:20px;background:rgba(102,126,234,0.3);border-radius:8px;margin:15px 0;text-align:center;">\n<strong>"Which factor causes land to change the FASTEST: waves, wind, or steep slopes?"</strong>\n</div>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(0,212,170,0.2);border-radius:10px;">\n<strong style="color:#00d4aa;font-size:2rem;">CLAIM:</strong><br>\n<span style="font-size:1.8rem;">State which factor you think causes fastest change</span><br><br>\n<em>Example starter: "I claim that __________ causes the fastest land change because..."</em>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,193,7,0.2);border-radius:10px;">\n<strong style="color:#ffc107;font-size:2rem;">EVIDENCE:</strong><br>\n<span style="font-size:1.8rem;">Use data from your lab stations</span><br><br>\n<em>Include specific observations:</em><br>\n• How much sediment moved?<br>\n• How long did it take?<br>\n• What did you measure or observe?<br>\n• Compare at least TWO stations\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,107,53,0.2);border-radius:10px;">\n<strong style="color:#ff6b35;font-size:2rem;">REASONING:</strong><br>\n<span style="font-size:1.8rem;">Explain WHY your evidence supports your claim</span><br><br>\n<em>Connect to science concepts:</em><br>\n• Why does steepness matter?<br>\n• How does force/energy relate to erosion rate?<br>\n• What makes one agent more powerful than others?\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(102,126,234,0.2);border-left:4px solid #667eea;border-radius:5px;">\n<strong>💡 Remember:</strong> Use complete sentences, scientific vocabulary, and be specific! Your CER should convince someone who wasn\'t in the lab today.\n</div>'
                         }
                     ]
                 },
                 'lesson17': {
-                    title: 'Plate Tectonics: Patterns of Earth’s Features',
+                    title: 'Plate Tectonics: Patterns of Earth\'s Features',
                     slides: [
                         {
-                            title: '🌍 Warm-up: Plate Pattern Hunt',
-                            content: '🖼️ Image Placeholder: World map showing mountain ranges, trenches, volcanoes.\nStudents mark where they see clusters of features. Which areas might be plate boundaries?\n\n📷 Expected file: plate_feature_map.png',
-                            image: 'images/Bundle2/Lesson 17/plate_feature_map.png'
+                            title: '🌍 Warm-up: Earth\'s Puzzle Pieces',
+                            content: '<strong>🗺️ Look at this world map - do you see a pattern?</strong>\n\n<div style="margin:20px 0;text-align:center;">\n<img src="images/Bundle2/Lesson 17/plate_boundaries_map.png" style="max-width:90%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.3);" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:30px;background:rgba(255,255,255,0.1);border-radius:15px;margin:20px auto;max-width:600px;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 World Plate Boundaries Map</div>\nShows tectonic plates, earthquake zones, volcanoes, and mountain ranges\n</div>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2rem;">🤔 Observe & Discuss:</strong><br><br>\n• Where do you see clusters of mountains? Mark them<br>\n• Where are most earthquakes located? Draw dots<br>\n• Where are most volcanoes? Draw triangles<br>\n• Do these features form random patterns or do they line up?\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(255,193,7,0.2);border-left:4px solid #ffc107;border-radius:5px;">\n<strong>🔥 Investigative Phenomenon:</strong><br>\n"Why are there MORE earthquakes and volcanoes in certain places on Earth?"<br><br>\nBy the end of this lesson, you\'ll be able to explain this pattern!\n</div>',
+                            image: 'images/Bundle2/Lesson 17/plate_boundaries_map.png',
+                            imageDescription: 'World map showing tectonic plates, earthquake zones, and volcano locations'
                         },
                         {
                             title: '🎯 Objectives & Vocabulary',
-                            content: 'We will:\n• Analyze maps to describe patterns of Earth\'s surface features\n• Model plate motion with a hands-on activity\n• Connect plate boundaries to natural hazards\n\nKey Vocabulary:',
+                            content: '<strong>📋 Today We Will:</strong>\n\n• Identify patterns in Earth\'s surface features using maps<br>\n• Understand what tectonic plates are and how they move<br>\n• Connect plate boundaries to earthquakes, volcanoes, and mountains<br>\n• Model plate interactions with hands-on materials\n\n<div style="margin-top:20px;"></div>',
                             vocabulary: [
-                                { term: 'Tectonic Plate', definition: 'Large section of Earth\'s crust that moves over the mantle' },
-                                { term: 'Boundary', definition: 'Where two plates meet' },
-                                { term: 'Trench', definition: 'Deep valley in the ocean floor' },
-                                { term: 'Mid-Ocean Ridge', definition: 'Underwater mountain chain formed by plate movement' },
-                                { term: 'Ring of Fire', definition: 'Zone of frequent earthquakes and volcanoes around the Pacific' }
+                                { term: 'Tectonic Plate', definition: 'A giant slab of Earth\'s crust that floats on the mantle and moves very slowly' },
+                                { term: 'Plate Boundary', definition: 'The edge where two tectonic plates meet - where most action happens!' },
+                                { term: 'Mid-Ocean Ridge', definition: 'An underwater mountain range formed where plates move apart' },
+                                { term: 'Trench', definition: 'A deep valley in the ocean floor where one plate dives under another' },
+                                { term: 'Ring of Fire', definition: 'A zone around the Pacific Ocean with many earthquakes and volcanoes' }
                             ]
                         },
                         {
-                            title: '🗺️ Explore: Patterns in Land',
-                            content: 'Use the Scope 3 Explore 1 map set. Students annotate where earthquakes, volcanoes, and mountains align with plate edges.'
+                            title: '🧩 What Are Tectonic Plates?',
+                            content: '<strong>🌍 Earth\'s surface is broken into giant pieces like a cracked eggshell!</strong>\n\n<div style="margin:20px 0;text-align:center;">\n<img src="images/Bundle2/Lesson 17/tectonic_plates_diagram.png" style="max-width:85%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.3);" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:30px;background:rgba(255,255,255,0.1);border-radius:15px;margin:20px auto;max-width:600px;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Major Tectonic Plates</div>\nShows all major plates including Pacific, North American, Eurasian, African, South American, Indo-Australian, Antarctic\n</div>\n</div>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">Key Facts About Tectonic Plates:</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌎</span>\n    <span class="reveal-question">How Many Plates?</span>\n    <span class="reveal-answer">There are about 15 major plates and many smaller ones covering Earth</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📏</span>\n    <span class="reveal-question">How Big?</span>\n    <span class="reveal-answer">Some plates are HUGE! The Pacific Plate covers most of the Pacific Ocean</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🐌</span>\n    <span class="reveal-question">How Fast Do They Move?</span>\n    <span class="reveal-answer">About 1-10 cm per year - slower than your fingernails grow! But over millions of years, continents move thousands of miles</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🔥</span>\n    <span class="reveal-question">Why Do They Move?</span>\n    <span class="reveal-answer">Hot rock in Earth\'s mantle flows in circles (convection), dragging the plates along like rafts</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💥</span>\n    <span class="reveal-question">What Happens at the Edges?</span>\n    <span class="reveal-answer">Plate boundaries are where all the action happens - earthquakes, volcanoes, and mountains form there!</span>\n</div>'
                         },
                         {
-                            title: '🍪 Model: Tectonic Plates',
-                            content: 'Provide directions for the graham cracker and marshmallow fluff model (Explore 2). Ask students to map which motions create mountains, trenches, or ridges.'
+                            title: '🔀 Three Types of Plate Boundaries',
+                            content: '<strong>⚡ Different plate movements create different landforms!</strong>\n\n<div style="margin:20px 0;padding:25px;background:rgba(102,126,234,0.2);border-radius:10px;">\n<strong style="font-size:2.2rem;">1️⃣ DIVERGENT Boundary (Moving Apart)</strong><br><br>\n<div style="display:flex;gap:30px;align-items:center;flex-wrap:wrap;">\n<div style="flex:1;min-width:300px;">\n<strong>What Happens:</strong><br>\nTwo plates pull away from each other<br><br>\n<strong>What Forms:</strong><br>\n• Mid-ocean ridges (underwater mountains)<br>\n• Rift valleys (on land)<br>\n• New crust is created<br><br>\n<strong>Example:</strong><br>\n🌊 Mid-Atlantic Ridge - Iceland is on this ridge!\n</div>\n<div style="flex:1;min-width:300px;text-align:center;">\n<div style="font-size:4rem;">← →</div>\n<div>Plates moving apart</div>\n</div>\n</div>\n</div>\n\n<div style="margin:20px 0;padding:25px;background:rgba(220,53,69,0.2);border-radius:10px;">\n<strong style="font-size:2.2rem;">2️⃣ CONVERGENT Boundary (Colliding)</strong><br><br>\n<div style="display:flex;gap:30px;align-items:center;flex-wrap:wrap;">\n<div style="flex:1;min-width:300px;">\n<strong>What Happens:</strong><br>\nTwo plates crash together<br><br>\n<strong>What Forms:</strong><br>\n• Tall mountains (when both plates fold up)<br>\n• Deep ocean trenches (when one dives under)<br>\n• Volcanoes (from melting rock)<br><br>\n<strong>Examples:</strong><br>\n🏔️ Himalayas (tallest mountains!)<br>\n🌋 Ring of Fire volcanoes<br>\n🕳️ Mariana Trench (deepest ocean spot)\n</div>\n<div style="flex:1;min-width:300px;text-align:center;">\n<div style="font-size:4rem;">→ ←</div>\n<div>Plates colliding</div>\n</div>\n</div>\n</div>\n\n<div style="margin:20px 0;padding:25px;background:rgba(40,167,69,0.2);border-radius:10px;">\n<strong style="font-size:2.2rem;">3️⃣ TRANSFORM Boundary (Sliding Past)</strong><br><br>\n<div style="display:flex;gap:30px;align-items:center;flex-wrap:wrap;">\n<div style="flex:1;min-width:300px;">\n<strong>What Happens:</strong><br>\nTwo plates slide sideways past each other<br><br>\n<strong>What Forms:</strong><br>\n• Fault lines<br>\n• LOTS of earthquakes<br>\n• No mountains or volcanoes<br><br>\n<strong>Example:</strong><br>\n🌁 San Andreas Fault in California\n</div>\n<div style="flex:1;min-width:300px;text-align:center;">\n<div style="font-size:4rem;">↑<br>↓</div>\n<div>Plates sliding past</div>\n</div>\n</div>\n</div>'
                         },
                         {
-                            title: '📊 Data Dive: Volcanoes Around the World',
-                            content: 'Use the Tuva dataset or simplified chart to highlight how patterns support the Investigative Phenomena “Why are there more earthquakes in certain places?”.'
+                            title: '🍪 Hands-On Model: Graham Cracker Plates',
+                            content: '<strong>🔬 Let\'s model plate boundaries with snacks!</strong>\n\n<div style="margin:20px 0;text-align:center;">\n<img src="images/Bundle2/Lesson 17/graham_cracker_model.png" style="max-width:80%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.3);" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:30px;background:rgba(255,255,255,0.1);border-radius:15px;margin:20px auto;max-width:600px;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Graham Cracker Plate Model</div>\nShows graham crackers on frosting "mantle" demonstrating plate movements\n</div>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2rem;">📋 Materials:</strong><br>\n• Paper plate (represents the mantle)<br>\n• Frosting or marshmallow fluff (represents semi-liquid mantle)<br>\n• Graham crackers (represent tectonic plates)<br>\n• Fruit snacks (represent volcanoes/mountains - optional)\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,193,7,0.2);border-radius:10px;">\n<strong style="font-size:2rem;">🧪 Experiment Time:</strong><br><br>\n\n<strong>Test 1: DIVERGENT (Pull Apart)</strong><br>\n1. Spread frosting on plate<br>\n2. Place two graham cracker halves close together<br>\n3. SLOWLY pull them apart<br>\n4. <strong>Observe:</strong> What happens to the frosting? (It rises up!)<br>\n5. <strong>Real World:</strong> This is how mid-ocean ridges form<br><br>\n\n<strong>Test 2: CONVERGENT (Push Together)</strong><br>\n1. Take two new graham crackers<br>\n2. SLOWLY push them together<br>\n3. <strong>Observe:</strong> One breaks or bends, one might slide under<br>\n4. <strong>Real World:</strong> This creates mountains and trenches<br><br>\n\n<strong>Test 3: TRANSFORM (Slide Past)</strong><br>\n1. Place two crackers side by side<br>\n2. Slide one forward, one backward<br>\n3. <strong>Observe:</strong> They grind and break along the edge<br>\n4. <strong>Real World:</strong> This causes earthquakes!\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(220,53,69,0.2);border-left:4px solid #dc3545;border-radius:5px;">\n<strong>⚠️ Important:</strong> The frosting represents the hot, flowing mantle rock. Real mantle isn\'t liquid - it\'s solid rock that flows VERY slowly like silly putty when heated!\n</div>'
                         },
                         {
-                            title: '🔄 Guided Practice: Boundary Scenarios',
-                            content: 'Present three scenarios (divergent, convergent, transform) and ask students to predict landforms and hazards.\n🖼️ Placeholder: Diagram showing arrows for each boundary type.\n\n📷 Expected file: boundary_scenarios_chart.png',
-                            image: 'images/Bundle2/Lesson 17/boundary_scenarios_chart.png'
+                            title: '🔥 The Ring of Fire: A Pattern Emerges',
+                            content: '<strong>🌋 Why do so many volcanoes surround the Pacific Ocean?</strong>\n\n<div style="margin:20px 0;text-align:center;">\n<img src="images/Bundle2/Lesson 17/ring_of_fire_map.png" style="max-width:90%;height:auto;border-radius:15px;box-shadow:0 6px 12px rgba(0,0,0,0.3);" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">\n<div style="display:none;padding:30px;background:rgba(255,255,255,0.1);border-radius:15px;margin:20px auto;max-width:600px;">\n<div style="font-size:1.8rem;margin-bottom:10px;">📷 Ring of Fire Map</div>\nShows Pacific Plate boundaries with volcano and earthquake markers\n</div>\n</div>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">Ring of Fire Facts:</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌋</span>\n    <span class="reveal-question">How Many Volcanoes?</span>\n    <span class="reveal-answer">About 75% of Earth\'s volcanoes are in the Ring of Fire - that\'s 450+ volcanoes!</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">How Many Earthquakes?</span>\n    <span class="reveal-answer">90% of the world\'s earthquakes happen here!</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🗺️</span>\n    <span class="reveal-question">Where Exactly?</span>\n    <span class="reveal-answer">It forms a horseshoe around the Pacific Ocean - touching Asia, Australia, Americas</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">💥</span>\n    <span class="reveal-question">Why Does It Exist?</span>\n    <span class="reveal-answer">The Pacific Plate is surrounded by CONVERGENT boundaries where plates collide, creating volcanoes and quakes</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏙️</span>\n    <span class="reveal-question">Countries Affected</span>\n    <span class="reveal-answer">Japan, Philippines, Indonesia, Chile, Peru, Alaska, California, New Zealand - millions live in this zone!</span>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,107,53,0.2);border-radius:10px;">\n<strong style="font-size:2.2rem;">🤔 Pattern Discovery:</strong><br><br>\n<strong>Question:</strong> "Why are there more earthquakes in certain places?"<br><br>\n<strong>Answer:</strong> Most earthquakes and volcanoes happen at PLATE BOUNDARIES! The Ring of Fire marks where the Pacific Plate meets other plates. When plates collide, pull apart, or grind past each other, energy is released as earthquakes. When plates collide and one dives under, it melts and creates volcanoes.\n</div>'
                         },
                         {
-                            title: 'Digital Citizenship: Don’t Fall for Fake (Hazard News)',
-                            content: 'Apply the “Don’t Fall for Fake” checklist when reading earthquake or volcano headlines. Verify with USGS or another reliable agency before sharing.'
+                            title: '🗺️ Map Analysis: Finding Plate Boundaries',
+                            content: '<strong>📊 Let\'s analyze real Earth data!</strong>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2.2rem;">🔍 Your Task:</strong><br><br>\nLook at a world map showing earthquake locations. Mark these famous plate boundary zones:\n</div>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">Famous Plate Boundaries:</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🏔️</span>\n    <span class="reveal-question">Himalayas</span>\n    <span class="reveal-answer"><strong>Type:</strong> Convergent | <strong>Plates:</strong> Indian & Eurasian | <strong>Result:</strong> Tallest mountains on Earth (Mount Everest 8,849m!)</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌁</span>\n    <span class="reveal-question">San Andreas Fault</span>\n    <span class="reveal-answer"><strong>Type:</strong> Transform | <strong>Plates:</strong> Pacific & North American | <strong>Result:</strong> Frequent earthquakes in California</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Mid-Atlantic Ridge</span>\n    <span class="reveal-answer"><strong>Type:</strong> Divergent | <strong>Plates:</strong> North American & Eurasian | <strong>Result:</strong> Underwater mountain range, Iceland formed here</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🗻</span>\n    <span class="reveal-question">Japan Trench</span>\n    <span class="reveal-answer"><strong>Type:</strong> Convergent | <strong>Plates:</strong> Pacific diving under Eurasian | <strong>Result:</strong> Deep trench, many volcanoes, strong earthquakes</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⛰️</span>\n    <span class="reveal-question">Andes Mountains</span>\n    <span class="reveal-answer"><strong>Type:</strong> Convergent | <strong>Plates:</strong> Nazca diving under South American | <strong>Result:</strong> Long mountain range with volcanoes</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌴</span>\n    <span class="reveal-question">East African Rift</span>\n    <span class="reveal-answer"><strong>Type:</strong> Divergent | <strong>Plates:</strong> African Plate splitting | <strong>Result:</strong> Rift valley forming - Africa may split into two continents in millions of years!</span>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(40,167,69,0.2);border-radius:10px;">\n<strong style="font-size:2.2rem;">💡 Math Connection:</strong><br><br>\nIf the Pacific Plate moves 10 cm per year toward Japan:<br><br>\n<strong>How much has it moved in your lifetime?</strong><br>\nIf you\'re 10 years old: 10 cm/year × 10 years = <strong>100 cm = 1 meter!</strong><br><br>\n<strong>How much will it move in 1 million years?</strong><br>\n10 cm × 1,000,000 years = 10,000,000 cm = <strong>100 kilometers!</strong><br><br>\n<strong>That\'s why continents that were once together are now far apart!</strong>\n</div>'
                         },
                         {
-                            title: '🚪 Exit Ticket',
-                            content: 'Label three regions on the map (e.g., Himalayas, San Andreas, Mid-Atlantic Ridge) and describe the boundary type and resulting landform/hazard.'
+                            title: '🏞️ How This Affects Our Mining Mission',
+                            content: '<strong>⛏️ What does plate tectonics mean for our coal mine?</strong>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2.2rem;">🎯 Mission Connection:</strong><br><br>\nOur coal mine will be built near a plate boundary. We need to understand the risks!\n</div>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">Questions to Consider:</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">⚡</span>\n    <span class="reveal-question">Earthquake Risk</span>\n    <span class="reveal-answer">If the mine is near a boundary, earthquakes could damage buildings and cause tunnel collapses. We need earthquake-resistant structures!</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌋</span>\n    <span class="reveal-question">Volcanic Hazards</span>\n    <span class="reveal-answer">Convergent boundaries have volcanoes. Ash, lava flows, and volcanic gases could threaten workers and equipment</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🌊</span>\n    <span class="reveal-question">Tsunami Danger</span>\n    <span class="reveal-answer">Underwater earthquakes near plate boundaries can trigger tsunamis. If the mine is coastal, we need evacuation plans!</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📐</span>\n    <span class="reveal-question">Land Movement</span>\n    <span class="reveal-answer">Slow plate movement can crack roads, pipelines, and foundations over time</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🛡️</span>\n    <span class="reveal-question">What Can We Do?</span>\n    <span class="reveal-answer">• Build with flexible, earthquake-proof designs<br>• Install early warning systems<br>• Train workers for emergency evacuations<br>• Choose locations away from active fault lines when possible<br>• Have backup escape routes from underground</span>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(220,53,69,0.2);border-left:4px solid #dc3545;border-radius:5px;">\n<strong>⚠️ Safety First:</strong> Understanding plate boundaries helps us prepare! Companies that ignore geology put workers at risk. Our recruitment ad MUST address earthquake and volcano safety!\n</div>'
+                        },
+                        {
+                            title: '💻 Digital Citizenship: Don\'t Fall for Fake Earthquake News',
+                            content: '<strong>📰 How to spot FALSE earthquake and volcano news online!</strong>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2.2rem;">🚨 Why It Matters:</strong><br><br>\nFake earthquake "predictions" and exaggerated volcano warnings spread panic! Scientists CANNOT predict exactly when earthquakes will happen, despite what clickbait says.\n</div>\n\n<div class="interactive-question" style="margin-top:15px;margin-bottom:10px;">Don\'t Fall for Fake - Checklist for Earthquake/Volcano News:</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🔍</span>\n    <span class="reveal-question">Check the Source</span>\n    <span class="reveal-answer"><strong>Reliable:</strong> USGS (U.S. Geological Survey), university geology departments, official weather services<br><strong>NOT Reliable:</strong> Random blogs, social media posts without sources, "psychic predictions"</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📅</span>\n    <span class="reveal-question">Check the Date</span>\n    <span class="reveal-answer">Old earthquake news gets reshared as "breaking news!" Always check if it happened recently or years ago</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🎯</span>\n    <span class="reveal-question">Beware of "Predictions"</span>\n    <span class="reveal-answer">Real scientists give PROBABILITIES, not exact predictions. If someone says "earthquake WILL happen Tuesday at 3pm" - it\'s FAKE</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">📊</span>\n    <span class="reveal-question">Look for Data</span>\n    <span class="reveal-answer">Real reports include: magnitude, depth, location coordinates, time. Fake ones use vague dramatic language</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🖼️</span>\n    <span class="reveal-question">Verify Photos/Videos</span>\n    <span class="reveal-answer">Use reverse image search! Fake news often uses old disaster photos or CGI effects</span>\n</div>\n<div class="reveal-item" onclick="revealAnswer(this)">\n    <span class="reveal-emoji">🚫</span>\n    <span class="reveal-question">Watch for Clickbait</span>\n    <span class="reveal-answer">Headlines like "MEGAQUAKE IN 3 DAYS!" or "YELLOWSTONE WILL EXPLODE TOMORROW!" are designed for clicks, not facts</span>\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(40,167,69,0.2);border-radius:10px;">\n<strong style="font-size:2rem;">✅ Example of GOOD vs BAD Headlines:</strong><br><br>\n\n<div style="background:rgba(40,167,69,0.4);padding:15px;border-radius:8px;margin:10px 0;">\n<strong style="color:#28a745;">✓ GOOD:</strong><br>\n"Magnitude 5.2 Earthquake Recorded Near Los Angeles - USGS Reports No Major Damage"<br>\n<em>Why good: Specific magnitude, source cited, factual tone</em>\n</div>\n\n<div style="background:rgba(220,53,69,0.4);padding:15px;border-radius:8px;margin:10px 0;">\n<strong style="color:#dc3545;">✗ BAD:</strong><br>\n"THE BIG ONE IS COMING!!! 9.9 Earthquake Will DESTROY California Next Week!!!"<br>\n<em>Why bad: No source, impossible prediction, ALL CAPS, exaggerated magnitude</em>\n</div>\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(255,193,7,0.2);border-left:4px solid #ffc107;border-radius:5px;">\n<strong>🎯 Your Task:</strong> If you see earthquake/volcano news this week, practice using this checklist! Share ONLY if it passes ALL checks.\n</div>'
+                        },
+                        {
+                            title: '🚪 Exit Ticket: Map Your Understanding',
+                            content: '<strong>📝 Show what you learned about plate tectonics!</strong>\n\n<div style="margin:20px 0;padding:25px;background:rgba(255,255,255,0.1);border-radius:10px;">\n<strong style="font-size:2.2rem;">🎯 Your Task:</strong><br><br>\nDraw a simple world map in your science journal. Mark and label THREE of these features:\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(102,126,234,0.2);border-radius:10px;">\n<strong style="font-size:2rem;">Required Information for Each:</strong><br><br>\n\n1. <strong>Location Name</strong> (Example: Himalayas, San Andreas Fault, Ring of Fire)<br><br>\n\n2. <strong>Boundary Type</strong><br>\n• Divergent (moving apart) ← →<br>\n• Convergent (colliding) → ←<br>\n• Transform (sliding) ↑↓<br><br>\n\n3. <strong>What Forms There</strong><br>\n• Mountains<br>\n• Volcanoes<br>\n• Ocean trenches<br>\n• Earthquakes<br>\n• Mid-ocean ridges<br><br>\n\n4. <strong>Why It Happens</strong><br>\nBriefly explain the plate motion causing this feature\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(0,212,170,0.2);border-radius:10px;">\n<strong style="font-size:2rem;">✨ Example Entry:</strong><br><br>\n<strong>1. Location:</strong> Himalayas (between India and China)<br>\n<strong>2. Boundary Type:</strong> Convergent → ←<br>\n<strong>3. What Forms:</strong> Earth\'s tallest mountains (Mount Everest)<br>\n<strong>4. Why:</strong> The Indian Plate is crashing into the Eurasian Plate, pushing rock upward to create mountains. This has been happening for 50 million years!\n</div>\n\n<div style="margin:20px 0;padding:20px;background:rgba(255,193,7,0.2);border-radius:10px;">\n<strong style="font-size:2rem;">🌟 Bonus Challenge (+5 points):</strong><br><br>\nAnswer this question: <em>"Why do scientists say that California will eventually be next to Alaska?"</em><br><br>\n<strong>Hint:</strong> Think about the San Andreas Fault type and direction of plate movement!\n</div>\n\n<div style="margin-top:15px;padding:15px;background:rgba(40,167,69,0.2);border-left:4px solid #28a745;border-radius:5px;">\n<strong>🎉 Coming Up Next:</strong> In Lesson 18, we\'ll dive DEEP inside Earth to see what makes plates move! Get ready to learn about convection and Earth\'s layers!\n</div>'
                         }
                     ]
                 },
                 'lesson18': {
-                    title: 'Plate Tectonics & Earth’s Interior',
+                    title: 'Plate Tectonics & Earth\'s Interior',
                     slides: [
                         {
                             title: '🌅 Warm-up: Interior Clues',
@@ -2988,7 +3052,7 @@
                         <div class="vocab-card" onclick="flipCard(this)">
                             <div class="card-inner">
                                 <div class="card-front">${item.term}</div>
-                                <div class="card-back"><span style="text-decoration: underline; display: inline;">${item.term}</span>: <span style="display: inline;">${item.definition}</span></div>
+                                <div class="card-back"><div><strong>${item.term}:</strong> ${item.definition}</div></div>
                             </div>
                         </div>
                     `;
