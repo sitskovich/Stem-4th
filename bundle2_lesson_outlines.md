@@ -104,14 +104,15 @@ Each lesson outline lists required slide beats: warm-up, objectives/vocabulary, 
 - Digital Citizenship: Documenting team decisions respectfully (It’s Cool to Be Kind) – align with collaboration.
 - Exit Ticket: Students submit quick self-evaluation + one improvement idea.
 
-## Lesson 23 – Bundle Mission Workshop & Assessment Prep
-- Warm-up: Revisit anchoring phenomena/misson prompt `bundle2_guide.txt L41-L109`.
-- Objectives: Synthesize evidence from all scopes to support mining ad pitch.
-- Concept Slide: Recap key findings from each scope (Rock Patterns, Changing Land, Plate Tectonics, Resources, Natural Processes).
-- Assessment Prep: Provide review questions drawn from Evaluate sections (CER prompts) for each scope.
-- Mission Planning Slide: Outline ad storyboard, include checklists for addressing safety, environmental impact, resource management.
-- Digital Citizenship: Reinforce responsible persuasive messaging and citing evidence.
-- Exit Ticket: Students submit ad outline + evidence list.
+## Lesson 23 – Bundle 2 Review: "The Earth Science Games"
+- Warm-up: "Pictionary" Relay for key vocabulary terms.
+- Objectives: Review Lessons 13-22 vocabulary, core concepts, and mission connections via interactive games.
+- Game 1: "Memory Match" (Vocabulary Flip Cards) focusing on definitions (Weathering, Erosion, Plates).
+- Game 2: "Four Corners" (Standard review) for multiple-choice concept questions.
+- Game 3: "Charades/Hot Potato" for acting out processes (e.g., Tsunami, Landslide).
+- Game 4: "Mission Jeopardy" team challenge (Categories: Changing Land, Shaky Ground, Resources, Hazards).
+- Mission Debrief Discussion: Connection to Mining Mission (Ring of Fire risks, Resource conservation).
+- Assessment Prep: Reminders for Lesson 24 Test.
 
 ## Lesson 24 – Final Project: Earth Surface & Resources Showcase
 - Warm-up: Peer feedback protocol for final ads.
