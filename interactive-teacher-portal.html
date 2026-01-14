@@ -4779,7 +4779,7 @@
                         },
                         {
                             title: '🏃 Game 2: Four Corners (Multiple Choice)',
-                            content: 'Students: Move to the corner (A, B, C, D) that matches the correct answer!<div id="four-corners-container-b3" style="width:100%; display:flex; flex-direction:column; align-items:center;"></div>'
+                            content: '<strong>Move to the corner (A, B, C, D) that matches the correct answer!</strong><div style="text-align:center;margin:15px 0;"><button onclick="window.initFourCornersB3()" style="background:#ffc107;color:#333;border:none;padding:10px 20px;border-radius:20px;font-size:1.2rem;cursor:pointer;font-weight:bold;box-shadow:0 4px 6px rgba(0,0,0,0.1);">▶️ Start/Restart Game</button></div><div id="four-corners-container-b3" style="background:rgba(255,255,255,0.1);padding:20px;border-radius:15px;min-height:300px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;"><p>Click Start to begin!</p></div>'
                         },
                         {
                             title: '🎭 Game 3: Charades (Active Review)',
@@ -4787,7 +4787,7 @@
                         },
                         {
                             title: '🏆 Game 4: Mission Jeopardy',
-                            content: 'The final showdown! Click a category and value to play.<div style="text-align:center;margin-bottom:10px;"><span id="jeopardy-score-b3" style="font-size:1.5rem;font-weight:bold;background:rgba(0,0,0,0.2);padding:5px 15px;border-radius:10px;">Score: 0</span> <button onclick="window.initJeopardyB3()" style="margin-left:15px;background:#dc3545;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;">Reset Game</button></div><div id="jeopardy-grid-game-b3" class="jeopardy-grid"></div><div id="jeopardy-modal-game-b3" class="jeopardy-modal"><div class="jeopardy-modal-content"><span class="close-modal" onclick="document.getElementById(\'jeopardy-modal-game-b3\').style.display=\'none\'">×</span><div id="jeopardy-question-b3"></div><div id="jeopardy-answer-b3" style="display:none;margin-top:20px;color:#28a745;font-weight:bold;font-size:1.5rem;"></div><button id="jeop-reveal-btn-b3" style="margin-top:20px;padding:10px 20px;background:#ffc107;border:none;border-radius:5px;cursor:pointer;font-size:1.2rem;">Show Answer</button></div></div>'
+                            content: 'Pick a category and point value!<div style="text-align:center;margin-bottom:10px;"><span id="jeopardy-score-b3" style="font-size:1.5rem;font-weight:bold;background:rgba(0,0,0,0.2);padding:5px 15px;border-radius:10px;">Score: 0</span> <button onclick="window.initJeopardyB3()" style="margin-left:15px;background:#dc3545;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;">Start Game</button></div><div id="jeopardy-grid-game-b3" class="jeopardy-grid"></div><div id="jeopardy-modal-game-b3" class="jeopardy-modal"><div class="jeopardy-modal-content"><span class="close-modal" onclick="document.getElementById(\'jeopardy-modal-game-b3\').style.display=\'none\'">×</span><div id="jeopardy-question-b3"></div><div id="jeopardy-answer-b3" style="display:none;margin-top:20px;color:#28a745;font-weight:bold;font-size:1.5rem;"></div><button id="jeop-reveal-btn-b3" style="margin-top:20px;padding:10px 20px;background:#ffc107;border:none;border-radius:5px;cursor:pointer;font-size:1.2rem;">Show Answer</button></div></div>'
                         }
                     ]
                 },
@@ -6792,7 +6792,12 @@
         }
 
         var fcIndexB3 = 0;
-        window.initFourCornersB3 = function () { fcIndexB3 = 0; renderFcQuestionB3(); };
+        window.initFourCornersB3 = function () {
+            fcIndexB3 = 0;
+            var container = document.getElementById('four-corners-container-b3');
+            if (container) container.innerHTML = '';
+            renderFcQuestionB3();
+        };
         function renderFcQuestionB3() {
             var container = document.getElementById('four-corners-container-b3');
             if (!container) return;
@@ -6805,10 +6810,10 @@
             html += '<div style="grid-template-columns:1fr 1fr; display:grid; gap:20px; width:100%; max-width:800px;">';
             ['A', 'B', 'C', 'D'].forEach(l => {
                 let colors = { A: '#667eea', B: '#28a745', C: '#ffc107', D: '#dc3545' };
-                html += `<div id="fc-b3-${l}" style="background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;font-size:1.5rem;border:2px solid ${colors[l]};"><strong>${l})</strong> ${curr.options[l]}</div>`;
+                html += `<div id="fc-b3-${l}" style="background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;font-size:1.5rem;border:2px solid ${colors[l]};box-shadow: 0 4px 6px rgba(0,0,0,0.1);"><strong>${l})</strong> ${curr.options[l]}</div>`;
             });
-            html += '</div><div style="margin-top:25px;"><button id="fc-b3-rev" onclick="revealFcAnswerB3()" style="padding:10px 25px;background:#17a2b8;color:white;border-radius:10px;cursor:pointer;">Reveal Answer</button>';
-            html += '<button id="fc-b3-next" onclick="fcIndexB3++;renderFcQuestionB3()" style="display:none;padding:10px 25px;background:#007bff;color:white;border-radius:10px;cursor:pointer;margin-left:10px;">Next Question</button></div>';
+            html += '</div><div style="margin-top:25px;"><button id="fc-b3-rev" onclick="revealFcAnswerB3()" style="padding:10px 25px;background:#17a2b8;color:white;border-radius:10px;cursor:pointer;font-weight:bold;">Reveal Answer</button>';
+            html += '<button id="fc-b3-next" onclick="fcIndexB3++;renderFcQuestionB3()" style="display:none;padding:10px 25px;background:#007bff;color:white;border-radius:10px;cursor:pointer;margin-left:10px;font-weight:bold;">Next Question</button></div>';
             container.innerHTML = html;
         }
         function revealFcAnswerB3() {
@@ -6909,8 +6914,14 @@
                 for (let c = 0; c < 5; c++) {
                     const q = jeopQuestionsB3[c][r];
                     const card = document.createElement('div');
-                    card.className = 'q-card';
-                    card.innerText = q.v;
+                    card.className = 'q-card mem-card';
+                    card.style.height = '100px';
+                    card.innerHTML = `
+                        <div class="mem-inner">
+                            <div class="mem-front">${q.v}</div>
+                            <div class="mem-back" style="font-size:0.7rem;overflow:hidden;background:#764ba2;color:white;border:none;">QUESTION</div>
+                        </div>
+                    `;
                     card.onclick = function () { window.openJeopardyQuestionB3(c, r, this); };
                     grid.appendChild(card);
                 }
@@ -6921,7 +6932,15 @@
             if (card.classList.contains('disabled')) return;
             const q = jeopQuestionsB3[catIdx][rowIdx];
             let modal = document.getElementById('jeopardy-modal-game-b3');
-            if (!modal) return; // Should be in the slide content
+            if (!modal) return;
+
+            // Move to body to avoid clipping
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+
+            // Trigger Flip
+            card.classList.add('flipped');
 
             const qEl = document.getElementById('jeopardy-question-b3');
             const aEl = document.getElementById('jeopardy-answer-b3');
@@ -6933,7 +6952,10 @@
             aEl.innerHTML = q.a;
             aEl.style.display = 'none';
             revBtn.style.display = 'inline-block';
-            modal.style.display = 'flex';
+
+            setTimeout(() => {
+                modal.style.display = 'flex';
+            }, 300);
 
             revBtn.onclick = function () {
                 aEl.style.display = 'block';
@@ -6941,8 +6963,11 @@
                 jeopScoreB3 += q.v;
                 const scoreEl = document.getElementById('jeopardy-score-b3');
                 if (scoreEl) scoreEl.innerText = 'Score: ' + jeopScoreB3;
+
+                // Finalize Card State
                 card.classList.add('disabled');
-                card.innerText = '';
+                const inner = card.querySelector('.mem-inner');
+                if (inner) inner.style.opacity = '0.3';
             };
         };
 
