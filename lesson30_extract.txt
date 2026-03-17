@@ -1,0 +1,69 @@
+'lesson30': {
+                    title: 'Light and Optics',
+                    slides: [
+                        {
+                            title: '🌅 Warm-up: The Mirror Mystery',
+                            content: '<div class="journal-box"><strong>Stand in front of a mirror and touch your right ear. Which ear does your reflection touch?</strong><br><br>📓 <strong>Journal Task:</strong> Answer these:<ol style="line-height:1.8; margin-top:10px;"><li>Why is the image flipped? Is the light "bouncing" or "bending"?</li><li>Have you ever noticed that "AMBULANCE" is written backwards on the front of the truck? Why do they do that?</li></ol></div>'
+                        },
+                        {
+                            title: '🎯 Objectives & Vocabulary',
+                            content: '<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Explain how <strong>Reflection</strong> and <strong>Refraction</strong> change the path of light.</li><li>Categorize objects as <strong>Opaque</strong>, <strong>Translucent</strong>, or <strong>Transparent</strong>.</li><li>Explain why we see <strong>Colors</strong> based on absorption and reflection.</li><li>Connect light speed to real-world phenomena (Lightning/Thunder).</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#ffc107; background:rgba(255,193,7,0.15);"><strong>🛰️ Mission Context:</strong> On the Moon, we use gold-coated mirrors to reflect harmful radiation away from our base. If the light isn\'t controlled, the heat will destroy our systems!</div>',
+                            vocabulary: [
+                                { term: 'Refraction', definition: 'The bending of a wave as it enters a new medium at an angle.' },
+                                { term: 'Reflection', definition: 'The bouncing back of light when it hits a surface it cannot go through.' },
+                                { term: 'Opaque', definition: 'Material that does not allow any light to pass through.' },
+                                { term: 'Transparent', definition: 'Material that allows light to pass through clearly.' },
+                                { term: 'Translucent', definition: 'Material that allows some light to pass through, but scatters it.' }
+                            ]
+                        },
+                        {
+                            title: '📜 The Window to the Invisible',
+                            content: '<div style="line-height:1.7;">In the 1670s, Antonie van Leeuwenhoek used <strong>Refraction</strong> to see a hidden world.</div><div class="journal-box">He realized that a tiny, perfectly curved sphere of glass could bend light so much that it magnified small things 270 times! He was the first human to see bacteria. He called them "animalcules." His curiosity changed medicine forever!</div>'
+                        },
+                        {
+                            title: '🌈 The Prism Discovery',
+                            content: '<div style="line-height:1.7;">White light looks plain, but it is hiding a secret!</div><img src="images/Bundle3/lens_refraction_diagram_1768923963160.png" style="width:60\%; display:block; margin:20px auto; border-radius:12px; border:2px solid #ffbc00;"><div class="journal-box" style="background:rgba(255,193,7,0.1); border-left-color:#ffbc00;">When light enters glass, different colors bend at different angles. This <strong>Refraction</strong> separates white light into a rainbow!</div>'
+                        },
+                        {
+                            title: '✨ Specular vs. Diffuse Reflection',
+                            content: '<div style="line-height:1.7;">Why is a mirror shiny but a piece of paper isn\'t?</div><div class="journal-box"><strong>Specular:</strong> Light bounces off a <em>perfectly</em> smooth surface at the same angle. (Mirror)<br><br><strong>Diffuse:</strong> Light hits a rough surface and bounces in 1,000 different directions. (Paper)</div>'
+                        },
+                        {
+                            title: '🚀 Light Speed Math: Interplanetary Lag',
+                            content: '<div style="line-height:1.7;">Light is the fastest thing in the universe, but space is BIG.</div><table style="width:100\%; border-collapse: collapse; margin-top:15px; font-size:1.8rem;"><tr style="background:rgba(255,193,7,0.15);"><th style="padding:15px; border:1px solid #444;">Path</th><th style="padding:15px; border:1px solid #444;">Time for Light</th></tr><tr><td style="padding:15px; border:1px solid #444;">Earth to Moon</td><td style="padding:15px; border:1px solid #444;">1.3 Seconds</td></tr><tr style="background:rgba(255,255,255,0.05);"><td style="padding:15px; border:1px solid #444;">Earth to Mars</td><td style="padding:15px; border:1px solid #444;">3 - 22 Minutes</td></tr><tr><td style="padding:15px; border:1px solid #444;">Earth to Sun</td><td style="padding:15px; border:1px solid #444;">8 Minutes 20 Seconds</td></tr></table>'
+                        },
+                        {
+                            title: '🔬 STEM Interactive: Light Refraction Lab',
+                            content: '<div style="margin-bottom:15px;"><strong>Prism Lab:</strong> Adjust the prism to see how white light separates into colors!</div><div id="threejs-container-l30" style="width:100\%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initLightSim()">🛠️ Debug</button><button class="btn-drop" onclick="launchLight()">🔦 Shine Light</button><button class="btn-pause" onclick="pauseLight()">⏸️ Pause</button><button class="btn-slow" onclick="slowMoLight()">🐢 Slow Mo</button><button class="btn-reset" onclick="resetLight()">🔄 Reset</button></div>'
+                        },
+                        {
+                            title: '🤔 What If Scenario: No Atmosphere?',
+                            content: '<div class="what-if-box"><strong>What If:</strong> Earth had no atmosphere (air)?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 The Black Sky...</div><div class="reveal-content">The sky is blue because air molecules scatter blue light. Without air, the sky would be pitch black even during the day—just like it is on the Moon! You would see stars next to the Sun.</div></div>'
+                        },
+                        {
+                            title: '🧮 Math Moment: The Speed King',
+                            content: '<div style="line-height:1.7;"><strong>300,000 Kilometers per second!</strong></div><div class="journal-box" style="background:rgba(255,193,7,0.1); border-left-color:#ffbc00;">Light is about 1,000,000 times faster than sound. This is why you see lightning before you hear thunder.</div><div class="journal-box">📓 <strong>Fast Fact:</strong> Light from the Sun takes about 8 minutes and 20 seconds to reach Earth. If the Sun vanished right now, we wouldn\'t know for 8 minutes!</div>'
+                        },
+                        {
+                            title: '🛰️ Mission Link: Lunar Mirrors',
+                            content: '<div style="line-height:1.7;">Apollo astronauts left mirrors on the Moon!</div><img src="images/Bundle3/apollo_mirror_moon_1768923590355.png" style="width:60\%; display:block; margin:20px auto; border-radius:12px; border:2px solid #00d4aa;"><div class="journal-box" style="border-left-color:#00d4aa; background:rgba(0,212,170,0.15);">By timing how long it takes for a laser to bounce back from these mirrors, we can measure the distance to the Moon within 1 millimeter! It turns out the Moon is drifting away by 1.5 inches per year.</div>'
+                        },
+                        {
+                            title: '📊 Organizer: Color Absorption',
+                            content: '<div style="margin-bottom:15px;">Why is a Red Apple red?</div><table style="width:100\%; border-collapse: collapse; font-size:1.8rem;"><tr style="background:rgba(255,255,255,0.1);"><th style="padding:15px; border:1px solid #444;">Object</th><th style="padding:15px; border:1px solid #444;">Reflects</th><th style="padding:15px; border:1px solid #444;">Absorbs</th></tr><tr><td style="padding:15px; border:1px solid #444;">Red Apple</td><td style="padding:15px; border:1px solid #444; color:#ff4444;">Red</td><td style="padding:15px; border:1px solid #444;">O, Y, G, B, I, V</td></tr><tr style="background:rgba(255,255,255,0.05);"><td style="padding:15px; border:1px solid #444;">White Shirt</td><td style="padding:15px; border:1px solid #444;">ALL Colors</td><td style="padding:15px; border:1px solid #444;">None</td></tr><tr><td style="padding:15px; border:1px solid #444;">Black Coal</td><td style="padding:15px; border:1px solid #444;">None</td><td style="padding:15px; border:1px solid #444; color:#aaa;">ALL (Heats up!)</td></tr></table>'
+                        },
+                        {
+                            title: '🦉 Perspective 3: Animal Eyes',
+                            content: '<div style="line-height:1.7;">Some animals see light differently than us.</div><div class="journal-box">Cats and owls have a "Tapetum Lucidum"—a mirror layer behind their retina. It bounces light through their eyes <strong>twice</strong>, giving them super-powered night vision! This is why a cat\'s eyes "glow" in the dark when hit by a flashlight.</div>'
+                        },
+                        {
+                            title: '🧪 The Optical Illusion Challenge',
+                            content: '<div style="line-height:1.7;">Put a pencil in a glass of water. It looks broken!</div><div class="journal-box" style="background:rgba(102,126,234,0.1); border-left-color:#667eea;">This is <strong>Refraction</strong>. Light slow down when it hits the water, changing direction and tricking your brain into thinking the pencil is in a different spot.</div>'
+                        },
+                        {
+                            title: '🚪 Exit Ticket',
+                            content: '<div class="journal-box"><strong>Journal Task:</strong> Answer in complete sentences:<br><br>1. If you are a chef, why would you choose a <strong>white</strong> kitchen over a <strong>black</strong> one to stay cool?<br><br>2. Give one example of <strong>Refraction</strong> you see in your house.</div>'
+                        }
+                    ]
+                },
+                

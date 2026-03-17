@@ -2992,14 +2992,14 @@
                             title: `🎯 Objectives & Vocabulary`,
                             content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Define a <strong>Wave</strong> as a disturbance that transfers energy.</li><li>Explain that waves move <em>energy</em>, not <em>matter</em>.</li><li>Identify different types of waves in the real world.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#00bcd4; background:rgba(0,188,212,0.15);"><strong>🛰️ Mission Context:</strong> To communicate during an emergency, we need to send information over long distances instantly. We need something that can travel miles without moving any physical material across the landscape!</div>`,
                             vocabulary: [
-                                { term: 'Wave', definition: 'A disturbance that transfers energy from one place to another.' },
-                                { term: 'Matter', definition: 'Any physical substance; the "stuff" that the wave travels through.' },
-                                { term: 'Energy Transfer', definition: 'The passing of energy from one object, molecule, or place to another.' }
+                                { term: `Wave`, definition: `A disturbance that transfers energy from one place to another.` },
+                                { term: `Matter`, definition: `Any physical substance; the "stuff" that the wave travels through.` },
+                                { term: `Energy Transfer`, definition: `The passing of energy from one object, molecule, or place to another.` }
                             ]
                         },
                         {
-                            title: `📜 Perspective: Ocean Surfing`,
-                            content: `<div style="line-height:1.7;">A surfer catches a wave, but is the water actually rushing forward?</div><div class="journal-box" style="border-left-color:#667eea; background:rgba(102,126,234,0.1);">Out in the deep ocean, water molecules just bob <strong>Up and Down</strong> when a wave passes. The wave is pure energy moving <em>through</em> the water. It’s only when the wave hits the shallow beach that the water is pushed forward and crashes!</div>`
+                            title: `📜 Historical Discovery: Measuring the Speed of Sound`,
+                            content: `<div style="line-height:1.7;">In 1640, Pierre Gassendi correctly measured the speed of sound!</div><div class="journal-box" style="border-left-color:#667eea; background:rgba(102,126,234,0.1);">He used a cannon. By timing the flash of the gunpowder to the "boom" reaching his ears, he proved that wave energy (sound) travels at a specific speed through the air medium, much slower than light!</div>`
                         },
                         {
                             title: `🔍 Discovery: The Rope Trick`,
@@ -3015,7 +3015,7 @@
                         },
                         {
                             title: `🔬 STEM Interactive: Wave Physics Simulator`,
-                            content: `<div style="margin-bottom:15px;"><strong>Observe Energy Transfer:</strong> Flick the rope and watch the energy travel! Notice how the red dot just bobs up and down.</div><div id="threejs-container-l39" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-drop" onclick="startRopeWave()">⚡ Send Wave</button><button class="btn-pause" onclick="pauseRopeWave()">⏸️ Pause</button><button class="btn-slow" onclick="slowMoRopeWave()">🐢 Slow Mo</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Observe Energy Transfer:</strong> Flick the rope and watch the energy travel! Notice how the red dot just bobs up and down.</div><div id="threejs-container-l39" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l39')">🛠️ Debug</button><button class="btn-drop" onclick="startRopeWave()">⚡ Send Wave</button><button class="btn-pause" onclick="pauseRopeWave()">⏸️ Pause</button><button class="btn-slow" onclick="slowMoRopeWave()">🐢 Slow Mo</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -3034,15 +3034,15 @@
                             title: `🎯 Objectives & Vocabulary`,
                             content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Identify the <strong>Peak</strong> and <strong>Trough</strong> of a wave.</li><li>Measure a wave\'s <strong>Amplitude</strong> (height).</li><li>Measure a wave\'s <strong>Wavelength</strong> (distance).</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#ff4444; background:rgba(244,67,54,0.15);"><strong>🛰️ Mission Context:</strong> Different emergencies need different signals. By changing the shape of our waves (amplitude and wavelength), we can encode different messages, like "Send Medical Help" vs "Evacuate."</div>`,
                             vocabulary: [
-                                { term: 'Peak (or Crest)', definition: 'The highest point of a wave.' },
-                                { term: 'Trough', definition: 'The lowest point of a wave.' },
-                                { term: 'Amplitude', definition: 'The height of a wave from its resting position to its peak.' },
-                                { term: 'Wavelength', definition: 'The distance between one peak and the next peak.' }
+                                { term: `Peak (or Crest)`, definition: `The highest point of a wave.` },
+                                { term: `Trough`, definition: `The lowest point of a wave.` },
+                                { term: `Amplitude`, definition: `The height of a wave from its resting position to its peak.` },
+                                { term: `Wavelength`, definition: `The distance between one peak and the next peak.` }
                             ]
                         },
                         {
-                            title: `📜 Perspective: Tsunami vs. Swell`,
-                            content: `<div style="line-height:1.7;">Not all waves are created equal.</div><div class="journal-box" style="border-left-color:#667eea; background:rgba(102,126,234,0.1);">A gentle ocean swell has a very small <strong>Amplitude</strong> (maybe 1 foot tall). A tsunami has a massive <strong>Amplitude</strong> (up to 100 feet tall) carrying devastating energy. Wavelength matters, too: Tsunami peaks can be 100 miles apart!</div>`
+                            title: `📜 Historical Discovery: The First Seismograph`,
+                            content: `<div style="line-height:1.7;">How did ancient scientists measure wave amplitude?</div><div class="journal-box" style="border-left-color:#667eea; background:rgba(102,126,234,0.1);">In 132 AD, Zhang Heng invented the first seismoscope in China! It was a giant bronze jar with dragons. When an earthquake wave arrived, the amplitude of the wave would knock a bronze ball into a toad's mouth, proving a wave had passed!</div>`
                         },
                         {
                             title: `🔍 Discovery: The Wave Graph`,
@@ -3058,7 +3058,7 @@
                         },
                         {
                             title: `🔬 STEM Interactive: Seismograph Sandbox`,
-                            content: `<div style="margin-bottom:15px;"><strong>Create Your Wave:</strong> Adjust the sliders to see how Amplitude and Wavelength change the wave!</div><div id="threejs-container-l40" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-drop" onclick="waveIncAmp()">⬆️ Amplitude</button><button class="btn-drop" onclick="waveDecAmp()">⬇️ Amplitude</button><button class="btn-slow" onclick="waveIncLength()">↔️ Wavelength</button><button class="btn-slow" onclick="waveDecLength()">>< Wavelength</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Create Your Wave:</strong> Adjust the sliders to see how Amplitude and Wavelength change the wave!</div><div id="threejs-container-l40" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l40')">🛠️ Debug</button><button class="btn-drop" onclick="waveIncAmp()">⬆️ Amplitude</button><button class="btn-drop" onclick="waveDecAmp()">⬇️ Amplitude</button><button class="btn-slow" onclick="waveIncLength()">↔️ Wavelength</button><button class="btn-slow" onclick="waveDecLength()">>< Wavelength</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -3114,15 +3114,15 @@
                             title: `🎯 Objectives & Vocabulary`,
                             content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Explain that <strong>Sound</strong> is a mechanical wave caused by vibrations.</li><li>Categorize materials as a <strong>Medium</strong> for sound (Solid, Liquid, Gas).</li><li>Explain why sound cannot travel through a vacuum.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#9c27b0; background:rgba(156,39,176,0.15);"><strong>🛰️ Mission Context:</strong> If our emergency signal uses a siren (Sound Wave), we must know how far the sound can travel through the air, water, or mountains before it runs out of energy!</div>`,
                             vocabulary: [
-                                { term: 'Vibration', definition: 'A rapid back-and-forth movement.' },
-                                { term: 'Sound Wave', definition: 'A pattern of disturbance caused by the movement of energy traveling through a medium.' },
-                                { term: 'Medium', definition: 'The matter (solid, liquid, or gas) through which a wave travels.' },
-                                { term: 'Vacuum', definition: 'A space that is completely empty of bounds—no air, no gas, nothing.' }
+                                { term: `Vibration`, definition: `A rapid back-and-forth movement.` },
+                                { term: `Sound Wave`, definition: `A pattern of disturbance caused by the movement of energy traveling through a medium.` },
+                                { term: `Medium`, definition: `The matter (solid, liquid, or gas) through which a wave travels.` },
+                                { term: `Vacuum`, definition: `A space that is completely empty of bounds—no air, no gas, nothing.` }
                             ]
                         },
                         {
-                            title: `📜 Perspective: Hearing Through the Ground`,
-                            content: `<div style="line-height:1.7;">In the old days of railroads, people would put their ear to the steel train tracks.</div><div class="journal-box" style="border-left-color:#ff9800; background:rgba(255,152,0,0.1);">Why? Sound travels <strong>15 times faster</strong> through solid steel than it does through the air! The vibrations of the heavy train miles away would shake the steel track, allowing people to hear the train coming long before they could see it or hear it in the air.</div>`
+                            title: `📜 Historical Discovery: The First Phonograph`,
+                            content: `<div style="line-height:1.7;">How did we first record sound waves?</div><div class="journal-box" style="border-left-color:#667eea; background:rgba(102,126,234,0.1);">In 1877, Thomas Edison invented the phonograph. He shouted into a horn, and the sound wave vibrations caused a needle to carve a physical wave pattern into a spinning cylinder of tin foil!</div>`
                         },
                         {
                             title: `🔍 Discovery: The Speaker Cone`,
@@ -3138,14 +3138,15 @@
                         },
                         {
                             title: `🔬 STEM Interactive: Sound Medium Race`,
-                            content: `<div style="margin-bottom:15px;"><strong>Test the Medium:</strong> Choose Air, Water, or Steel, and fire the sound wave to see who wins!</div><div id="threejs-container-l42" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-drop" onclick="startSoundRace(\'air\')">💨 Air Wave</button><button class="btn-drop" onclick="startSoundRace(\'water\')">💧 Water Wave</button><button class="btn-drop" onclick="startSoundRace(\'steel\')">🛡️ Steel Wave</button><button class="btn-reset" onclick="resetSoundRace()">🔄 Reset</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Test the Medium:</strong> Choose Air, Water, or Steel, and fire the sound wave to see who wins!</div><div id="threejs-container-l42" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l42')">🛠️ Debug</button><button class="btn-drop" onclick="startSoundRace(\'air\')">💨 Air Wave</button><button class="btn-drop" onclick="startSoundRace(\'water\')">💧 Water Wave</button><button class="btn-drop" onclick="startSoundRace(\'steel\')">🛡️ Steel Wave</button><button class="btn-reset" onclick="resetSoundRace()">🔄 Reset</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
                             content: `<div class="journal-box"><strong>Journal Task:</strong> Answer in complete sentences:<br><br>1. What are the three states of matter that sound can travel through (hint: solid...)?<br><br>2. Why does sound travel faster as a wave through a solid piece of metal than through the air?</div>`
                         }
                     ]
-                },\n'lesson43': {
+                },
+'lesson43': {
                     title: `Light Waves`,
                     slides: [
                         {
@@ -3156,9 +3157,9 @@
                             title: `🎯 Objectives & Vocabulary`,
                             content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Identify that <strong>Light</strong> travels in straight lines.</li><li>Explain that Light is an <strong>Electromagnetic Wave</strong>.</li><li>Understand that light does <em>not</em> need a medium to travel!</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#ffeb3b; background:rgba(255,235,59,0.15);"><strong>🛰️ Mission Context:</strong> A siren (sound wave) only travels a few miles. But if we use light to send our emergency message, it can travel almost infinitely... as long as nothing gets in its way!</div>`,
                             vocabulary: [
-                                { term: 'Light Wave', definition: 'A type of wave that travels in straight lines and carries electromagnetic energy.' },
-                                { term: 'Electromagnetic Spectrum', definition: 'The entire range of light waves, including things we can\'t see like X-rays and radio waves.' },
-                                { term: 'Speed of Light', definition: 'The fastest speed in the universe: 186,282 miles per second!' }
+                                { term: `Light Wave`, definition: `A type of wave that travels in straight lines and carries electromagnetic energy.` },
+                                { term: `Electromagnetic Spectrum`, definition: `The entire range of light waves, including things we can\'t see like X-rays and radio waves.` },
+                                { term: `Speed of Light`, definition: `The fastest speed in the universe: 186,282 miles per second!` }
                             ]
                         },
                         {
@@ -3179,7 +3180,7 @@
                         },
                         {
                             title: `🔬 STEM Interactive: Light Beams & Shadows`,
-                            content: `<div style="margin-bottom:15px;"><strong>Test the Light Beam:</strong> Drag the objects in front of the laser. Notice the sharp shadows formed because light cannot curve!</div><div id="threejs-container-l43" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-drop" onclick="spawnBlock()">🧱 Spawn Wall</button><button class="btn-drop" onclick="spawnGlass()">🥃 Spawn Glass</button><button class="btn-reset" onclick="resetLightScene()">🔄 Clear Room</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Test the Light Beam:</strong> Drag the objects in front of the laser. Notice the sharp shadows formed because light cannot curve!</div><div id="threejs-container-l43" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l43')">🛠️ Debug</button><button class="btn-drop" onclick="spawnBlock()">🧱 Spawn Wall</button><button class="btn-drop" onclick="spawnGlass()">🥃 Spawn Glass</button><button class="btn-reset" onclick="resetLightScene()">🔄 Clear Room</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -3198,10 +3199,10 @@
                             title: `🎯 Objectives & Vocabulary`,
                             content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Explain how a polished surface causes <strong>Reflection</strong>.</li><li>Explain how light bends, or <strong>Refracts</strong>, when it changes medium.</li><li>Provide examples of opaque, translucent, and transparent materials.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#e91e63; background:rgba(233,30,99,0.15);"><strong>🛰️ Mission Context:</strong> We can manipulate light to solve our line-of-sight problems! We can use mirrors to bounce our signal, or lenses to focus a weak light into a powerful beam!</div>`,
                             vocabulary: [
-                                { term: 'Reflection', definition: 'When light hits a surface and bounces off back into our eyes.' },
-                                { term: 'Refraction', definition: 'When light passes through a new medium (like water or glass) and changes speed, causing it to bend.' },
-                                { term: 'Opaque', definition: 'Materials that block all light (wood, metal).' },
-                                { term: 'Transparent', definition: 'Materials that let light pass through perfectly (clear glass).' }
+                                { term: `Reflection`, definition: `When light hits a surface and bounces off back into our eyes.` },
+                                { term: `Refraction`, definition: `When light passes through a new medium (like water or glass) and changes speed, causing it to bend.` },
+                                { term: `Opaque`, definition: `Materials that block all light (wood, metal).` },
+                                { term: `Transparent`, definition: `Materials that let light pass through perfectly (clear glass).` }
                             ]
                         },
                         {
@@ -3222,7 +3223,7 @@
                         },
                         {
                             title: `🔬 STEM Interactive: The Optics Bench`,
-                            content: `<div style="margin-bottom:15px;"><strong>Bend & Bounce the Laser:</strong> Drag mirrors and glass blocks to hit the target!</div><div id="threejs-container-l44" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-drop" onclick="spawnMirror()">🪞 Add Mirror</button><button class="btn-slow" onclick="rotateMirror()">🔄 Rotate</button><button class="btn-drop" onclick="spawnPrism()">💎 Add Glass Prism</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Bend & Bounce the Laser:</strong> Drag mirrors and glass blocks to hit the target!</div><div id="threejs-container-l44" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l44')">🛠️ Debug</button><button class="btn-drop" onclick="spawnMirror()">🪞 Add Mirror</button><button class="btn-slow" onclick="rotateMirror()">🔄 Rotate</button><button class="btn-drop" onclick="spawnPrism()">💎 Add Glass Prism</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -3278,9 +3279,9 @@
                             title: `🎯 Objectives & Vocabulary`,
                             content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Define a <strong>Code</strong> as a system of signals or symbols used to communicate.</li><li>Understand how simple <strong>Patterns</strong> can transfer complex information.</li><li>Recognize that different situations require different types of signals.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#f44336; background:rgba(244,67,54,0.15);"><strong>🛰️ Mission Context:</strong> A flashlight is useless in an emergency if you just turn it on and leave it on! To actually communicate a message, we must use patterns—flashing it on and off in a specific, agreed-upon code.</div>`,
                             vocabulary: [
-                                { term: 'Information Transfer', definition: 'The process of moving data or a message from one person or place to another.' },
-                                { term: 'Code', definition: 'A system of rules to convert information (like a letter or word) into another form (like a beep or a flash).' },
-                                { term: 'Pattern', definition: 'A repeated, predictable design or sequence.' }
+                                { term: `Information Transfer`, definition: `The process of moving data or a message from one person or place to another.` },
+                                { term: `Code`, definition: `A system of rules to convert information (like a letter or word) into another form (like a beep or a flash).` },
+                                { term: `Pattern`, definition: `A repeated, predictable design or sequence.` }
                             ]
                         },
                         {
@@ -3301,14 +3302,15 @@
                         },
                         {
                             title: `🔬 STEM Interactive: The Code Breaker`,
-                            content: `<div style="margin-bottom:15px;"><strong>Decode the Message:</strong> Watch the light flash. Use the codebook to decipher the secret word!</div><div id="threejs-container-l46" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-drop" onclick="playSecretFlash(\'easy\')">🟢 Easy Pattern</button><button class="btn-drop" onclick="playSecretFlash(\'hard\')">🔴 Hard Pattern</button><button class="btn-slow" onclick="showCodebook()">📖 View Codebook</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Decode the Message:</strong> Watch the light flash. Use the codebook to decipher the secret word!</div><div id="threejs-container-l46" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l46')">🛠️ Debug</button><button class="btn-drop" onclick="playSecretFlash(\'easy\')">🟢 Easy Pattern</button><button class="btn-drop" onclick="playSecretFlash(\'hard\')">🔴 Hard Pattern</button><button class="btn-slow" onclick="showCodebook()">📖 View Codebook</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
                             content: `<div class="journal-box"><strong>Journal Task:</strong><br><br>1. What is an example of a pattern or code you use every day without speaking? (Think about lights at an intersection, or sounds a microwave makes.)<br><br>2. Why are patterns better for sending information over long distances than simply yelling words?</div>`
                         }
                     ]
-                },\n'lesson47': {
+                },
+'lesson47': {
                     title: `Morse Code & Signals`,
                     slides: [
                         {
@@ -3319,10 +3321,10 @@
                             title: `🎯 Objectives & Vocabulary`,
                             content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Explain how <strong>Morse Code</strong> uses patterns of dots and dashes to represent letters.</li><li>Understand how a <strong>Telegraph</strong> was used to send electricity as a code.</li><li>Identify Morse Code as a precursor to modern digital signaling.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#3f51b5; background:rgba(63,81,181,0.15);"><strong>🛰️ Mission Context:</strong> We don\'t need a magical device to send words over a wire or a flashlight. We just need to convert the English alphabet into a simple pattern of "On" and "Off" signals!</div>`,
                             vocabulary: [
-                                { term: 'Morse Code', definition: 'A method of sending text information as a series of on-off tones, clicks, or lights.' },
-                                { term: 'Dot (or Dit)', definition: 'A very short signal in Morse Code (1 unit of time).' },
-                                { term: 'Dash (or Dah)', definition: 'A long signal in Morse Code (3 units of time).' },
-                                { term: 'Telegraph', definition: 'An old machine used to transmit and receive Morse code messages over long electrical wires.' }
+                                { term: `Morse Code`, definition: `A method of sending text information as a series of on-off tones, clicks, or lights.` },
+                                { term: `Dot (or Dit)`, definition: `A very short signal in Morse Code (1 unit of time).` },
+                                { term: `Dash (or Dah)`, definition: `A long signal in Morse Code (3 units of time).` },
+                                { term: `Telegraph`, definition: `An old machine used to transmit and receive Morse code messages over long electrical wires.` }
                             ]
                         },
                         {
@@ -3343,7 +3345,7 @@
                         },
                         {
                             title: `🔬 STEM Interactive: The Telegraph Machine`,
-                            content: `<div style="margin-bottom:15px;"><strong>Transmit a Message:</strong> Use the telegraph key. A quick tap is a dot, a long hold is a dash. Try spelling your name using the chart!</div><div id="threejs-container-l47" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-drop" onmousedown="telegraphKeyOn()" onmouseup="telegraphKeyOff()">📻 TAP KEY</button><button class="btn-slow" onclick="playSOS()">🚨 Auto-Play SOS</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Transmit a Message:</strong> Use the telegraph key. A quick tap is a dot, a long hold is a dash. Try spelling your name using the chart!</div><div id="threejs-container-l47" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l47')">🛠️ Debug</button><button class="btn-drop" onmousedown="telegraphKeyOn()" onmouseup="telegraphKeyOff()">📻 TAP KEY</button><button class="btn-slow" onclick="playSOS()">🚨 Auto-Play SOS</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -3362,10 +3364,10 @@
                             title: `🎯 Objectives & Vocabulary`,
                             content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Understand the concept of <strong>Binary Code</strong> (0s and 1s).</li><li>Explain how computers use binary to store and send information.</li><li>Compare an <strong>Analog</strong> signal (continuous) to a <strong>Digital</strong> signal (on/off).</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#2196f3; background:rgba(33,150,243,0.15);"><strong>🛰️ Mission Context:</strong> Morse code has dots, dashes, and spaces (3 things). For modern computers to send emergency data across the world in milliseconds, they use an even simpler code that only has 2 things: ON and OFF!</div>`,
                             vocabulary: [
-                                { term: 'Binary Code', definition: 'A coding system using the binary digits 0 and 1 to represent a letter, digit, or other character in a computer.' },
-                                { term: 'Bit', definition: 'The smallest unit of data in a computer (a single 0 or 1).' },
-                                { term: 'Digital Signal', definition: 'A signal that is expressed as a series of the digits 0 and 1.' },
-                                { term: 'Analog Signal', definition: 'A continuous signal that has infinite possibilities (like a smooth wave).' }
+                                { term: `Binary Code`, definition: `A coding system using the binary digits 0 and 1 to represent a letter, digit, or other character in a computer.` },
+                                { term: `Bit`, definition: `The smallest unit of data in a computer (a single 0 or 1).` },
+                                { term: `Digital Signal`, definition: `A signal that is expressed as a series of the digits 0 and 1.` },
+                                { term: `Analog Signal`, definition: `A continuous signal that has infinite possibilities (like a smooth wave).` }
                             ]
                         },
                         {
@@ -3386,7 +3388,7 @@
                         },
                         {
                             title: `🔬 STEM Interactive: The Binary Byte Builder`,
-                            content: `<div style="margin-bottom:15px;"><strong>Flip the Switches:</strong> Try to match the 8-bit pattern on the screen to unlock the secret data! Remember, 0 is light OFF, 1 is light ON.</div><div id="threejs-container-l48" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-drop" onclick="randomizeBinaryTarget()">🔢 New Target</button><button class="btn-slow" onclick="checkBinaryCode()">✅ Submit</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Flip the Switches:</strong> Try to match the 8-bit pattern on the screen to unlock the secret data! Remember, 0 is light OFF, 1 is light ON.</div><div id="threejs-container-l48" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l48')">🛠️ Debug</button><button class="btn-drop" onclick="randomizeBinaryTarget()">🔢 New Target</button><button class="btn-slow" onclick="checkBinaryCode()">✅ Submit</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -3442,9 +3444,9 @@
                             title: `🎯 Objectives & Vocabulary`,
                             content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Explain how a <strong>Lens</strong> uses refraction to focus light.</li><li>Understand how the human eye uses a lens to see.</li><li>Identify how digital devices convert light waves into digital data (0s and 1s).</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#e91e63; background:rgba(233,30,99,0.15);"><strong>🛰️ Mission Context:</strong> We know how to SEND light signals. But how does a modern computer actually "SEE" and RECEIVE a light signal? It uses a lens to catch the light, and a sensor to convert it to digital data!</div>`,
                             vocabulary: [
-                                { term: 'Lens', definition: 'A curved piece of glass or plastic that refracts (bends) light to a specific focal point.' },
-                                { term: 'Retina / Image Sensor', definition: 'The surface that catches the light image (in your eye, or in a digital camera).' },
-                                { term: 'Digitize', definition: 'The process of converting a physical wave (like light or sound) into a digital computer file of 1s and 0s.' }
+                                { term: `Lens`, definition: `A curved piece of glass or plastic that refracts (bends) light to a specific focal point.` },
+                                { term: `Retina / Image Sensor`, definition: `The surface that catches the light image (in your eye, or in a digital camera).` },
+                                { term: `Digitize`, definition: `The process of converting a physical wave (like light or sound) into a digital computer file of 1s and 0s.` }
                             ]
                         },
                         {
@@ -3465,14 +3467,15 @@
                         },
                         {
                             title: `🔬 STEM Interactive: Focus the Camera Lens`,
-                            content: `<div style="margin-bottom:15px;"><strong>Adjust the Focal Length:</strong> Slide the lens back and forth. Can you get the criss-crossing light beams to perfectly focus right on the camera sensor?</div><div id="threejs-container-l50" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><input type="range" min="1" max="100" value="50" oninput="moveCameraLens(this.value)" style="width:70%; margin:20px;"></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Adjust the Focal Length:</strong> Slide the lens back and forth. Can you get the criss-crossing light beams to perfectly focus right on the camera sensor?</div><div id="threejs-container-l50" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l50')">🛠️ Debug</button><input type="range" min="1" max="100" value="50" oninput="moveCameraLens(this.value)" style="width:70%; margin:20px;"></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
                             content: `<div class="journal-box"><strong>Journal Task:</strong><br><br>1. What does the lens in your eye do to light waves?<br><br>2. How does a digital camera turn a light wave into a photograph that can be saved on a computer? (Hint: What does it turn the light into?)</div>`
                         }
                     ]
-                },\n'lesson51': {
+                },
+'lesson51': {
                     title: `Communication Tech: Then & Now`,
                     slides: [
                         {
@@ -3483,9 +3486,9 @@
                             title: `🎯 Objectives & Vocabulary`,
                             content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Trace the evolution of communication technology over time.</li><li>Compare the speed, distance, and reliability of different methods.</li><li>Recognize that modern tech is just an advanced application of the exact same wave physics.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#009688; background:rgba(0,150,136,0.15);"><strong>🛰️ Mission Context:</strong> To build the ultimate emergency signaling system, we must look at what engineers have built in the past. We can learn perfectly good engineering from a 100-year-old telegraph or a 2000-year-old fire beacon!</div>`,
                             vocabulary: [
-                                { term: 'Technology Evolution', definition: 'The process of improving tools and systems over time to solve problems more effectively.' },
-                                { term: 'Reliability', definition: 'How consistently a system works without failing or losing the message.' },
-                                { term: 'Global Network', definition: 'A system of computers, cables, and satellites connecting the entire planet.' }
+                                { term: `Technology Evolution`, definition: `The process of improving tools and systems over time to solve problems more effectively.` },
+                                { term: `Reliability`, definition: `How consistently a system works without failing or losing the message.` },
+                                { term: `Global Network`, definition: `A system of computers, cables, and satellites connecting the entire planet.` }
                             ]
                         },
                         {
@@ -3506,7 +3509,7 @@
                         },
                         {
                             title: `🔬 STEM Interactive: Timeline Explorer`,
-                            content: `<div style="margin-bottom:15px;"><strong>Explore the Tech:</strong> Spin the globe to different eras to see how humanity connected the world!</div><div id="threejs-container-l51" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-drop" onclick="setEra(1800)">1800s: The Carrier</button><button class="btn-drop" onclick="setEra(1900)">1900s: The Wire</button><button class="btn-drop" onclick="setEra(2000)">2000s: The Web</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Explore the Tech:</strong> Spin the globe to different eras to see how humanity connected the world!</div><div id="threejs-container-l51" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l51')">🛠️ Debug</button><button class="btn-drop" onclick="setEra(1800)">1800s: The Carrier</button><button class="btn-drop" onclick="setEra(1900)">1900s: The Wire</button><button class="btn-drop" onclick="setEra(2000)">2000s: The Web</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -3544,7 +3547,7 @@
                         },
                         {
                             title: `🔬 STEM Interactive: Free Practice`,
-                            content: `<div style="margin-bottom:15px;"><strong>Choose Your Drill:</strong> Use the remaining time to practice the skill you feel weakest on!</div><div id="threejs-container-l52" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-drop" onclick="loadMode(\'waves\')">🌊 Waves</button><button class="btn-drop" onclick="loadMode(\'optics\')">🔍 Optics</button><button class="btn-drop" onclick="loadMode(\'binary\')">📻 Binary</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Choose Your Drill:</strong> Use the remaining time to practice the skill you feel weakest on!</div><div id="threejs-container-l52" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l52')">🛠️ Debug</button><button class="btn-drop" onclick="loadMode(\'waves\')">🌊 Waves</button><button class="btn-drop" onclick="loadMode(\'optics\')">🔍 Optics</button><button class="btn-drop" onclick="loadMode(\'binary\')">📻 Binary</button></div>`
                         },
                         {
                             title: `🚪 Dismissal & Setup`,
@@ -3582,7 +3585,7 @@
                         },
                         {
                             title: `🔬 STEM Interactive: The Brain Break`,
-                            content: `<div style="margin-bottom:15px;"><strong>Zone Out:</strong> Breathe deeply and watch the gentle sine wave below to clear your mind before the test begins.</div><div id="threejs-container-l53" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-slow" onclick="startZenWave()">🌊 Begin Zen Mode</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Zone Out:</strong> Breathe deeply and watch the gentle sine wave below to clear your mind before the test begins.</div><div id="threejs-container-l53" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l53')">🛠️ Debug</button><button class="btn-slow" onclick="startZenWave()">🌊 Begin Zen Mode</button></div>`
                         },
                         {
                             title: `🚪 Begin the Assessment!`,
@@ -3620,14 +3623,15 @@
                         },
                         {
                             title: `🔬 STEM Interactive: VR Pre-Flight Check`,
-                            content: `<div style="margin-bottom:15px;"><strong>Wait for the Green Light!</strong> Watch the safety check below to make sure your space is clear before you plug in!</div><div id="threejs-container-l54" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-slow" onclick="runGuardianCheck()">✅ Run System Check</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Wait for the Green Light!</strong> Watch the safety check below to make sure your space is clear before you plug in!</div><div id="threejs-container-l54" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l54')">🛠️ Debug</button><button class="btn-slow" onclick="runGuardianCheck()">✅ Run System Check</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket & Power Down`,
                             content: `<div class="journal-box"><strong>🧹 MINUTE 40: CLEANUP</strong><ol><li>Hold the power button for 3 seconds to shut off the headset.</li><li>Wipe the face cushion with a sanitation wipe.</li><li>Plug the headset back into the charging cart perfectly straight!</li></ol></div><div style="margin-top:20px;padding:20px;background:rgba(40,167,69,0.2);border-radius:10px;border:2px solid #28a745;"><strong>📓 EXIT TICKET:</strong> High five your partner on the way out!</div>`
                         }
                     ]
-                }\n            };
+                }
+            };
 
 
 

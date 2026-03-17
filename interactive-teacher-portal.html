@@ -12,6 +12,141 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// Custom Bundle 4 STEM Simulators
+let b4Sim = {
+    renderer: null, scene: null, camera: null, animationId: null,
+    cubes: [], speeds: [], speed: 1, isPlaying: false, frame: 0, uniforms: { amp: 2, freq: 0.5 },
+    currentLesson: null
+};
+
+window.initSim = function(lessonId) {
+    b4Sim.currentLesson = lessonId;
+    let container = document.getElementById("threejs-container-" + lessonId);
+    if (!container) return;
+    
+    if (b4Sim.renderer) {
+        cancelAnimationFrame(b4Sim.animationId);
+        container.innerHTML = '';
+    }
+    
+    b4Sim.scene = new THREE.Scene();
+    b4Sim.scene.background = new THREE.Color(0x1a1a2e);
+    b4Sim.camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    b4Sim.renderer = new THREE.WebGLRenderer({ antialias: true });
+    b4Sim.renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(b4Sim.renderer.domElement);
+    
+    b4Sim.scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    let dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(10, 20, 10);
+    b4Sim.scene.add(dirLight);
+
+    b4Sim.cubes = [];
+    b4Sim.speeds = [];
+    b4Sim.frame = 0;
+    b4Sim.isPlaying = false;
+    b4Sim.speed = 1;
+
+    if (lessonId === 'l39' || lessonId === 'l40') {
+        setupWave(lessonId);
+    } else if (lessonId === 'l42') {
+        setupRace();
+    } else {
+        setupGenericOrbit();
+    }
+    
+    function animate() {
+        b4Sim.animationId = requestAnimationFrame(animate);
+        if (b4Sim.isPlaying) {
+            b4Sim.frame += 0.05 * b4Sim.speed;
+        }
+        updateSim(lessonId);
+        b4Sim.renderer.render(b4Sim.scene, b4Sim.camera);
+    }
+    animate();
+};
+
+function setupWave(id) {
+    b4Sim.camera.position.z = 15;
+    let geo = new THREE.SphereGeometry(0.3, 16, 16);
+    let mat = new THREE.MeshPhongMaterial({ color: 0x00d4aa });
+    let highlight = new THREE.MeshPhongMaterial({ color: 0xff4444 });
+    for(let i = 0; i < 40; i++) {
+        let mesh = new THREE.Mesh(geo, i === 20 ? highlight : mat);
+        mesh.position.x = -10 + i * 0.5;
+        b4Sim.scene.add(mesh);
+        b4Sim.cubes.push(mesh);
+    }
+}
+
+function setupRace() {
+    b4Sim.camera.position.z = 20;
+    let geo = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+    let mats = [
+        new THREE.MeshPhongMaterial({ color: 0xff4444 }), // Gas
+        new THREE.MeshPhongMaterial({ color: 0x4444ff }), // Liquid
+        new THREE.MeshPhongMaterial({ color: 0x44ff44 })  // Solid
+    ];
+    for (let i=0; i<3; i++) {
+        let m = new THREE.Mesh(geo, mats[i]);
+        m.position.set(-10, 5 - i*5, 0);
+        b4Sim.scene.add(m);
+        b4Sim.cubes.push(m);
+    }
+    b4Sim.speeds = [0.1, 0.8, 4.0]; // Slow (Gas), Medium (Liquid), Fast (Solid)
+}
+
+function setupGenericOrbit() {
+    b4Sim.camera.position.z = 12;
+    let geo = new THREE.TorusGeometry(3, 0.5, 16, 100);
+    let mat = new THREE.MeshPhongMaterial({ color: 0x667eea, wireframe: true });
+    let m = new THREE.Mesh(geo, mat);
+    b4Sim.scene.add(m);
+    b4Sim.cubes.push(m);
+}
+
+function updateSim(id) {
+    if (!b4Sim.scene) return;
+    if (id === 'l39' || id === 'l40') {
+        b4Sim.cubes.forEach((cube, i) => {
+            cube.position.y = Math.sin(b4Sim.frame - i * b4Sim.uniforms.freq) * b4Sim.uniforms.amp;
+        });
+    } else if (id === 'l42') {
+        b4Sim.cubes.forEach((cube, i) => {
+            let p = -10 + b4Sim.frame * b4Sim.speeds[i];
+            cube.position.x = Math.min(10, p);
+        });
+    } else {
+        if (b4Sim.cubes.length) {
+            b4Sim.cubes[0].rotation.x += 0.01 * b4Sim.speed;
+            b4Sim.cubes[0].rotation.y += 0.02 * b4Sim.speed;
+        }
+    }
+}
+
+// Rope Wave Global Hooks
+window.startRopeWave = function() { b4Sim.isPlaying = true; b4Sim.speed = 1; };
+window.pauseRopeWave = function() { b4Sim.isPlaying = false; };
+window.slowMoRopeWave = function() { b4Sim.isPlaying = true; b4Sim.speed = 0.2; };
+
+// Amplitude Hooks
+window.waveIncAmp = function() { b4Sim.uniforms.amp = Math.min(5, b4Sim.uniforms.amp + 0.5); };
+window.waveDecAmp = function() { b4Sim.uniforms.amp = Math.max(0.5, b4Sim.uniforms.amp - 0.5); };
+window.waveIncLength = function() { b4Sim.uniforms.freq = Math.max(0.1, b4Sim.uniforms.freq - 0.1); };
+window.waveDecLength = function() { b4Sim.uniforms.freq = Math.min(2.0, b4Sim.uniforms.freq + 0.1); };
+
+// Sound Race Hooks
+window.startSoundRace = function() { b4Sim.isPlaying = true; b4Sim.frame = 0; };
+window.pauseSoundRace = function() { b4Sim.isPlaying = false; };
+window.resetSoundRace = function() { b4Sim.isPlaying = false; b4Sim.frame = 0; if(b4Sim.currentLesson) updateSim(b4Sim.currentLesson); };
+
+// Catchalls for the rest
+window.startZenWave = function() { b4Sim.isPlaying = true; };
+window.pauseZenWave = function() { b4Sim.isPlaying = false; };
+window.resetLightScene = function() { b4Sim.isPlaying = false; b4Sim.frame = 0; };
+
+</script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <style>
@@ -1987,12 +2122,12 @@
                 <div class="lesson-description">Compare historical and modern communication technologies and how wave science drives innovation.</div>
             </div>
             <div class="lesson-card" onclick="openLesson('lesson52')">
-                <div class="lesson-title">Lesson 52: 🥽 VR Free Day — Wave Tech Explorer</div>
-                <div class="lesson-description">Student-directed exploration using VR headsets, wave simulations, and interactive digital tools.</div>
+                <div class="lesson-title">Lesson 52: Bundle 4 Review — The Wave Games</div>
+                <div class="lesson-description">Station rotations and mini-challenges to review Bundle 4 concepts.</div>
             </div>
             <div class="lesson-card" onclick="openLesson('lesson53')">
-                <div class="lesson-title">Lesson 53: Bundle 4 Review — The Wave Games</div>
-                <div class="lesson-description">Gamified review stations covering wave properties, light, sound, patterns, and communication tech.</div>
+                <div class="lesson-title">Lesson 53: Bundle 4 Assessment</div>
+                <div class="lesson-description">Summative assessment covering waves, light, and information transfer.</div>
             </div>
             <div class="lesson-card lab" onclick="openLesson('lesson54')">
                 <div class="lesson-title">Lesson 54: Bundle 4 Assessment</div>
@@ -5044,445 +5179,652 @@
                     ]
                 },
                 'lesson39': {
-                    title: 'What is a Wave?',
+                    title: `What is a Wave?`,
                     slides: [
                         {
-                            title: '🌊 Phenomenon: Waves Are Everywhere!',
-                            content: '<div style="font-size:1.8rem;line-height:1.7;">Look at the ocean, hear a sound, feel the warmth of the sun — you are experiencing <strong>waves</strong>!</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🤔 What do ALL waves have in common?</div><div class="reveal-content">They all <strong>transfer energy</strong> from one place to another — without permanently moving the matter they travel through!</div></div><div class="what-if-box">💭 <strong>What If:</strong> What would the world be like without waves? No sound, no light, no heat from the sun...</div>'
+                            title: `🌅 Warm-up: The Stadium Wave`,
+                            content: `<div class="journal-box"><strong>Have you ever seen a "wave" at a stadium?</strong><br><br>📓 <strong>Journal Task:</strong> Answer these questions:<ol style="line-height:1.8; margin-top:10px;"><li>When the crowd does "The Wave," do the people run around the stadium, or do they just stand up and sit down in place?</li><li>What is actually moving around the stadium?</li></ol></div>`
                         },
                         {
-                            title: '📚 Key Vocabulary',
-                            content: 'Wave energy vocabulary for Bundle 4:',
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Define a <strong>Wave</strong> as a disturbance that transfers energy.</li><li>Explain that waves move <em>energy</em>, not <em>matter</em>.</li><li>Identify different types of waves in the real world.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#00bcd4; background:rgba(0,188,212,0.15);"><strong>🛰️ Mission Context:</strong> To communicate during an emergency, we need to send information over long distances instantly. We need something that can travel miles without moving any physical material across the landscape!</div>`,
                             vocabulary: [
-                                { term: 'Wave', definition: 'A repeating disturbance that transfers energy through matter or space' },
-                                { term: 'Medium', definition: 'The material (solid, liquid, or gas) that a wave travels through' },
-                                { term: 'Mechanical Wave', definition: 'A wave that needs a medium to travel (sound, water waves)' },
-                                { term: 'Electromagnetic Wave', definition: 'A wave that can travel without a medium (light, radio waves)' },
-                                { term: 'Transverse Wave', definition: 'A wave where matter moves perpendicular (sideways) to the direction of energy travel' }
+                                { term: `Wave`, definition: `A disturbance that transfers energy from one place to another.` },
+                                { term: `Matter`, definition: `Any physical substance; the "stuff" that the wave travels through.` },
+                                { term: `Energy Transfer`, definition: `The passing of energy from one object, molecule, or place to another.` }
                             ]
                         },
                         {
-                            title: '💡 Core Concept: Energy Transfer',
-                            content: '<strong>A wave moves energy — NOT matter!</strong><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:15px;"><div class="reveal-hint">🏄 Think of a wave in the ocean. Does the water travel to shore?</div><div class="reveal-content"><strong>No!</strong> The water bobs up and down in place. Only the <em>energy</em> moves forward. A surfer is carried by the energy of the wave, not the water itself!</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🎸 How does a guitar make sound?</div><div class="reveal-content">Plucking the string makes it <strong>vibrate</strong>, which disturbs the air particles around it. Those particles bump into neighbors, passing the energy outward as a sound wave!</div></div>'
+                            title: `📜 Historical Discovery: Measuring the Speed of Sound`,
+                            content: `<div style="line-height:1.7;">In 1640, Pierre Gassendi correctly measured the speed of sound!</div><div class="journal-box" style="border-left-color:#667eea; background:rgba(102,126,234,0.1);">He used a cannon. By timing the flash of the gunpowder to the "boom" reaching his ears, he proved that wave energy (sound) travels at a specific speed through the air medium, much slower than light!</div>`
                         },
                         {
-                            title: '🔬 Types of Waves',
-                            content: '<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:15px 0;"><div style="background:rgba(102,126,234,0.2);padding:20px;border-radius:12px;"><strong style="font-size:1.4rem;">🌊 Mechanical Waves</strong><br><br>Need a medium to travel.<br><br>📌 Examples:<br>• Sound waves (air)<br>• Water waves (water)<br>• Seismic waves (ground)</div><div style="background:rgba(255,193,7,0.2);padding:20px;border-radius:12px;"><strong style="font-size:1.4rem;">☀️ Electromagnetic Waves</strong><br><br>Do NOT need a medium.<br><br>📌 Examples:<br>• Light (visible)<br>• Radio waves<br>• X-rays</div></div><div class="journal-box">📓 <strong>Science Journal:</strong> Can sound travel through outer space? Why or why not?</div>'
+                            title: `🔍 Discovery: The Rope Trick`,
+                            content: `<div style="line-height:1.7;">If you tie one end of a rope to a doorknob and flick the other end, a ripple travels down the rope.</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What is moving?</div><div class="reveal-content">The pieces of the rope just go up and down. The <strong>Energy</strong> from your flick is what travels from your hand to the doorknob. The rope itself didn't move closer to the door!</div></div>`
                         },
                         {
-                            title: '🧠 Check for Understanding',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Q1: You drop a pebble in a pond. What transfers outward?</div><div class="reveal-content">✅ <strong>Energy transfers</strong> outward in circular waves. The water molecules mostly bob up and down — they do not travel across the pond!</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 Q2: Why can\'t sound reach us from an explosion in space?</div><div class="reveal-content">✅ Sound is a <strong>mechanical wave</strong> — it needs a medium (like air) to travel. Space is a vacuum (no matter), so sound has nothing to vibrate through!</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 Q3: What DO we receive from the sun across the vacuum of space?</div><div class="reveal-content">✅ <strong>Light and heat</strong> — both electromagnetic waves that travel without needing a medium!</div></div>'
+                            title: `🤔 What If Scenario: Zero Gravity`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> An astronaut flicked a jump rope on the International Space Station, where they are floating in microgravity?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Would the wave still happen?</div><div class="reveal-content">Yes! The wave isn't dependent on gravity to move forward. The energy would still travel down the rope, making it wiggle through the air inside the station!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Invisible Messengers`,
+                            content: `<div style="line-height:1.7;">Our mission is to create an <strong>Emergency Signaling System</strong>.</div><div class="journal-box" style="border-left-color:#ffbc00; background:rgba(255,193,7,0.15);">We can't run a letter across a mountain in 5 seconds. But a <strong>Wave</strong> (like sound or light) can carry our "SOS" message miles away almost instantly, without us needing to move a single inch!</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: Wave Physics Simulator`,
+                            content: `<div style="margin-bottom:15px;"><strong>Observe Energy Transfer:</strong> Flick the rope and watch the energy travel! Notice how the red dot just bobs up and down.</div><div id="threejs-container-l39" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l39')">🛠️ Debug</button><button class="btn-drop" onclick="startRopeWave()">⚡ Send Wave</button><button class="btn-pause" onclick="pauseRopeWave()">⏸️ Pause</button><button class="btn-slow" onclick="slowMoRopeWave()">🐢 Slow Mo</button></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket`,
+                            content: `<div class="journal-box"><strong>Journal Task:</strong> Answer in complete sentences:<br><br>1. In your own words, what is a wave?<br><br>2. When a wave travels through the ocean, does the water itself move across the ocean? Explain.</div>`
                         }
                     ]
                 },
                 'lesson40': {
-                    title: 'Amplitude & Wavelength',
+                    title: `Amplitude & Wavelength`,
                     slides: [
                         {
-                            title: '🌊 Warm-Up: Draw That Wave!',
-                            content: '<div style="font-size:1.8rem;">Before we dive in — grab a pencil and paper. Draw what you think a wave looks like!</div><div class="what-if-box">💭 <strong>Think About It:</strong> What makes a loud sound different from a soft sound? What makes a high-pitched sound different from a low-pitched one? The answer is in the <em>shape</em> of the wave...</div>'
+                            title: `🌅 Warm-up: Drawing the Invisible`,
+                            content: `<div class="journal-box"><strong>In your journal, grab a pencil.</strong><br><br>📓 <strong>Task:</strong><ol style="line-height:1.8; margin-top:10px;"><li>Draw a wave that looks calm, gentle, and slow.</li><li>Below it, draw a wave that looks angry, chaotic, and energetic.</li><li>Look at the two drawings. What specifically makes them look different? (Height? Spacing?)</li></ol></div>`
                         },
                         {
-                            title: '📚 Key Vocabulary',
-                            content: 'Wave properties vocabulary:',
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Identify the <strong>Peak</strong> and <strong>Trough</strong> of a wave.</li><li>Measure a wave\'s <strong>Amplitude</strong> (height).</li><li>Measure a wave\'s <strong>Wavelength</strong> (distance).</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#ff4444; background:rgba(244,67,54,0.15);"><strong>🛰️ Mission Context:</strong> Different emergencies need different signals. By changing the shape of our waves (amplitude and wavelength), we can encode different messages, like "Send Medical Help" vs "Evacuate."</div>`,
                             vocabulary: [
-                                { term: 'Amplitude', definition: 'The height of a wave from the resting position to the crest — related to the energy of the wave' },
-                                { term: 'Wavelength', definition: 'The distance from one crest (or trough) to the next — related to pitch/frequency' },
-                                { term: 'Crest', definition: 'The highest point of a wave' },
-                                { term: 'Trough', definition: 'The lowest point of a wave' },
-                                { term: 'Frequency', definition: 'How many waves pass a point in one second — high frequency = high pitch in sound' }
+                                { term: `Peak (or Crest)`, definition: `The highest point of a wave.` },
+                                { term: `Trough`, definition: `The lowest point of a wave.` },
+                                { term: `Amplitude`, definition: `The height of a wave from its resting position to its peak.` },
+                                { term: `Wavelength`, definition: `The distance between one peak and the next peak.` }
                             ]
                         },
                         {
-                            title: '📐 Amplitude: The Energy of a Wave',
-                            content: '<strong>Amplitude = how much energy a wave carries.</strong><div style="background:rgba(255,107,53,0.2);padding:20px;border-radius:12px;margin:15px 0;border-left:4px solid #ff6b35;"><strong>🔊 In Sound:</strong> High amplitude = LOUD sound<br>Low amplitude = quiet sound</div><div style="background:rgba(255,193,7,0.2);padding:20px;border-radius:12px;margin:10px 0;border-left:4px solid #ffc107;"><strong>🌊 In Water:</strong> High amplitude = BIG waves (more energy)<br>Low amplitude = small ripples (less energy)</div><div class="journal-box">📓 <strong>Science Journal:</strong> A tsunami has extremely high amplitude. What does that tell us about the energy it carries?</div>'
+                            title: `📜 Historical Discovery: The First Seismograph`,
+                            content: `<div style="line-height:1.7;">How did ancient scientists measure wave amplitude?</div><div class="journal-box" style="border-left-color:#667eea; background:rgba(102,126,234,0.1);">In 132 AD, Zhang Heng invented the first seismoscope in China! It was a giant bronze jar with dragons. When an earthquake wave arrived, the amplitude of the wave would knock a bronze ball into a toad's mouth, proving a wave had passed!</div>`
                         },
                         {
-                            title: '📏 Wavelength: The Spacing of a Wave',
-                            content: '<strong>Wavelength = distance from one crest to the next.</strong><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:15px;"><div class="reveal-hint">🎺 Short wavelength = high frequency = ?</div><div class="reveal-content">Short wavelength = high frequency = <strong>high-pitched sound!</strong> Think of a flute or whistle — many waves per second!</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🎸 Long wavelength = low frequency = ?</div><div class="reveal-content">Long wavelength = low frequency = <strong>low-pitched sound!</strong> Think of a bass drum or tuba — fewer waves per second!</div></div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:10px;margin-top:15px;"><strong>4-PS4-1 Connection:</strong> Waves have measurable properties (amplitude and wavelength) that we can use to predict their behavior and the energy they carry!</div>'
+                            title: `🔍 Discovery: The Wave Graph`,
+                            content: `<div style="line-height:1.7;">Scientists graph waves to understand them.</div><img src="images/Bundle3/lens_reflection_diagram_1768923963160.png" style="width:60%; display:block; margin:20px auto; border-radius:12px; border:2px solid #00bcd4;" alt="Wave Anatomy"><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 How is Energy connected to Amplitude?</div><div class="reveal-content">The taller the wave (higher Amplitude), the more <strong>Energy</strong> is packed into it! It takes a lot more force to make a 20-foot wave than a 2-inch ripple.</div></div>`
                         },
                         {
-                            title: '🧠 Check for Understanding',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 You turn up the volume on a speaker. Which property changed?</div><div class="reveal-content">✅ <strong>Amplitude increased!</strong> More energy → greater amplitude → louder sound.</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 A dog whistle produces a very high-pitched sound. What does its wave look like?</div><div class="reveal-content">✅ Very <strong>short wavelength, high frequency</strong>. Many waves pass per second. (Too high for human ears!)</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 Which has more energy: a large ocean wave or a small ripple?</div><div class="reveal-content">✅ The <strong>large ocean wave</strong> — it has greater amplitude, meaning it carries far more energy!</div></div>'
+                            title: `🤔 What If Scenario: Earthquake Measurments`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> An earthquake measuring station in California prints a graph with huge lines (high amplitude) drawn close together (short wavelength). What happened?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Interpret the Graph...</div><div class="reveal-content">The ground was shaking VIOLENTLY (high amplitude) and VERY FAST (short wavelength). That’s a massive, destructive earthquake!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Designing the Signal`,
+                            content: `<div style="line-height:1.7;">For our Emergency Signaler, we will use Light or Sound waves.</div><div class="journal-box" style="border-left-color:#28a745; background:rgba(40,167,69,0.15);">If we use a flashlight (Light Wave), changing the <strong>Amplitude</strong> makes the light brighter or dimmer. If we use a siren (Sound Wave), changing the <strong>Wavelength</strong> makes the pitch higher or lower!</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: Seismograph Sandbox`,
+                            content: `<div style="margin-bottom:15px;"><strong>Create Your Wave:</strong> Adjust the sliders to see how Amplitude and Wavelength change the wave!</div><div id="threejs-container-l40" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l40')">🛠️ Debug</button><button class="btn-drop" onclick="waveIncAmp()">⬆️ Amplitude</button><button class="btn-drop" onclick="waveDecAmp()">⬇️ Amplitude</button><button class="btn-slow" onclick="waveIncLength()">↔️ Wavelength</button><button class="btn-slow" onclick="waveDecLength()">>< Wavelength</button></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket`,
+                            content: `<div class="journal-box"><strong>Journal Task:</strong> Draw a single wave line in your journal.<br><br>1. Label exactly where the <strong>Peak</strong> and <strong>Trough</strong> are.<br>2. Draw an arrow showing what the <strong>Amplitude</strong> is.</div>`
                         }
                     ]
                 },
                 'lesson41': {
-                    title: 'LAB 1 — Wave Properties Lab',
+                    title: `LAB 1 — Wave Properties Lab`,
                     slides: [
                         {
-                            title: '🌅 Overview & Mission',
-                            content: '<strong>🔬 Mission:</strong> Observe how waves behave when we change amplitude and wavelength!<div style="background:rgba(255,107,53,0.1);padding:15px;border-radius:10px;margin:15px 0;"><strong>⚠️ Safety First:</strong><br>• Do NOT place ear directly next to tone generator.<br>• Do NOT over-stretch slinkies — they will permanently bend!<br>• Keep volume at safe levels.</div>'
+                            title: `🔬 Lab Overview: Your Mission Today`,
+                            content: `<strong style="font-size:1.4rem;">🎯 YOUR GOAL: Manipulate a medium to create exact wave patterns!</strong><div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:15px 0;"><div style="background:rgba(40,167,69,0.2);padding:15px;border-radius:10px;border-left:4px solid #28a745;"><strong style="font-size:1.2rem;">✅ SUCCESS CRITERIA:</strong><br>1. Must demonstrate High Amplitude vs Low Amplitude.<br>2. Must demonstrate Short Wavelength vs Long Wavelength.</div><div style="background:rgba(220,53,69,0.2);padding:15px;border-radius:10px;border-left:4px solid #dc3545;"><strong style="font-size:1.2rem;">⚠️ SAFETY RULES:</strong><br>• Do not snap the slinky/coil at your partner.<br>• Keep waves parallel to the floor.</div></div>`
                         },
                         {
-                            title: '🛠️ Supplies & Materials',
-                            content: '<strong>What you need:</strong><br>• Tone Generator<br>• Slinky or long spring<br>• Washers (to tape to slinky for visibility)<br>• Science Journal<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:15px;"><div class="reveal-hint">🔍 What is a tone generator?</div><div class="reveal-content">It is an electronic device that creates sound waves at very specific frequencies and amplitudes! It lets us hear exactly what a wave property change does.</div></div>'
+                            title: `🛠️ Supplies & Setup`,
+                            content: `<div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;"><strong style="font-size:1.8rem;">📦 WHAT YOU NEED:</strong><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px;font-size:1.5rem;"><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">1 Long Metal Slinky (Coil)</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">1 Meter Stick</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">Masking Tape</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">Lab Partner</div></div></div><div style="margin-top:20px;padding:15px;background:rgba(255,193,7,0.15);border-radius:10px;"><strong>📐 SETUP STEPS:</strong><br>Find an open spot on the floor. Take a piece of masking tape. One partner sits on the tape holding one end of the coil. The other sits 3 meters away holding the other end. Do not over-stretch!</div>`
                         },
                         {
-                            title: '📋 Procedure',
-                            content: '<strong>Part 1: Tone Generator (Air Waves)</strong><br>1️⃣ Use the tone generator program on the tablet/computer.<br>2️⃣ Change the <strong>amplitude</strong> (volume). What do you observe?<br>3️⃣ Change the <strong>frequency</strong> (Herz). What do you observe?<br><br><strong>Part 2: Slinky (Physical Waves)</strong><br>4️⃣ Two partners hold the slinky on the floor.<br>5️⃣ Move one end side-to-side (transverse wave).<br>6️⃣ Try making high amplitude waves (wide) and low amplitude waves (narrow).<br>7️⃣ Try making high frequency waves (fast wiggles) and low frequency waves (slow wiggles).'
+                            title: `🏁 Procedure: The Amplitude Test`,
+                            content: `<strong>📋 PART 1: AMPLITUDE (15 min)</strong><div style="margin:15px 0;"><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">1</div><div><strong>Low Amplitude:</strong> Partner A shakes their hand side-to-side just a TINY bit. Record if it took a lot of energy or a little.</div></div><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">2</div><div><strong>High Amplitude:</strong> Partner A shakes their hand side-to-side VERY WIDE (3 feet total). Record the difference.</div></div></div><div style="background:rgba(255,193,7,0.2);padding:12px;border-radius:8px;"><strong>📝 NOTE:</strong> Amplitude is how WIDE you shake it.</div>`
                         },
                         {
-                            title: '💻 STEM Interactive: 3D Wave Simulator',
-                            content: '<div style="margin-bottom:15px;"><strong>Wave Generator:</strong> Change the Amplitude and Frequency below to see how the wave changes!</div><div id="threejs-container-bundle4-wave" style="width:100%; height:400px; background:rgba(0,0,0,0.8); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls" style="display:flex; justify-content:center; gap:30px; margin-top:15px; flex-wrap:wrap;"><div style="background:rgba(255,107,53,0.2); padding:15px 25px; border-radius:12px; text-align:center;"><label style="font-size:1.4rem; font-weight:bold; color:#ff6b35;">Amplitude (Energy)</label><br><input type="range" id="wave-amp-slider" min="0" max="3" step="0.1" value="1.5" style="width:200px; margin-top:10px;" oninput="if(window.updateWaveParams) window.updateWaveParams()"></div><div style="background:rgba(102,126,234,0.2); padding:15px 25px; border-radius:12px; text-align:center;"><label style="font-size:1.4rem; font-weight:bold; color:#667eea;">Frequency (Pitch)</label><br><input type="range" id="wave-freq-slider" min="0.5" max="5" step="0.1" value="2" style="width:200px; margin-top:10px;" oninput="if(window.updateWaveParams) window.updateWaveParams()"></div></div><div style="text-align:center; margin-top:15px;"><button class="btn-reset" onclick="initBundle4WaveSim()" style="background:#667eea; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:1.1rem;">🔄 Start Simulation</button></div>'
+                            title: `🔍 Discovery: Generating the Wave`,
+                            content: `<div style="line-height:1.7;">Did you notice the slinky didn't move towards your partner?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What was moving?</div><div class="reveal-content">Only the <strong>kinetic energy</strong> from your arm traveled down the metal rings. The metal rings themselves just moved left and right. That’s a wave!</div></div>`
                         },
                         {
-                            title: '🔬 Scientific Integration',
-                            content: '<strong>What did we just prove?</strong><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🤔 How did the slinky wave change when you moved your hand faster?</div><div class="reveal-content">Moving your hand faster increased the <strong>frequency</strong>, which made the <strong>wavelength shorter</strong> (the waves got closer together)!</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🤔 Did the slinky itself travel across the room?</div><div class="reveal-content"><strong>No!</strong> Only the wiggle (the <em>energy</em>) traveled from one partner to the other!</div></div>'
+                            title: `🏁 Procedure: The Wavelength Test`,
+                            content: `<strong>📋 PART 2: WAVELENGTH (15 min)</strong><div style="margin:15px 0;"><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">3</div><div><strong>Long Wavelength:</strong> Shake the slinky very SLOWLY side to side. The waves should look long and stretched out.</div></div><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">4</div><div><strong>Short Wavelength (High Frequency):</strong> Shake the slinky side to side as FAST as you can! Notice how tight the wave peaks get.</div></div></div>`
                         },
                         {
-                            title: '🧹 Cleanup & Mission Report',
-                            content: '<strong>Cleanup Checklist:</strong><div class="reveal-items-container"><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🔊</span><span class="reveal-question">Step 1</span><span class="reveal-answer">Turn off tone generators and close app.</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🌀</span><span class="reveal-question">Step 2</span><span class="reveal-answer">Carefully compress slinkies so they don\'t tangle.</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">📓</span><span class="reveal-question">Step 3</span><span class="reveal-answer">Return all materials and complete Lab Journal entry!</span></div></div>'
+                            title: `🤔 What If Scenario: Breaking the Slinky?`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> You tried to make a wave with massive amplitude AND massive frequency (super wide and super fast)?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What happens to your arm?</div><div class="reveal-content">Your arm gets exhausted in two seconds! High Amplitude + Short Wavelength means the wave contains a HUGE amount of energy. Nature works the same way.</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Wave Data`,
+                            content: `<div style="line-height:1.7;">If we are using waves to send an emergency code, we have options!</div><div class="journal-box" style="border-left-color:#00d4aa; background:rgba(0,212,170,0.15);">We could make a rule: 1 "High Amplitude" wave means "FIRE", 2 "High Amplitude" waves means "FLOOD." The wave is our messenger!</div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket & Cleanup`,
+                            content: `<div class="journal-box"><strong>🧹 MINUTE 40: CLEANUP</strong><ol><li>Coil your slinky carefully (don't tangle!).</li><li>Return meter sticks.</li><li>Sign off on your partner's lab sheet.</li></ol></div><div style="margin-top:20px;padding:20px;background:rgba(40,167,69,0.2);border-radius:10px;border:2px solid #28a745;"><strong>📓 EXIT TICKET:</strong> Which took more muscle energy to create: High Amplitude or Low Amplitude? Why?</div>`
                         }
                     ]
                 },
                 'lesson42': {
-                    title: 'Sound Waves',
+                    title: `Sound Waves & Mediums`,
                     slides: [
                         {
-                            title: '🔊 Phenomenon: Dancing Sprinkles',
-                            content: '<div style="font-size:1.8rem;">Imagine stretching a balloon over a bowl, putting sprinkles on top, and yelling at it. What happens? <strong>The sprinkles dance!</strong></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🤔 Why do they move without being touched?</div><div class="reveal-content">Your voice creates <strong>sound waves</strong> in the air. The energy from your voice travels through the air, hits the balloon, and makes it <strong>vibrate</strong>, bouncing the sprinkles!</div></div>'
+                            title: `🌅 Warm-up: Try This Now`,
+                            content: `<div class="journal-box"><strong>Place two fingers lightly against the front of your throat.</strong><br><br>📓 <strong>Task:</strong> Hum a very low, deep note. Then hum a very high, squeaky note.<ol style="line-height:1.8; margin-top:10px;"><li>What do your fingers feel?</li><li>Did the feeling change between the low note and the high note?</li></ol></div>`
                         },
                         {
-                            title: '📚 Key Vocabulary',
-                            content: 'Sound properties vocabulary:',
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Explain that <strong>Sound</strong> is a mechanical wave caused by vibrations.</li><li>Categorize materials as a <strong>Medium</strong> for sound (Solid, Liquid, Gas).</li><li>Explain why sound cannot travel through a vacuum.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#9c27b0; background:rgba(156,39,176,0.15);"><strong>🛰️ Mission Context:</strong> If our emergency signal uses a siren (Sound Wave), we must know how far the sound can travel through the air, water, or mountains before it runs out of energy!</div>`,
                             vocabulary: [
-                                { term: 'Vibration', definition: 'A rapid back-and-forth movement' },
-                                { term: 'Pitch', definition: 'How high or low a sound is (determined by frequency)' },
-                                { term: 'Volume', definition: 'How loud or quiet a sound is (determined by amplitude)' },
-                                { term: 'Longitudinal Wave', definition: 'A wave where particles move back and forth in the same direction the wave travels (like a push-pull motion)' }
+                                { term: `Vibration`, definition: `A rapid back-and-forth movement.` },
+                                { term: `Sound Wave`, definition: `A pattern of disturbance caused by the movement of energy traveling through a medium.` },
+                                { term: `Medium`, definition: `The matter (solid, liquid, or gas) through which a wave travels.` },
+                                { term: `Vacuum`, definition: `A space that is completely empty of bounds—no air, no gas, nothing.` }
                             ]
                         },
                         {
-                            title: '💡 Core Concept: How Sound Travels',
-                            content: '<strong>Sound is a longitudinal mechanical wave!</strong><br><br>When you tap a tone generator or hit a drum, it <strong>vibrates</strong>.<br>1. Those vibrations push on air particles.<br>2. The air particles bunch up (compress) and spread out (rarefy).<br>3. This bumping chain reaction travels through the air until it hits your eardrum!<div class="journal-box">📓 <strong>Science Journal:</strong> Since sound needs a medium (particles to bump into), where does sound travel faster: through air (gas) or through water (liquid)? Why?</div>'
+                            title: `📜 Historical Discovery: The First Phonograph`,
+                            content: `<div style="line-height:1.7;">How did we first record sound waves?</div><div class="journal-box" style="border-left-color:#667eea; background:rgba(102,126,234,0.1);">In 1877, Thomas Edison invented the phonograph. He shouted into a horn, and the sound wave vibrations caused a needle to carve a physical wave pattern into a spinning cylinder of tin foil!</div>`
                         },
                         {
-                            title: '🌊 Sound Through Different Media',
-                            content: '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:15px 0;text-align:center;"><div style="background:rgba(200,200,200,0.2);padding:15px;border-radius:10px;">☁️ <strong>Gas (Air)</strong><br><br>Particles are far apart. Sound travels <strong>slowly</strong>.</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:10px;">💧 <strong>Liquid (Water)</strong><br><br>Particles are closer. Sound travels <strong>faster</strong>.</div><div style="background:rgba(150,100,50,0.2);padding:15px;border-radius:10px;">🧱 <strong>Solid (Desk)</strong><br><br>Particles are packed tight! Sound travels <strong>fastest</strong>!</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">👂 Try it: Put your ear on your desk and scratch the other end. Is it louder or quieter than scratching the air?</div><div class="reveal-content">It is MUCH louder! Solids carry sound energy much better than air!</div></div>'
+                            title: `🔍 Discovery: The Speaker Cone`,
+                            content: `<div style="line-height:1.7;">If you look at the black cone of a giant speaker at a concert, you can see it physically jumping in and out.</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What is it doing to the air?</div><div class="reveal-content">It is literally "punching" the air molecules! The speaker pushes out, creating a high-pressure wave of air, which bumps into the next air molecules, all the way to your eardrum!</div></div>`
                         },
                         {
-                            title: '🧠 Check for Understanding',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 True or False: Sound waves can travel through empty space.</div><div class="reveal-content">❌ <strong>False!</strong> Sound requires a medium (to vibrate). Space is a vacuum.</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 What happens to a sound wave when a singer hits a very high note?</div><div class="reveal-content">✅ The vocal cords vibrate much faster, creating a <strong>higher frequency (shorter wavelength)</strong> sound wave!</div></div>'
+                            title: `🤔 What If Scenario: Sound in Space`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> A giant asteroid crashes into the moon. Would an astronaut in a nearby spaceship hear the explosion?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Does sound travel in space?</div><div class="reveal-content">NO! Space is a <strong>Vacuum</strong>. There are no air molecules to bump into each other. The explosion happens in total, eerie silence! Sound REQUIRES a medium.</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: The Siren Limit`,
+                            content: `<div style="line-height:1.7;">For our emergency signaling system, a siren has limits.</div><div class="journal-box" style="border-left-color:#00bcd4; background:rgba(0,188,212,0.15);">As sound waves travel through the air, they hit objects (trees, buildings, wind). Every time they hit something, they lose a tiny bit of energy. Eventually, the wave dies out, meaning the siren can only be heard a few miles away.</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: Sound Medium Race`,
+                            content: `<div style="margin-bottom:15px;"><strong>Test the Medium:</strong> Choose Air, Water, or Steel, and fire the sound wave to see who wins!</div><div id="threejs-container-l42" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l42')">🛠️ Debug</button><button class="btn-drop" onclick="startSoundRace(\'air\')">💨 Air Wave</button><button class="btn-drop" onclick="startSoundRace(\'water\')">💧 Water Wave</button><button class="btn-drop" onclick="startSoundRace(\'steel\')">🛡️ Steel Wave</button><button class="btn-reset" onclick="resetSoundRace()">🔄 Reset</button></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket`,
+                            content: `<div class="journal-box"><strong>Journal Task:</strong> Answer in complete sentences:<br><br>1. What are the three states of matter that sound can travel through (hint: solid...)?<br><br>2. Why does sound travel faster as a wave through a solid piece of metal than through the air?</div>`
                         }
                     ]
                 },
-                'lesson43': {
-                    title: 'Light Waves',
+'lesson43': {
+                    title: `Light Waves`,
                     slides: [
                         {
-                            title: '☀️ Phenomenon: The Speed Champion',
-                            content: '<div style="font-size:1.8rem;line-height:1.7;">Light is the fastest thing in the universe. It travels from the Sun to Earth (93 million miles) in just 8 minutes!</div><div class="what-if-box">💭 <strong>What If:</strong> What if light didn\'t travel in slow waves but instantaneous bursts? Light is strangely a wave AND a particle! But today, let\'s look at it as a wave.</div>'
+                            title: `🌅 Warm-up: The Laser Pointer`,
+                            content: `<div class="journal-box"><strong>Imagine shining a laser pointer across a dark, dusty room.</strong><br><br>📓 <strong>Task:</strong> In your journal, answer these two questions:<ol style="line-height:1.8; margin-top:10px;"><li>What does the beam of light look like? (Is it perfectly straight, wavy, or zig-zagged?)</li><li>How long does it take for the light to hit the wall?</li></ol></div>`
                         },
                         {
-                            title: '📚 Key Vocabulary',
-                            content: 'Light properties vocabulary:',
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Identify that <strong>Light</strong> travels in straight lines.</li><li>Explain that Light is an <strong>Electromagnetic Wave</strong>.</li><li>Understand that light does <em>not</em> need a medium to travel!</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#ffeb3b; background:rgba(255,235,59,0.15);"><strong>🛰️ Mission Context:</strong> A siren (sound wave) only travels a few miles. But if we use light to send our emergency message, it can travel almost infinitely... as long as nothing gets in its way!</div>`,
                             vocabulary: [
-                                { term: 'Light', definition: 'A form of energy you can see that travels in straight lines as an electromagnetic wave' },
-                                { term: 'Transparent', definition: 'A material that lets all light pass through clearly (glass)' },
-                                { term: 'Translucent', definition: 'A material that lets some light pass through, but it scatters (wax paper)' },
-                                { term: 'Opaque', definition: 'A material that blocks all light from passing through (wood)' },
-                                { term: 'Shadow', definition: 'The dark area formed when an opaque object blocks light waves' }
+                                { term: `Light Wave`, definition: `A type of wave that travels in straight lines and carries electromagnetic energy.` },
+                                { term: `Electromagnetic Spectrum`, definition: `The entire range of light waves, including things we can\'t see like X-rays and radio waves.` },
+                                { term: `Speed of Light`, definition: `The fastest speed in the universe: 186,282 miles per second!` }
                             ]
                         },
                         {
-                            title: '💡 Core Concept: Electromagnetic Energy',
-                            content: '<strong>Light does NOT need a medium!</strong><br><br>Unlike sound, light is an <strong>electromagnetic wave</strong>. It can travel through gas, liquid, some solids (glass)... AND completely empty space (a vacuum)!<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:15px;"><div class="reveal-hint">📏 Does light travel in zig-zags?</div><div class="reveal-content">No! Light travels in <strong>perfectly straight lines</strong> (rays) until it hits something!</div></div>'
+                            title: `📜 Perspective: Sunlight Journey`,
+                            content: `<div style="line-height:1.7;">It takes 8 minutes for light to leave the Sun and reach Earth.</div><div class="journal-box" style="border-left-color:#f44336; background:rgba(244,67,54,0.1);">Unlike sound waves, which need air, water, or solid matter to travel through, light waves are perfectly happy traveling through the empty vacuum of space! This is why we can see the stars, but we can't hear them explode.</div>`
                         },
                         {
-                            title: '🌑 Making Shadows',
-                            content: '<strong>Shadows happen because light travels in straight lines.</strong><div style="background:rgba(0,0,0,0.8);color:white;padding:20px;border-radius:12px;margin:15px 0;">When an <strong>opaque</strong> object gets in the way of a light beam, the light cannot bend around it easily. The dark area left behind is the shadow!</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🤔 How do you make a shadow bigger on the wall?</div><div class="reveal-content">Move the object <strong>closer to the light source</strong>! It blocks more rays that were spreading outward!</div></div>'
+                            title: `🔍 Discovery: Blocking the Path`,
+                            content: `<div style="line-height:1.7;">Light is incredibly fast, but it has a weakness.</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What happens if you stand in front of a flashlight?</div><div class="reveal-content">A shadow appears! Because light ONLY travels in perfectly straight lines, it cannot bend around your body. Sound can bounce around corners easily, but light is rigid.</div></div>`
                         },
                         {
-                            title: '🧠 Check for Understanding',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Q1: Why can we see the sun, but we can\'t hear it?</div><div class="reveal-content">✅ Light is an electromagnetic wave (can travel through bare space). Sound is mechanical (needs air/matter, which space doesn\'t have).</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 Q2: Which material is translucent: a clear window, a brick wall, or frosted glass?</div><div class="reveal-content">✅ <strong>Frosted glass</strong>! It lets some light through but scatters it so you can\'t see clearly.</div></div>'
+                            title: `🤔 What If Scenario: The Laser Maze`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> You need to shine a flashlight into a room, but the door is down a long, winding hallway?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 How can you get light to turn a corner?</div><div class="reveal-content">You have to force it to bounce! Since light travels in straight lines, you need to use <strong>MIRRORS</strong> to reflect the light cleanly around the corners.</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Line of Sight`,
+                            content: `<div style="line-height:1.7;">For our emergency signaling system, a flashlight is powerful but tricky.</div><div class="journal-box" style="border-left-color:#9c27b0; background:rgba(156,39,176,0.15);">If we use light to send a code from mountain A to mountain B, we need a clear <strong>Line of Sight</strong>. If a tree or cloud blocks the beam, the message dies instantly.</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: Light Beams & Shadows`,
+                            content: `<div style="margin-bottom:15px;"><strong>Test the Light Beam:</strong> Drag the objects in front of the laser. Notice the sharp shadows formed because light cannot curve!</div><div id="threejs-container-l43" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l43')">🛠️ Debug</button><button class="btn-drop" onclick="spawnBlock()">🧱 Spawn Wall</button><button class="btn-drop" onclick="spawnGlass()">🥃 Spawn Glass</button><button class="btn-reset" onclick="resetLightScene()">🔄 Clear Room</button></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket`,
+                            content: `<div class="journal-box"><strong>Journal Task:</strong> Compare Sound and Light:<br><br>1. Can sound travel through the empty vacuum of space? Why or why not?<br><br>2. Can light travel through the empty vacuum of space?</div>`
                         }
                     ]
                 },
                 'lesson44': {
-                    title: 'Reflection & Refraction',
+                    title: `Reflection & Refraction`,
                     slides: [
                         {
-                            title: '🪞 Phenomenon: The Broken Pencil',
-                            content: '<div style="font-size:1.8rem;">Put a pencil in a half-glass of water. The pencil looks strangely "broken" or bent at the water line!</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🤔 Did the pencil really break?</div><div class="reveal-content">No! The <strong>light waves</strong> coming from the pencil to your eye are bending as they exit the water! This is called <strong>refraction!</strong></div></div>'
+                            title: `🌅 Warm-up: The Broken Pencil`,
+                            content: `<div class="journal-box"><strong>Look at a clear glass of water with a pencil resting in it.</strong><br><br>📓 <strong>Task:</strong> Draw exactly what you see happening to the pencil where the air meets the water.<ol style="line-height:1.8; margin-top:10px;"><li>Does the pencil look straight?</li><li>What illusion is happening?</li></ol></div>`
                         },
                         {
-                            title: '📚 Key Vocabulary',
-                            content: 'Bouncing and bending light:',
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Explain how a polished surface causes <strong>Reflection</strong>.</li><li>Explain how light bends, or <strong>Refracts</strong>, when it changes medium.</li><li>Provide examples of opaque, translucent, and transparent materials.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#e91e63; background:rgba(233,30,99,0.15);"><strong>🛰️ Mission Context:</strong> We can manipulate light to solve our line-of-sight problems! We can use mirrors to bounce our signal, or lenses to focus a weak light into a powerful beam!</div>`,
                             vocabulary: [
-                                { term: 'Reflection', definition: 'When light waves bounce off a surface (like a mirror or still water)' },
-                                { term: 'Refraction', definition: 'When light waves bend as they pass from one medium into another (like from air to water)' },
-                                { term: 'Absorption', definition: 'When light stops at an object and turns into heat energy (why dark clothes get hot)' }
+                                { term: `Reflection`, definition: `When light hits a surface and bounces off back into our eyes.` },
+                                { term: `Refraction`, definition: `When light passes through a new medium (like water or glass) and changes speed, causing it to bend.` },
+                                { term: `Opaque`, definition: `Materials that block all light (wood, metal).` },
+                                { term: `Transparent`, definition: `Materials that let light pass through perfectly (clear glass).` }
                             ]
                         },
                         {
-                            title: '🪞 Reflection: Bouncing Light',
-                            content: '<strong>When light hits a smooth, shiny surface, it bounces back organized!</strong><div style="display:flex; gap:10px; margin:15px 0;"><div style="flex:1; background:rgba(200,200,200,0.2); padding:15px; border-radius:10px;"><strong>Smooth Mirror:</strong> Rays bounce perfectly back = clear image.</div><div style="flex:1; background:rgba(200,200,200,0.2); padding:15px; border-radius:10px;"><strong>Rough Surface:</strong> Rays scatter everywhere = no reflection image seen.</div></div><div class="journal-box">📓 <strong>Science Journal:</strong> The moon doesn\'t make its own light. How can we see it at night?</div>'
+                            title: `📜 Perspective: Why is an Apple Red?`,
+                            content: `<div style="line-height:1.7;">White light from the sun actually contains every color of the rainbow.</div><div class="journal-box" style="border-left-color:#4caf50; background:rgba(76,175,80,0.1);">When white light hits an apple, the skin of the apple absorbs the blue, green, and yellow light. It <strong>Reflects</strong> only the red light back to your eyeball! We only see things because light bounces off them.</div>`
                         },
                         {
-                            title: '💧 Refraction: Bending Light',
-                            content: '<strong>When light travels from air into water or glass, it changes speed!</strong><br><br>Light travels slightly slower in water than it does in air. This speed change causes the light wave to <strong>bend</strong> (refract).<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🌈 What happens when white light bends through a prism?</div><div class="reveal-content">The white light bends, but different colors bend at different angles! The light separates into a <strong>rainbow!</strong></div></div>'
+                            title: `🔍 Discovery: The Mirror Bounce`,
+                            content: `<div style="line-height:1.7;">Most objects scatter light in every direction because they are microscopically bumpy.</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Why does a mirror create a perfect image?</div><div class="reveal-content">A mirror is completely smooth. When light hits it, all the light rays bounce off at the exact same, perfect angle! It’s like throwing a bouncy ball against a perfectly flat wall vs a rocky cliff.</div></div>`
                         },
                         {
-                            title: '🧠 Check for Understanding',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 You look into a calm lake and see your face. What is the light doing?</div><div class="reveal-content">✅ <strong>Reflecting!</strong> Bouncing off the smooth water.</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 A magnifying glass makes things look bigger. What is the light doing?</div><div class="reveal-content">✅ <strong>Refracting!</strong> The curved glass bends the light rays as they pass through, making the image appear larger!</div></div>'
+                            title: `🤔 What If Scenario: The Bending Spear`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> An ancient fisherman is trying to spear a fish in a river. He aims perfectly straight at where he sees the fish, but he keeps missing. Why?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Hint: The water is tricking him!</div><div class="reveal-content"><strong>Refraction!</strong> As light from the fish leaves the water and hits the air, the light bends. The fish isn’t actually where he sees it. He needs to aim slightly lower to catch the fish!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Focus and Bounce`,
+                            content: `<div style="line-height:1.7;">We can build tools to control our light signals.</div><div class="journal-box" style="border-left-color:#ff9800; background:rgba(255,152,0,0.15);">A magnifying glass uses <strong>Refraction</strong> to bend light to a single, powerful point. A periscope uses <strong>Reflection</strong> to bounce the light signal over a wall!</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: The Optics Bench`,
+                            content: `<div style="margin-bottom:15px;"><strong>Bend & Bounce the Laser:</strong> Drag mirrors and glass blocks to hit the target!</div><div id="threejs-container-l44" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l44')">🛠️ Debug</button><button class="btn-drop" onclick="spawnMirror()">🪞 Add Mirror</button><button class="btn-slow" onclick="rotateMirror()">🔄 Rotate</button><button class="btn-drop" onclick="spawnPrism()">💎 Add Glass Prism</button></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket`,
+                            content: `<div class="journal-box"><strong>Journal Task:</strong> Explain the difference between Reflection and Refraction to a friend.<br><br>1. Reflection is when light ________.<br><br>2. Refraction is when light ________.</div>`
                         }
                     ]
                 },
                 'lesson45': {
-                    title: 'LAB 2 — Light & Reflection Lab',
+                    title: `LAB 2 — Light & Reflection Lab`,
                     slides: [
                         {
-                            title: '🌅 Overview & Mission',
-                            content: '<strong>🔬 Mission:</strong> Direct light wave energy exactly where we want it using reflection! We will use mirrors and test how light interacts with solar cells!<div style="background:rgba(102,126,234,0.1);padding:15px;border-radius:10px;margin:15px 0;"><strong>⭐ 4-PS4-2 Objective:</strong> Develop a model to describe that light reflecting from objects and entering the eye allows objects to be seen.</div>'
+                            title: `🔬 Lab Overview: Your Mission Today`,
+                            content: `<strong style="font-size:1.4rem;">🎯 YOUR GOAL: Engineer a system to bounce a light signal around an obstacle!</strong><div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:15px 0;"><div style="background:rgba(40,167,69,0.2);padding:15px;border-radius:10px;border-left:4px solid #28a745;"><strong style="font-size:1.2rem;">✅ SUCCESS CRITERIA:</strong><br>1. The light beam hit the target target.<br>2. The light beam must wrap a 90-degree corner.<br>3. You must use exactly two mirrors.</div><div style="background:rgba(220,53,69,0.2);padding:15px;border-radius:10px;border-left:4px solid #dc3545;"><strong style="font-size:1.2rem;">⚠️ SAFETY RULES:</strong><br>• NEVER shine the flashlight in a partner\'s eyes.<br>• Handle mirrors delicately by the edges.</div></div>`
                         },
                         {
-                            title: '🛠️ Supplies & Materials',
-                            content: '<strong>What you need:</strong><br>• Flashlights / Light sources<br>• Small mirrors<br>• Solar cells connected to buzzers or fans<br>• Cardboard / Obstacles<br>• Science Journal'
+                            title: `🛠️ Supplies & Setup`,
+                            content: `<div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;"><strong style="font-size:1.8rem;">📦 WHAT YOU NEED:</strong><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px;font-size:1.5rem;"><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">1 Target Box (Cardboard)</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">1 Flashlight (Signal Source)</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">2 Flat Craft Mirrors</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">1 Giant Textbook (Obstacle)</div></div></div><div style="margin-top:20px;padding:15px;background:rgba(255,193,7,0.15);border-radius:10px;"><strong>📐 SETUP STEPS:</strong><br>Stand the textbook up vertically like a wall in the middle of your desk. Place the flashlight at one end. Place the target box directly behind the book. If you turn on the flashlight, the book blocks the beam!</div>`
                         },
                         {
-                            title: '📋 Procedure',
-                            content: '<strong>Part 1: The Light Maze</strong><br>1️⃣ Set up a cardboard obstacle course.<br>2️⃣ Place the flashlight at one end, and a target at the other.<br>3️⃣ Use 2-3 mirrors to bounce (reflect) the light around the obstacles until it hits the target!<br><br><strong>Part 2: Solar Energy Target</strong><br>4️⃣ Replace the target with a Solar Cell (connected to a fan or buzzer).<br>5️⃣ Can you reflect the flashlight beam onto the solar cell to power it up?<br>6️⃣ What happens if you put translucent or opaque objects in the beam path?'
+                            title: `🏁 Procedure: The Double Bounce`,
+                            content: `<strong>📋 PART 1: AROUND THE CORNER (20 min)</strong><div style="margin:15px 0;"><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">1</div><div><strong>Position Mirror 1:</strong> Place one mirror off to the side so the flashlight hits it and bounces <em>past</em> the book.</div></div><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">2</div><div><strong>Position Mirror 2:</strong> Place the second mirror behind the book to catch the beam and bounce it back inward to hit the target.</div></div></div><div style="background:rgba(255,193,7,0.2);padding:12px;border-radius:8px;"><strong>📝 NOTE:</strong> The angle it hits the mirror will be the exact angle it leaves the mirror.</div>`
                         },
                         {
-                            title: '💻 STEM Interactive',
-                            content: '<div style="text-align:center;padding:20px;background:rgba(255,193,7,0.1);border-radius:15px;"><strong>Let\'s see it!</strong><br><br>When light reflects off the mirror and hits the solar cell, what happens to the energy?<br><br>Light Energy ➡️ reflected ➡️ absorbed by Solar Cell ➡️ transformed into Electrical Energy ➡️ turns Fan (Motion Energy)!</div>'
+                            title: `🔍 Discovery: Angle of Incidence`,
+                            content: `<div style="line-height:1.7;">Did you notice a pattern with how you had to twist the mirrors?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What is the rule of reflection?</div><div class="reveal-content">Angle in = Angle out! If you hit a mirror perfectly straight, it bounces straight back. If you hit it at a sharp 45-degree slant, it bounces off at a matching 45-degree slant!</div></div>`
                         },
                         {
-                            title: '🔬 Scientific Integration',
-                            content: '<strong>Why do we see things?</strong><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🤔 How do you see the mirror or the cardboard object if it\'s not glowing?</div><div class="reveal-content">The flashlight sends out light waves. Those waves hit the object, <strong>reflect</strong> off it, and bounce into your <strong>eye</strong>! If there is no light to reflect, you can\'t see the object! (4-PS4-2)</div></div>'
+                            title: `🏁 Procedure: The Periscope Principle`,
+                            content: `<strong>📋 PART 2: THE PERISCOPE BUILD (15 min)</strong><div style="margin:15px 0;"><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">3</div><div><strong>The Setup:</strong> Have Partner A sit on the floor. Have Partner B stand and hold the target box near their face. Partner A must use the flashlight to hit the target.</div></div><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">4</div><div><strong>The Climb:</strong> The light must bounce UP to a mirror, and then ACROSS. Adjust the angles carefully to solve the vertical challenge!</div></div></div>`
                         },
                         {
-                            title: '🧹 Cleanup & Mission Report',
-                            content: '<strong>Cleanup Checklist:</strong><div class="reveal-items-container"><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🔦</span><span class="reveal-question">Step 1</span><span class="reveal-answer">Turn off flashlights.</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🪞</span><span class="reveal-question">Step 2</span><span class="reveal-answer">Carefully stack mirrors (they break easily).</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🔌</span><span class="reveal-question">Step 3</span><span class="reveal-answer">Disconnect solar cells from fans/buzzers.</span></div></div>'
+                            title: `🤔 What If Scenario: Foggy Air`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> Someone filled the classroom with super thick smoke or fog while you were doing this lab?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What happens to the light beam?</div><div class="reveal-content">The fog acts as a million tiny obstacles. The light starts bouncing (reflecting) off every tiny water droplet, scattering in all directions until the beam is completely scattered and lost. You wouldn't hit the target!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Mirror Signaler`,
+                            content: `<div style="line-height:1.7;">We just proved that we can redirect an emergency signal!</div><div class="journal-box" style="border-left-color:#00bcd4; background:rgba(0,188,212,0.15);">If someone is trapped in a canyon and they have a mirror, they can bounce sunlight directly up to a rescue helicopter. They are controlling light perfectly!</div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket & Cleanup`,
+                            content: `<div class="journal-box"><strong>🧹 MINUTE 40: CLEANUP</strong><ol><li>Turn off all flashlights to save batteries.</li><li>Return mirrors and flashlights.</li></ol></div><div style="margin-top:20px;padding:20px;background:rgba(40,167,69,0.2);border-radius:10px;border:2px solid #28a745;"><strong>📓 EXIT TICKET:</strong> Draw a simple map showing your double-mirror solution from Part 1. Draw a straight line to show the beam of light bouncing off the two mirrors!</div>`
                         }
                     ]
                 },
                 'lesson46': {
-                    title: 'Patterns & Information Transfer',
+                    title: `Patterns & Information Transfer`,
                     slides: [
                         {
-                            title: '📱 Phenomenon: The Glowing Rectangle',
-                            content: '<div style="font-size:1.8rem;">How is it that tapping a flat piece of glass in your hand (a phone) makes a video suddenly appear?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🤔 What is traveling through the air to your phone?</div><div class="reveal-content"><strong>Waves!</strong> Specifically, radio waves carrying a complex <strong>pattern</strong> of information!</div></div>'
+                            title: `🌅 Warm-up: The Silent Signal`,
+                            content: `<div class="journal-box"><strong>Your teacher will perform an action at the front of the classroom without speaking.</strong><br><br>📓 <strong>Task:</strong> Observe. Your teacher will put their index finger perfectly vertically over their lips.<ol style="line-height:1.8; margin-top:10px;"><li>What does this signal mean?</li><li>Did they have to write a letter or say a word to communicate that message?</li></ol></div>`
                         },
                         {
-                            title: '📚 Key Vocabulary',
-                            content: 'Information transfer vocabulary:',
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Define a <strong>Code</strong> as a system of signals or symbols used to communicate.</li><li>Understand how simple <strong>Patterns</strong> can transfer complex information.</li><li>Recognize that different situations require different types of signals.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#f44336; background:rgba(244,67,54,0.15);"><strong>🛰️ Mission Context:</strong> A flashlight is useless in an emergency if you just turn it on and leave it on! To actually communicate a message, we must use patterns—flashing it on and off in a specific, agreed-upon code.</div>`,
                             vocabulary: [
-                                { term: 'Digitized Information', definition: 'Information turned into a pattern of numbers (like 1s and 0s)' },
-                                { term: 'Encode', definition: 'To hide or pack information into a pattern (like making a secret code)' },
-                                { term: 'Decode', definition: 'To read the pattern and turn it back into meantingful information' },
-                                { term: 'Pattern', definition: 'Something that repeats in a predictable way' }
+                                { term: `Information Transfer`, definition: `The process of moving data or a message from one person or place to another.` },
+                                { term: `Code`, definition: `A system of rules to convert information (like a letter or word) into another form (like a beep or a flash).` },
+                                { term: `Pattern`, definition: `A repeated, predictable design or sequence.` }
                             ]
                         },
                         {
-                            title: '💡 Core Concept: Waves Carry Patterns',
-                            content: '<strong>We can use waves to send messages over long distances! (4-PS4-3)</strong><br><br>If we change the amplitude or wavelength in a <em>predictable pattern</em>, we can send codes!<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:15px;"><div class="reveal-hint">🔦 Example: Using a flashlight</div><div class="reveal-content">One blink = Yes.<br>Two blinks = No.<br>You just used a pattern of light waves to transfer information!</div></div>'
+                            title: `📜 Perspective: Talking Drums of Africa`,
+                            content: `<div style="line-height:1.7;">Long before phones were invented, communities in West Africa could send complex news miles away in minutes.</div><div class="journal-box" style="border-left-color:#ff9800; background:rgba(255,152,0,0.1);">They used "Talking Drums." Because their languages were tonal (pitch mattered), drummers could manipulate the pitch and rhythm of the drum to mimic spoken phrases. A pattern of high and low beats told neighboring villages exactly what was happening!</div>`
                         },
                         {
-                            title: '🥁 Drumming Patterns',
-                            content: '<div style="background:rgba(255,107,53,0.1);padding:20px;border-radius:12px;margin:15px 0;">Historically, tribes used drums to send messages miles away.<br>• Fast drumbeats = Danger!<br>• Slow rhythmic beats = Gathering.<br><br>The <strong>sound waves</strong> carried a <strong>pattern</strong> that the listener could <strong>decode</strong> into information!</div><div class="journal-box">📓 <strong>Science Journal:</strong> Can you think of a way humans use patterns of light to control traffic today?</div>'
+                            title: `🔍 Discovery: Baseball Signs`,
+                            content: `<div style="line-height:1.7;">Look closely at a baseball coach in the dugout. They touch their ear, rub their chest, and tap their nose.</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What is happening?</div><div class="reveal-content">They are transferring information! This is a visual <strong>Code</strong>. The batter knows that "nose tap" means "bunt the ball." The coach is communicating complex strategy to one player without the other team hearing it!</div></div>`
                         },
                         {
-                            title: '🧠 Check for Understanding',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Q1: What pattern of light do traffic lights use to send instructions?</div><div class="reveal-content">✅ Red = Stop, Yellow = Caution, Green = Go. A visual color pattern!</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 Q2: Why are patterns better than just yelling?</div><div class="reveal-content">✅ Patterns can be transmitted over very long distances using light flashes or electronic signals, far further than a voice carries!</div></div>'
+                            title: `🤔 What If Scenario: Stranded on an Island`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> You are stranded on an island. You see a ship miles away. You have a pile of dry wood, green leaves, and fire.</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 How do you send information?</div><div class="reveal-content">A normal fire just means "someone is camping." If you put green leaves on the fire, the smoke turns thick and white. If you cover the fire with a wet blanket and release it in bursts, you create three equal puffs of smoke: A <strong>Pattern</strong> that universally means "SOS"!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Creating the Code`,
+                            content: `<div style="line-height:1.7;">We have sound waves and light waves. Now we need the code!</div><div class="journal-box" style="border-left-color:#4caf50; background:rgba(76,175,80,0.15);">If we blast a siren for 1 second, pause, and blast again for 1 second... that is a pattern. Just like the talking drums, we must agree on what the pattern means before the emergency happens!</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: The Code Breaker`,
+                            content: `<div style="margin-bottom:15px;"><strong>Decode the Message:</strong> Watch the light flash. Use the codebook to decipher the secret word!</div><div id="threejs-container-l46" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l46')">🛠️ Debug</button><button class="btn-drop" onclick="playSecretFlash(\'easy\')">🟢 Easy Pattern</button><button class="btn-drop" onclick="playSecretFlash(\'hard\')">🔴 Hard Pattern</button><button class="btn-slow" onclick="showCodebook()">📖 View Codebook</button></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket`,
+                            content: `<div class="journal-box"><strong>Journal Task:</strong><br><br>1. What is an example of a pattern or code you use every day without speaking? (Think about lights at an intersection, or sounds a microwave makes.)<br><br>2. Why are patterns better for sending information over long distances than simply yelling words?</div>`
                         }
                     ]
                 },
-                'lesson47': {
-                    title: 'Morse Code & Signals',
+'lesson47': {
+                    title: `Morse Code & Signals`,
                     slides: [
                         {
-                            title: '••• ——— ••• Phenomenon: SOS!',
-                            content: '<div style="font-size:1.8rem; letter-spacing: 2px;">Dot-Dot-Dot. Dash-Dash-Dash. Dot-Dot-Dot.</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🤔 What does this famous pattern mean?</div><div class="reveal-content">It is Morse Code for <strong>S.O.S!</strong> (Help!). It is the most famous example of using sound/light patterns to transfer information!</div></div>'
+                            title: `🌅 Warm-up: The Silent Tap`,
+                            content: `<div class="journal-box"><strong>Close your eyes and listen to the teacher tap the desk.</strong><br><br>📓 <strong>Task:</strong> Your teacher tapped: (Short-Short-Short) ... (Long-Long-Long) ... (Short-Short-Short)<ol style="line-height:1.8; margin-top:10px;"><li>Did that sound like a random tapping, or did it sound intentionally planned?</li><li>What famous 3-letter emergency code does that pattern represent?</li></ol></div>`
                         },
                         {
-                            title: '📚 Key Vocabulary',
-                            content: 'Signal vocabulary:',
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Explain how <strong>Morse Code</strong> uses patterns of dots and dashes to represent letters.</li><li>Understand how a <strong>Telegraph</strong> was used to send electricity as a code.</li><li>Identify Morse Code as a precursor to modern digital signaling.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#3f51b5; background:rgba(63,81,181,0.15);"><strong>🛰️ Mission Context:</strong> We don\'t need a magical device to send words over a wire or a flashlight. We just need to convert the English alphabet into a simple pattern of "On" and "Off" signals!</div>`,
                             vocabulary: [
-                                { term: 'Morse Code', definition: 'A communication system using short (dots) and long (dashes) signals' },
-                                { term: 'Telegraph', definition: 'An early machine that sent electrical signals (Morse code) over long wires' },
-                                { term: 'Signal', definition: 'A sign or action used to send a message' }
+                                { term: `Morse Code`, definition: `A method of sending text information as a series of on-off tones, clicks, or lights.` },
+                                { term: `Dot (or Dit)`, definition: `A very short signal in Morse Code (1 unit of time).` },
+                                { term: `Dash (or Dah)`, definition: `A long signal in Morse Code (3 units of time).` },
+                                { term: `Telegraph`, definition: `An old machine used to transmit and receive Morse code messages over long electrical wires.` }
                             ]
                         },
                         {
-                            title: '💡 Core Concept: Encoding the Alphabet',
-                            content: '<strong>Morse code turns the alphabet into sound or light patterns.</strong><br><br>Instead of 26 letters, Samuel Morse used only TWO things:<br>• A short signal (• dot)<br>• A long signal (— dash)<div style="background:rgba(102,126,234,0.1);padding:15px;border-radius:10px;margin-top:15px;font-family:monospace;font-size:1.2rem;">A = • — <br>B = — • • •<br>C = — • — •</div>'
+                            title: `📜 Perspective: The First Text Message`,
+                            content: `<div style="line-height:1.7;">In 1844, Samuel Morse stood in Washington D.C. and tapped a sequence of dots and dashes into a machine.</div><div class="journal-box" style="border-left-color:#795548; background:rgba(121,85,72,0.1);">Miles away in Baltimore, a machine clicked in response. It was the first time in human history that a message traveled faster than a horse could run! It revolutionized the world almost exactly like the internet did.</div>`
                         },
                         {
-                            title: '⚡ The Telegraph',
-                            content: '<strong>Electricity + Patterns = Global Communication</strong><br><br>In the 1800s, people couldn\'t send voices over wires yet. So they used electricity to make clicking sounds (Telegraph).<br><br>By sending long and short electrical clicks (Morse Code) through a wire, a message could travel from New York to California in seconds! It changed the world forever.'
+                            title: `🔍 Discovery: Translating the Alphabet`,
+                            content: `<div style="line-height:1.7;">How do you turn 26 letters into just dots and dashes?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What is the code for the letter "E"?</div><div class="reveal-content">The letter "E" is the most common letter in English. So Samuel Morse made it easiest to tap: Just ONE single Dot (.)! The letter "Q" is rarely used, so it got a long, complicated code: Dash-Dash-Dot-Dash (--.-). Efficiency matters!</div></div>`
                         },
                         {
-                            title: '🧠 Check for Understanding',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 True or False: You need wires to send Morse Code.</div><div class="reveal-content">❌ <strong>False!</strong> While telegraphs used wires, you can send Morse Code by flashing a flashlight (light waves) or tapping on a wall (sound waves)!</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 E = • (one dot). Why do you think Morse made the letter "E" the shortest code?</div><div class="reveal-content">✅ Because "E" is the most common letter in the English language! He wanted the most common letters to be the fastest to type!</div></div>'
+                            title: `🤔 What If Scenario: The Sinking Ship`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> In 1912, the Titanic was sinking in the icy ocean. They had radios aboard, but they couldn't transmit voice. How did they call for help?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 How did the rescue ships know?</div><div class="reveal-content">The Titanic’s radio operators frantically tapped out "CQD" and "SOS" in <strong>Morse Code</strong> using electrical radio waves continuously until the power died. Ships miles away heard the Beep-Beep-Beep patterns and rushed to help!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: The Universal Language`,
+                            content: `<div style="line-height:1.7;">For our emergency signaling system, Morse Code is the perfect tool.</div><div class="journal-box" style="border-left-color:#009688; background:rgba(0,150,136,0.15);">We can send Morse Code by turning a flashlight on and off (light wave), blasting a siren (sound wave), or even just tapping a rock against a pipe! It is a universal code.</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: The Telegraph Machine`,
+                            content: `<div style="margin-bottom:15px;"><strong>Transmit a Message:</strong> Use the telegraph key. A quick tap is a dot, a long hold is a dash. Try spelling your name using the chart!</div><div id="threejs-container-l47" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l47')">🛠️ Debug</button><button class="btn-drop" onmousedown="telegraphKeyOn()" onmouseup="telegraphKeyOff()">📻 TAP KEY</button><button class="btn-slow" onclick="playSOS()">🚨 Auto-Play SOS</button></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket`,
+                            content: `<div class="journal-box"><strong>Journal Task:</strong><br><br>1. Write your initials in your journal, and write the Morse Code dots and dashes for them next to it.<br><br>2. Why do you think Samuel Morse made the letter "A" very short (.-) but the letter "Z" much longer (--..)?</div>`
                         }
                     ]
                 },
                 'lesson48': {
-                    title: 'Binary & Digital Information',
+                    title: `Binary & Digital Information`,
                     slides: [
                         {
-                            title: '💻 Phenomenon: Welcome to the Matrix',
-                            content: '<div style="font-size:1.8rem; font-family:monospace; word-break:break-all;">01101000 01100101 01101100 01101100 01101111</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🤔 What language is this?</div><div class="reveal-content"><strong>Binary Code!</strong> It is the language of computers, and it spells the word "hello".</div></div>'
+                            title: `🌅 Warm-up: The Light Switch`,
+                            content: `<div class="journal-box"><strong>Look at the light switch on the wall of your classroom.</strong><br><br>📓 <strong>Task:</strong> Answer these questions:<ol style="line-height:1.8; margin-top:10px;"><li>How many positions does the switch have?</li><li>Can the switch be "halfway" on?</li><li>If we assigned numbers to the switch, what number would "Off" be? What number would "On" be?</li></ol></div>`
                         },
                         {
-                            title: '📚 Key Vocabulary',
-                            content: 'Digital vocabulary:',
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Understand the concept of <strong>Binary Code</strong> (0s and 1s).</li><li>Explain how computers use binary to store and send information.</li><li>Compare an <strong>Analog</strong> signal (continuous) to a <strong>Digital</strong> signal (on/off).</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#2196f3; background:rgba(33,150,243,0.15);"><strong>🛰️ Mission Context:</strong> Morse code has dots, dashes, and spaces (3 things). For modern computers to send emergency data across the world in milliseconds, they use an even simpler code that only has 2 things: ON and OFF!</div>`,
                             vocabulary: [
-                                { term: 'Binary', definition: 'A system of representing information using only TWO options (usually 1 and 0)' },
-                                { term: 'Bit', definition: 'A single 1 or 0 (the smallest piece of computer data)' },
-                                { term: 'Digital Signal', definition: 'Information that is sent in exact, discrete packets of numbers (pulse on/off)' },
-                                { term: 'Analog Signal', definition: 'Information that is sent as a continuous, smooth wave (like an old record player)' }
+                                { term: `Binary Code`, definition: `A coding system using the binary digits 0 and 1 to represent a letter, digit, or other character in a computer.` },
+                                { term: `Bit`, definition: `The smallest unit of data in a computer (a single 0 or 1).` },
+                                { term: `Digital Signal`, definition: `A signal that is expressed as a series of the digits 0 and 1.` },
+                                { term: `Analog Signal`, definition: `A continuous signal that has infinite possibilities (like a smooth wave).` }
                             ]
                         },
                         {
-                            title: '💡 Core Concept: 1s and 0s',
-                            content: '<strong>How does a computer use waves to talk?</strong><br><br>A computer only understands two things:<br>• <strong>1</strong> = Electricity is ON (High Amplitude wave)<br>• <strong>0</strong> = Electricity is OFF (Low/Zero Amplitude wave)<div style="background:rgba(255,193,7,0.2);padding:15px;border-radius:10px;margin-top:15px;">By sending millions of electrical pulses a second (on, off, on, on, off), computers can encode letters, pictures, and video games into digital wave patterns!</div>'
+                            title: `📜 Perspective: 0 is Off, 1 is On`,
+                            content: `<div style="line-height:1.7;">A computer is just a box filled with billions of microscopic switches.</div><div class="journal-box" style="border-left-color:#607d8b; background:rgba(96,125,139,0.1);">It doesn't understand English, or math, or pictures. All it understands is "Switch is OFF" (which we write as a 0) or "Switch is ON" (which we write as a 1). By combining millions of 0s and 1s, the computer can play a video game or send an email!</div>`
                         },
                         {
-                            title: '📸 Why Digital is Better',
-                            content: '<strong>4-PS4-3: Compare solutions that use patterns to transfer information.</strong><div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:15px 0;"><div style="background:rgba(200,200,200,0.2);padding:15px;border-radius:10px;">📼 <strong>Analog (Old)</strong><br>Uses smooth waves (like old VHS tapes). If the tape gets scratched, the wave gets messed up and the picture gets fuzzy.</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:10px;">💿 <strong>Digital (New)</strong><br>Uses exact 1s and 0s. The computer knows it\'s either a 1 or a 0. It will never look fuzzy — it\'s a perfect copy every time!</div></div>'
+                            title: `🔍 Discovery: Translating Binary`,
+                            content: `<div style="line-height:1.7;">How do you spell a word with just 0s and 1s?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 How do computers spell "HI"?</div><div class="reveal-content">Every letter has an 8-digit binary code! The letter "H" is exactly <strong>01001000</strong>. The letter "I" is exactly <strong>01001001</strong>. So to text your friend "HI", your phone shoots an invisible radio wave holding: 0100100001001001!</div></div>`
                         },
                         {
-                            title: '🧠 Check for Understanding',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 How is Binary similar to Morse Code?</div><div class="reveal-content">✅ Both use only TWO options to build patterns! Morse uses dots/dashes, Binary uses 1s/0s!</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 Why do photos from your phone copy to a computer perfectly?</div><div class="reveal-content">✅ Because they are sent as <strong>digital information</strong> (exact patterns of 1s and 0s), which don\'t lose quality when transferred!</div></div>'
+                            title: `🤔 What If Scenario: A Scratched DVD`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> An old vinyl record gets scratched, the music sounds fuzzy and distorted. BUT if a digital DVD gets a tiny scratch, the movie might skip a split second, but the rest of the picture looks perfectly clear. Why?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Why is Digital better?</div><div class="reveal-content">A vinyl record is <strong>Analog</strong>: the needle reads a continuous wavy groove. If it’s damaged, the wave is ruined. A DVD is <strong>Digital</strong>: it is microscopic pits (0s) and flat spots (1s). The computer can often repair a missing 0 or 1 instantly! Digital is a much more reliable way to send information.</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Digital Emergency Transmissions`,
+                            content: `<div style="line-height:1.7;">When a modern GPS rescue beacon is activated on a mountain...</div><div class="journal-box" style="border-left-color:#e91e63; background:rgba(233,30,99,0.15);">It does NOT send a voice pleading for help. It blasts a burst of radio waves into space containing billions of 1s and 0s (digital binary data). The satellite catches those 1s and 0s, and decodes them into the hiker’s exact latitude and longitude coordinates!</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: The Binary Byte Builder`,
+                            content: `<div style="margin-bottom:15px;"><strong>Flip the Switches:</strong> Try to match the 8-bit pattern on the screen to unlock the secret data! Remember, 0 is light OFF, 1 is light ON.</div><div id="threejs-container-l48" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l48')">🛠️ Debug</button><button class="btn-drop" onclick="randomizeBinaryTarget()">🔢 New Target</button><button class="btn-slow" onclick="checkBinaryCode()">✅ Submit</button></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket`,
+                            content: `<div class="journal-box"><strong>Journal Task:</strong><br><br>1. What two numbers are used in Binary Code?<br><br>2. Why does a computer use binary? (Hint: Think about what is inside a computer processor).</div>`
                         }
                     ]
                 },
                 'lesson49': {
-                    title: 'LAB 3 — Design a Communication Device',
+                    title: `LAB 3 — Design a Communication System`,
                     slides: [
                         {
-                            title: '🌅 Overview & Mission',
-                            content: '<strong>🔬 Mission:</strong> Engineers, you must design a device to send a secret message to another team across the room without talking! (4-PS4-3)'
+                            title: `🔬 Lab Overview: Your Mission Today`,
+                            content: `<strong style="font-size:1.4rem;">🎯 YOUR GOAL: Design, build, and test a device that can send a coded message across the room WITHOUT speaking!</strong><div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:15px 0;"><div style="background:rgba(40,167,69,0.2);padding:15px;border-radius:10px;border-left:4px solid #28a745;"><strong style="font-size:1.2rem;">✅ SUCCESS CRITERIA:</strong><br>1. The Receiver must accurately decode a full 3-word message.<br>2. The Sender and Receiver must be 15 feet apart.<br>3. Zero vocal communication allowed.</div><div style="background:rgba(220,53,69,0.2);padding:15px;border-radius:10px;border-left:4px solid #dc3545;"><strong style="font-size:1.2rem;">⚠️ THE CATCH:</strong><br>• You must use either Light (flashlight) OR Sound (tapping).<br>• You must invent your own code dictionary!</div></div>`
                         },
                         {
-                            title: '🛠️ Supplies & Materials',
-                            content: '<strong>What you need:</strong><br>• Flashlights / Lasers<br>• Buzzer modules, batteries, wires<br>• String, cups, cardboard<br>• Any other building materials available in the lab!'
+                            title: `🛠️ Supplies & Setup`,
+                            content: `<div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;"><strong style="font-size:1.8rem;">📦 WHAT YOU NEED:</strong><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px;font-size:1.5rem;"><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">1 Flashlight OR 1 Drum/Stick</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">1 Blank Code Dictionary Sheet</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">Pencils</div><div style="background:rgba(102,126,234,0.2);padding:15px;border-radius:8px;text-align:center;font-weight:bold;">Lab Partner (Sender & Receiver)</div></div></div><div style="margin-top:20px;padding:15px;background:rgba(255,193,7,0.15);border-radius:10px;"><strong>📐 INTRUCTIONS:</strong><br>Do not use standard Morse Code. You must invent a simpler code for specific words (e.g. 2 flashes means "DANGER", 1 long flash means "FOOD").</div>`
                         },
                         {
-                            title: '📋 Procedure',
-                            content: '<strong>The Engineering Design Process:</strong><br>1️⃣ <strong>ASK:</strong> How can we send a specific set of words to our partner group?<br>2️⃣ <strong>IMAGINE:</strong> Will you use light patterns (flashes) or sound patterns (buzzes/taps)?<br>3️⃣ <strong>PLAN:</strong> Create your code book! (e.g., 2 fast blinks = "Go", 1 long blink = "Stop"). Provide the codebook to the partner group.<br>4️⃣ <strong>BUILD:</strong> Construct your device (circuit, reflector, string-phone).<br>5️⃣ <strong>TEST & IMPROVE:</strong> Try sending the message. Did the other team decode it correctly? If not, fix the device or the code!'
+                            title: `🏁 Procedure: Engineering the Code`,
+                            content: `<strong>📋 PART 1: THE DICTIONARY (15 min)</strong><div style="margin:15px 0;"><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">1</div><div><strong>Brainstorm Words:</strong> Together with your partner, pick 10 emergency words your team might need to say (e.g. Water, Fire, Help, Yes, No, Move, Stop, Cave, Hill, Animal).</div></div><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">2</div><div><strong>Assign the Patterns:</strong> Assign a specific light flash pattern or sound pattern to each word. Write it down twice (one copy for the Sender, one for the Receiver).</div></div></div>`
                         },
                         {
-                            title: '💻 STEM Interactive',
-                            content: '<div style="text-align:center;padding:20px;background:rgba(102,126,234,0.1);border-radius:15px;"><strong>The Decryption Challenge!</strong><br><br>While other teams are testing, watch their lights or listen to their sounds.<br>Even without their codebook, can you recognize any <strong>PATTERNS</strong> they are repeating?</div>'
+                            title: `🔍 Discovery: The "Space" Between Words`,
+                            content: `<div style="line-height:1.7;">If a flashlight blinks 6 times really fast...</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 How does the receiver know if it was one 6-blink word, or two 3-blink words?</div><div class="reveal-content">Just like spaces between words on a page, your code NEEDS a specific pause (like counting 3 seconds of silence) to tell the receiver that the word has ended. Otherwise, it is just a garbled mess of data!</div></div>`
                         },
                         {
-                            title: '🔬 Scientific Integration',
-                            content: '<strong>Evaluating Your Design (4-PS4-3)</strong><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🤔 What was the most common error when sending a message?</div><div class="reveal-content">Usually, the pattern is sent too fast, or the receiver loses track of the pattern! In real digital devices (like WiFi), there are strict timing rules to prevent this!</div></div>'
+                            title: `🏁 Procedure: The Transmission Text`,
+                            content: `<strong>📋 PART 2: THE TRANSMISSION (15 min)</strong><div style="margin:15px 0;"><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">3</div><div><strong>Separation:</strong> Sender goes to one side of the room. Receiver goes to the other side. DO NOT TALK. The teacher will hand the Sender a secret 3-word phrase from your dictionary.</div></div><div style="display:flex;align-items:center;gap:15px;background:rgba(102,126,234,0.15);padding:12px;border-radius:8px;margin-bottom:10px;"><div style="background:#667eea;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;">4</div><div><strong>Transmission:</strong> Send the message! The receiver must write down the translation. Then check with the teacher to see if it was 100% accurate!</div></div></div>`
                         },
                         {
-                            title: '🧹 Cleanup & Mission Report',
-                            content: '<strong>Cleanup Checklist:</strong><div class="reveal-items-container"><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🔋</span><span class="reveal-question">Step 1</span><span class="reveal-answer">Disconnect all batteries and circuits!</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">🔦</span><span class="reveal-question">Step 2</span><span class="reveal-answer">Turn off switch on flashlights.</span></div><div class="reveal-item" onclick="revealAnswer(this)"><span class="reveal-emoji">📓</span><span class="reveal-question">Step 3</span><span class="reveal-answer">Complete your Lab Journal reflection!</span></div></div>'
+                            title: `🤔 What If Scenario: Signal Interference`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> You are trying to send a light code, but someone turns on the bright classroom lights? Or you are trying to send a sound code, but someone starts playing loud music?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What happens to your message?</div><div class="reveal-content">This is called <strong>Interference</strong> or <strong>Noise</strong>! The receiver’s eyes or ears get overwhelmed by the extra light or sound waves, and they can’t distinguish your pattern from the background noise. The message is lost!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Real World Integrity`,
+                            content: `<div style="line-height:1.7;">In the real world, engineers face interference constantly.</div><div class="journal-box" style="border-left-color:#ff4444; background:rgba(244,67,54,0.15);">Static on a radio, static on a TV, or a dropped cell phone call are all examples of "Noise" overpowering your digital signal! Engineering is about making the signal strong enough to survive the journey.</div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket & Cleanup`,
+                            content: `<div class="journal-box"><strong>🧹 MINUTE 40: CLEANUP</strong><ol><li>Hand in your Code Dictionaries to the teacher.</li><li>Return all flashlights and drums.</li></ol></div><div style="margin-top:20px;padding:20px;background:rgba(40,167,69,0.2);border-radius:10px;border:2px solid #28a745;"><strong>📓 EXIT TICKET:</strong> Did your team successfully transmit the message? If yes, what made your code easy to read? If no, what went wrong?</div>`
                         }
                     ]
                 },
                 'lesson50': {
-                    title: 'Lenses, Cameras & Digital Devices',
+                    title: `Lenses, Cameras & Digital Devices`,
                     slides: [
                         {
-                            title: '📷 Phenomenon: Catching Light',
-                            content: '<div style="font-size:1.8rem;">How can a camera freeze a moment in time and put it on a screen forever?</div><div class="what-if-box">💭 <strong>Think About It:</strong> A camera is heavily inspired by the human eye. Both are designed to capture light waves!</div>'
+                            title: `🌅 Warm-up: The Human Camera`,
+                            content: `<div class="journal-box"><strong>Gently place your hand over one eye. Keep the other eye open.</strong><br><br>📓 <strong>Task:</strong> Look at an object far away, then quickly look at an object very close to your face (like a pencil).<ol style="line-height:1.8; margin-top:10px;"><li>Did the far away object get blurry when you looked at the pencil?</li><li>Did you feel your eye physically adjust or "strain" slightly to bring the close object into clear view?</li></ol></div>`
                         },
                         {
-                            title: '📚 Key Vocabulary',
-                            content: 'Optics vocabulary:',
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Explain how a <strong>Lens</strong> uses refraction to focus light.</li><li>Understand how the human eye uses a lens to see.</li><li>Identify how digital devices convert light waves into digital data (0s and 1s).</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#e91e63; background:rgba(233,30,99,0.15);"><strong>🛰️ Mission Context:</strong> We know how to SEND light signals. But how does a modern computer actually "SEE" and RECEIVE a light signal? It uses a lens to catch the light, and a sensor to convert it to digital data!</div>`,
                             vocabulary: [
-                                { term: 'Lens', definition: 'A curved piece of glass or plastic that refracts (bends) light' },
-                                { term: 'Convex Lens', definition: 'A lens thicker in the middle that bends light inward (magnifies)' },
-                                { term: 'Concave Lens', definition: 'A lens thinner in the middle that bends light outward (spreads)' },
-                                { term: 'Sensor', definition: 'A digital chip in a camera that turns light waves into electrical binary code' }
+                                { term: `Lens`, definition: `A curved piece of glass or plastic that refracts (bends) light to a specific focal point.` },
+                                { term: `Retina / Image Sensor`, definition: `The surface that catches the light image (in your eye, or in a digital camera).` },
+                                { term: `Digitize`, definition: `The process of converting a physical wave (like light or sound) into a digital computer file of 1s and 0s.` }
                             ]
                         },
                         {
-                            title: '💡 Lenses: Bending Light to Help Us See',
-                            content: '<strong>Lenses use REFRACTION to bend waves.</strong><br><br>We use lenses to enhance human senses:<br>• <strong>Microscopes</strong> bend light to make tiny things look huge.<br>• <strong>Telescopes</strong> bend light from stars to make distant things look close.<br>• <strong>Glasses</strong> bend light to help people\'s eyes focus properly!'
+                            title: `📜 Perspective: Anatomy of an Eyeball`,
+                            content: `<div style="line-height:1.7;">Your eye is an organic camera.</div><div class="journal-box" style="border-left-color:#4caf50; background:rgba(76,175,80,0.1);">Light bounces off the world and enters your pupil (the dark hole). Right behind it is a squishy clear <strong>Lens</strong>. This lens bends the light waves so they crash perfectly against the back of your eyeball (the Retina). The retina turns that light into an electrical signal and zaps it to your brain!</div>`
                         },
                         {
-                            title: '📸 How a Digital Camera Works',
-                            content: '<strong>From Wave to Binary Image!</strong><br><br>1. Light waves reflect off you and enter the camera lens.<br>2. The <strong>lens</strong> bends the light to focus it on a small <strong>sensor</strong>.<br>3. The sensor measures the color and brightness of the light and turns it into <strong>digital info (Binary 1s and 0s)</strong>.<br>4. The computer saves that pattern as a JPEG image file!'
+                            title: `🔍 Discovery: Flipping Reality`,
+                            content: `<div style="line-height:1.7;">Wait, how does a curved lens bend the light?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 If light criss-crosses in a lens, what happens to the picture?</div><div class="reveal-content">The image is turned completely UPSIDE DOWN! The lenses in your eyeballs project an upside-down movie onto the back of your eye. Your amazing brain automatically flips the image right-side-up, so you don't walk around seeing the world upside down!</div></div>`
                         },
                         {
-                            title: '🧠 Check for Understanding',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Q1: What wave property makes a lens work?</div><div class="reveal-content">✅ <strong>Refraction.</strong> The light bends as it enters the curved glass medium.</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 Q2: How does a digital camera store a picture?</div><div class="reveal-content">✅ By converting the light wave pattern into a <strong>digital binary pattern</strong> (1s and 0s) and saving it in memory!</div></div>'
+                            title: `🤔 What If Scenario: Glasses and Contacts`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> Someone is "nearsighted," meaning their eyeball is shaped a little too long. The lens in their eye bends the light, but the light crosses <em>before</em> it hits the back of the eyeball. Everything far away looks blurry!</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 How do glasses fix this?</div><div class="reveal-content">Glasses add a SECOND artificial lens in front of the eye. This extra lens pre-bends the light just perfectly, so that when it goes through the eye’s natural lens, it lands sharp and clear exactly on the back wall!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: The Smartphone Sensor`,
+                            content: `<div style="line-height:1.7;">A smartphone camera works exactly like an eyeball.</div><div class="journal-box" style="border-left-color:#9c27b0; background:rgba(156,39,176,0.15);">It has a glass lens to focus the light. But instead of a retina, it has a digital microchip! The chip senses the light wave, turns it into millions of <strong>Binary 0s and 1s</strong>, and saves it as a JPEG photo on your phone screen!</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: Focus the Camera Lens`,
+                            content: `<div style="margin-bottom:15px;"><strong>Adjust the Focal Length:</strong> Slide the lens back and forth. Can you get the criss-crossing light beams to perfectly focus right on the camera sensor?</div><div id="threejs-container-l50" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l50')">🛠️ Debug</button><input type="range" min="1" max="100" value="50" oninput="moveCameraLens(this.value)" style="width:70%; margin:20px;"></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket`,
+                            content: `<div class="journal-box"><strong>Journal Task:</strong><br><br>1. What does the lens in your eye do to light waves?<br><br>2. How does a digital camera turn a light wave into a photograph that can be saved on a computer? (Hint: What does it turn the light into?)</div>`
                         }
                     ]
                 },
-                'lesson51': {
-                    title: 'Communication Tech: Then & Now',
+'lesson51': {
+                    title: `Communication Tech: Then & Now`,
                     slides: [
                         {
-                            title: '⏳ Phenomenon: The Shrinking World',
-                            content: '<div style="font-size:1.8rem;">In the 1800s, it took months to send a letter across the ocean on a ship. Today, you can FaceTime someone in Australia in half a second!</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🤔 What changed?</div><div class="reveal-content">We learned how to use <strong>Electromagnetic Waves</strong> to send information at the speed of light!</div></div>'
+                            title: `🌅 Warm-up: The Time Traveler`,
+                            content: `<div class="journal-box"><strong>Imagine you went back in time to the year 1800.</strong><br><br>📓 <strong>Task:</strong> You need to tell your friend in Europe "Happy Birthday!" from New York.<ol style="line-height:1.8; margin-top:10px;"><li>How long would it take for the message to reach them?</li><li>How does that same message travel today?</li></ol></div>`
                         },
                         {
-                            title: '📚 The Timeline of Communication',
-                            content: '<strong>Visual/Sound Patterns (Ancient History)</strong><br>• Smoke signals, drums, carrier pigeons. Slow, short distance.<br><br><strong>Electrical Patterns (1800s)</strong><br>• Telegraph (Morse Code via wires). Still needed physical wires everywhere.<br><br><strong>Electromagnetic Waves (1900s)</strong><br>• Radio, TV, Walkie-talkies. Wireless! Uses invisible radio waves through the air.<br><br><strong>Digital & Satellite (2000s)</strong><br>• Cell phones, Internet/WiFi, Satellites. Bounces digital binary light patterns around the globe in milliseconds!'
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Trace the evolution of communication technology over time.</li><li>Compare the speed, distance, and reliability of different methods.</li><li>Recognize that modern tech is just an advanced application of the exact same wave physics.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#009688; background:rgba(0,150,136,0.15);"><strong>🛰️ Mission Context:</strong> To build the ultimate emergency signaling system, we must look at what engineers have built in the past. We can learn perfectly good engineering from a 100-year-old telegraph or a 2000-year-old fire beacon!</div>`,
+                            vocabulary: [
+                                { term: `Technology Evolution`, definition: `The process of improving tools and systems over time to solve problems more effectively.` },
+                                { term: `Reliability`, definition: `How consistently a system works without failing or losing the message.` },
+                                { term: `Global Network`, definition: `A system of computers, cables, and satellites connecting the entire planet.` }
+                            ]
                         },
                         {
-                            title: '💡 Fiber Optics: Light in a Tube',
-                            content: '<strong>How the internet really travels!</strong><div style="background:rgba(102,126,234,0.1);padding:15px;border-radius:10px;margin-top:15px;">You might think WiFi is everywhere, but the global internet is actually a massive network of <strong>Fiber Optic cables</strong> buried under the oceans!<br><br>These cables are made of pure glass. Lasers shoot pulses of light (1s and 0s) through the glass using total internal <strong>reflection</strong>. It\'s literally light speed!</div>'
+                            title: `📜 Perspective: From Fire to Fiber Optics`,
+                            content: `<div style="line-height:1.7;">Communication has always been about waves.</div><div class="journal-box" style="border-left-color:#ff5722; background:rgba(255,87,34,0.1);">2,000 years ago, people lit fires on mountains to warn of invasion (Light Waves). Today, we shoot lasers through microscopic glass cables called <strong>Fiber Optics</strong> underneath the ocean to send the internet between continents (Also Light Waves)! The physics hasn't changed; the tools just got better!</div>`
                         },
                         {
-                            title: '🧠 Check for Understanding',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Q1: Why was the telegraph a huge upgrade over horses/boats for sending messages?</div><div class="reveal-content">✅ It used electricity to send signal patterns through wires, which is almost instantaneous.</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">🔍 Q2: What travels through underwater fiber optic internet cables?</div><div class="reveal-content">✅ Pulses of <strong>light waves</strong> transferring digital information (binary patterns)!</div></div>'
+                            title: `🔍 Discovery: The Submarine Cable`,
+                            content: `<div style="line-height:1.7;">Most people think their cell phones use satellites to talk to the other side of the world.</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Is the internet mostly floating in space?</div><div class="reveal-content">NO! 99% of international data is carried by physical wires lying on the muddy bottom of the ocean! Ships spend years constantly laying and repairing giant cables full of tiny glass threads. Your TikTok goes underwater!</div></div>`
+                        },
+                        {
+                            title: `🤔 What If Scenario: A Complete Blackout`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> A massive solar flare knocks out all electricity and computers on Earth. You still need to communicate across town. What technology from the past would you revert to?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What doesn't plug in?</div><div class="reveal-content">To survive, you would instantly go back to basic physics: <strong>Sound Waves</strong> (like bells or horns), <strong>Light Waves</strong> (mirrors flashing sunlight), or <strong>Matter Carrier</strong> (sending a person with a written note)!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Redundancy`,
+                            content: `<div style="line-height:1.7;">The best engineers don't just rely on one system!</div><div class="journal-box" style="border-left-color:#607d8b; background:rgba(96,125,139,0.15);">They design <strong>Redundancy</strong> (a backup plan). If the digital radio fails in an emergency, maybe the helicopter has a giant analog spotlight. A good system has layers of technology!</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: Timeline Explorer`,
+                            content: `<div style="margin-bottom:15px;"><strong>Explore the Tech:</strong> Spin the globe to different eras to see how humanity connected the world!</div><div id="threejs-container-l51" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l51')">🛠️ Debug</button><button class="btn-drop" onclick="setEra(1800)">1800s: The Carrier</button><button class="btn-drop" onclick="setEra(1900)">1900s: The Wire</button><button class="btn-drop" onclick="setEra(2000)">2000s: The Web</button></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket`,
+                            content: `<div class="journal-box"><strong>Journal Task:</strong> List three different ways humans have communicated over long distances in history. Next to each, state if it primarily relied on Sound Waves, Light Waves, or moving physical Matter.</div>`
                         }
                     ]
                 },
                 'lesson52': {
-                    title: '🥽 VR Free Day — Wave Tech Explorer',
+                    title: `Bundle 4 Review — The Wave Games`,
+                    subtitle: `Station Rotations & Mini-Challenges`,
                     slides: [
                         {
-                            title: '🎮 Welcome to Free Day!',
-                            content: '<div style="font-size:1.8rem; text-align:center; padding: 20px;">Today is a student-directed exploration day!<br><br>You will have the chance to use VR headsets to step inside wave simulations and see the invisible forces we\'ve been studying!</div>'
+                            title: `🏁 Welcome to The Wave Games!`,
+                            content: `<strong style="font-size:1.4rem;">🎯 TODAY\'S GOAL: Prove your mastery of Waves, Codes, and Communication!</strong><div style="font-size:1.2rem; margin-top:20px;">You will rotate through <strong>3 high-speed stations</strong>. At each station, your team must complete the challenge to earn a Mission Patch!</div><div style="background:rgba(255,193,7,0.2);padding:15px;border-radius:10px;margin-top:20px;border-left:4px solid #ffc107;"><h3>🏆 The Ultimate Prize</h3>A perfect score unlocks the <strong>VR Expedition</strong>!</div>`
                         },
                         {
-                            title: '🥽 VR Station Guidelines',
-                            content: '<strong>When using the VR Headsets:</strong><br>1️⃣ Stay seated or in your designated safe square.<br>2️⃣ If you feel dizzy, take off the headset immediately and close your eyes.<br>3️⃣ Ensure the controllers have the wrist straps securely on.<br>4️⃣ Take turns! Limit sessions to 10 minutes so everyone gets a chance.'
+                            title: `🌊 Station 1: The Wavelength Master`,
+                            content: `<div style="background:linear-gradient(135deg, rgba(33,150,243,0.2), rgba(0,188,212,0.2)); padding:20px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.1);"><h3>📜 Your Task:</h3><p style="font-size:1.2rem;">Using the digital simulator, the teacher will show you a wave. Your team has 60 seconds to perfectly match the <strong>Amplitude</strong> and <strong>Wavelength</strong> on your own device.</p><hr style="border-color:rgba(255,255,255,0.3);"><p><strong>Scoring:</strong> Complete 3 matches perfectly to earn the <span style="color:#00bcd4; font-weight:bold;">Tsunami Patch</span>!</p></div>`
                         },
                         {
-                            title: '💻 iPad / Chromebook Alternatives',
-                            content: '<strong>If you are waiting for a headset:</strong><br>Go to the STEM classroom page and explore the interactive apps:<br>• <strong>Chrome Music Lab:</strong> Build sound wave patterns and see the frequencies.<br>• <strong>PhET Color Vision:</strong> Mix red, green, and blue light waves to trick your eyes (biology and wave physics!).<br>• <strong>Wave Interference Sim:</strong> Drop water drops and see the energy ripples.'
+                            title: `🔍 Station 2: The Optic Maze`,
+                            content: `<div style="background:linear-gradient(135deg, rgba(233,30,99,0.2), rgba(156,39,176,0.2)); padding:20px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.1);"><h3>📜 Your Task:</h3><p style="font-size:1.2rem;">You are given 3 mirrors, 1 glass prism, and a wooden block. You must bend the laser beam from the Start Point to the Target without touching the red "Danger Zones".</p><hr style="border-color:rgba(255,255,255,0.3);"><p><strong>Scoring:</strong> A successful hit in under 3 minutes earns the <span style="color:#e91e63; font-weight:bold;">Periscope Patch</span>!</p></div>`
                         },
                         {
-                            title: '📓 Free Day Reflection',
-                            content: 'While you explore, keep this question in mind for your journal at the end of class:<div class="journal-box">📓 <strong>Science Journal:</strong> The VR headset uses lenses and tiny screens flashing light waves very fast to trick your brain into thinking you are somewhere else. How does this prove that our eyes rely on light waves to understand reality?</div>'
+                            title: `📻 Station 3: The Decoding Expert`,
+                            content: `<div style="background:linear-gradient(135deg, rgba(76,175,80,0.2), rgba(205,220,57,0.2)); padding:20px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.1);"><h3>📜 Your Task:</h3><p style="font-size:1.2rem;">Listen closely! The computer will play out an emergency message in Morse Code. Use your dictionary to write down the exact English characters.</p><hr style="border-color:rgba(255,255,255,0.3);"><p><strong>Scoring:</strong> An exact translation earns the <span style="color:#4caf50; font-weight:bold;">Binary Patch</span>!</p></div>`
+                        },
+                        {
+                            title: `📝 The Final Exam Approach`,
+                            content: `<div class="journal-box" style="font-size:1.2rem; line-height:1.6;">Once you have completed all rotations, return to your seat for the final independent review sheet.<br><br>The actual Bundle 4 test will not just ask "what is a wave". It will give you an imaginary scenario—like being trapped on a mountain—and ask you to invent a wave-based signaling system to save yourself. <strong>Think like an engineer!</strong></div>`
+                        },
+                        {
+                            title: `🤔 Final Review: Open Q&A`,
+                            content: `<div class="what-if-box" style="text-align:center;"><strong>Ask the Teacher!</strong><br><br>If there is <em>anything</em> confusing about how light bounces, how sound travels, or how binary code works... ask it right now before the test!</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: Free Practice`,
+                            content: `<div style="margin-bottom:15px;"><strong>Choose Your Drill:</strong> Use the remaining time to practice the skill you feel weakest on!</div><div id="threejs-container-l52" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l52')">🛠️ Debug</button><button class="btn-drop" onclick="loadMode(\'waves\')">🌊 Waves</button><button class="btn-drop" onclick="loadMode(\'optics\')">🔍 Optics</button><button class="btn-drop" onclick="loadMode(\'binary\')">📻 Binary</button></div>`
+                        },
+                        {
+                            title: `🚪 Dismissal & Setup`,
+                            content: `<div class="journal-box" style="font-size:1.3rem; text-align:center; padding:30px;"><strong>REST UP!</strong><br><br>Tomorrow is the Bundle 4 Assessment.<br>May the waves be with you!</div>`
                         }
                     ]
                 },
                 'lesson53': {
-                    title: 'Bundle 4 Review — The Wave Games',
+                    title: `Bundle 4 Assessment`,
                     slides: [
                         {
-                            title: '🎮 Welcome to The Wave Games!',
-                            content: '<div style="font-size:1.8rem; text-align:center;">Today we review Bundle 4: Communicating Using Wave Energy!<br><br><strong>4-PS4-1, 4-PS4-2, 4-PS4-3</strong></div><div style="text-align:center; margin-top:20px;">Use the review questions on the next screens or play the class review game to prepare for the assessment!</div>'
+                            title: `📝 It is Test Day!`,
+                            content: `<div style="text-align:center; padding:40px;"><strong style="font-size:2rem; color:#f44336;">DO NOT OPEN YOUR TEST YET.</strong><br><br><span style="font-size:1.2rem; color:#aaa;">Make sure you have two sharpened pencils and a privacy folder. No calculators are needed today!</span></div>`
                         },
                         {
-                            title: '🔄 Review: Wave Properties',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">1️⃣ What do all waves carry? (Matter or Energy?)</div><div class="reveal-content">✅ <strong>Energy!</strong> Waves transfer energy without physically moving matter from A to B.</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">2️⃣ What is Amplitude?</div><div class="reveal-content">✅ The height of the wave. Higher amplitude means more energy (louder sound, bigger water wave).</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">3️⃣ What does Wavelength affect in sound?</div><div class="reveal-content">✅ <strong>Pitch / Frequency.</strong> Short wavelength = high pitch. Long wavelength = low pitch.</div></div>'
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 Assessment Goals:</strong><ol><li>Demonstrate understanding of Wave Amplitude and Wavelength.</li><li>Correctly draw the Reflection and Refraction of Light.</li><li>Explain how Patterns (like Morse Code) transfer information.</li><li>Pass the Emergency Scenario Engineering question.</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#e91e63; background:rgba(233,30,99,0.15);"><strong>🛰️ Final Mission Test:</strong> You are ready. You know how to send energy across distances to save lives!</div>`,
+                            vocabulary: []
                         },
                         {
-                            title: '🔄 Review: Light and Seeing',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">1️⃣ Does light need a medium (air) to travel?</div><div class="reveal-content">✅ <strong>No.</strong> It is an electromagnetic wave. It travels through the vacuum of empty space to reach Earth.</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">2️⃣ What is it called when light bends?</div><div class="reveal-content">✅ <strong>Refraction.</strong> (e.g. passing through a lens or water).</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">3️⃣ How are we able to see an object like a book?</div><div class="reveal-content">✅ Light from a source hits the book, <strong>reflects</strong> off the book, and travels in a straight line into our eyes!</div></div>'
+                            title: `📜 Test Taking Strategy: The Diagram`,
+                            content: `<div style="line-height:1.7;">For the long answer questions, don't just write a giant paragraph!</div><div class="journal-box" style="border-left-color:#2196f3; background:rgba(33,150,243,0.1);"><strong>Draw it out!</strong> If the question asks you how to bounce light over a wall, draw the flashlight, draw the mirrors, and draw straight arrows to show the light beam. A good diagram is worth an entire page of writing!</div>`
                         },
                         {
-                            title: '🔄 Review: Information Transfer',
-                            content: '<div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">1️⃣ Can we use waves to send messages? How?</div><div class="reveal-content">✅ Yes! By using a <strong>pattern</strong> of waves (like dots and dashes in Morse Code, or 1s and 0s in Binary).</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">2️⃣ What is better over long distances: Yelling, or sending Morse Code via light?</div><div class="reveal-content">✅ Light/Morse Code. Light travels further and faster than sound, and patterns are easier to decode from far away.</div></div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')" style="margin-top:10px;"><div class="reveal-hint">3️⃣ What is digitized information (Binary)?</div><div class="reveal-content">✅ Using exactly TWO things (1 and 0, on and off) to create massive patterns that computers read perfectly.</div></div>'
+                            title: `🔍 Discovery: Double Checking`,
+                            content: `<div style="line-height:1.7;">A careless mistake can cost you a perfect score!</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 When you finish, what is step 2?</div><div class="reveal-content">Reread every single question! Did it ask you for <em>two</em> examples, and you only gave <em>one</em>? Did it ask you to explain <em>why</em>, and you only gave the definition? Verify every detail.</div></div>`
+                        },
+                        {
+                            title: `🤔 What If Scenario: I'm Stuck`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> You read a question and your mind goes completely blank?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 What is the protocol?</div><div class="reveal-content">Skip it immediately! Circle the number, move on, and let your brain work on it in the background while you answer the easy questions. Come back to it at the very end. Sometimes a later question will trigger your memory!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Focus`,
+                            content: `<div style="line-height:1.7;">Focus your energy!</div><div class="journal-box" style="border-left-color:#4caf50; background:rgba(76,175,80,0.15);">If you feel overwhelmed, take a deep breath. You have practiced this hundreds of times. You built the waves, you decoded the binary, and you bounced the light. You know this!</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: The Brain Break`,
+                            content: `<div style="margin-bottom:15px;"><strong>Zone Out:</strong> Breathe deeply and watch the gentle sine wave below to clear your mind before the test begins.</div><div id="threejs-container-l53" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l53')">🛠️ Debug</button><button class="btn-slow" onclick="startZenWave()">🌊 Begin Zen Mode</button></div>`
+                        },
+                        {
+                            title: `🚪 Begin the Assessment!`,
+                            content: `<div style="text-align:center; padding:50px; border:4px solid #4CAF50; border-radius:15px; background:rgba(76,175,80,0.1);"><h1 style="color:#4CAF50; font-size:3rem; margin:0;">YOU MAY FLIP<br>YOUR PAPERS!</h1><p style="font-size:1.5rem; margin-top:20px;">You have 45 minutes.</p></div>`
                         }
                     ]
                 },
                 'lesson54': {
-                    title: 'Bundle 4 Assessment',
+                    title: `🥽 VR Free Day — Wave Tech Explorer`,
                     slides: [
                         {
-                            title: '📝 Test Setup Instructions',
-                            content: '<div style="font-size:1.4rem; line-height:1.6;"><strong>Students:</strong><br><br>1. Clear your desks of everything except a pencil and your tablet/divider.<br>2. Log in to the assessment portal or prepare your bubble sheet.<br>3. This test covers Bundle 4: Waves, Light, Sound, and Communication.<br>4. Take your time, read all answer choices carefully, and use strategies!</div>'
+                            title: `🌅 Warm-up: VR Prep`,
+                            content: `<div class="journal-box"><strong>Put all pencils and journals away!</strong><br><br>📓 <strong>Task:</strong> Clear your desk entirely. Put the headset strap loosely over your head, but DO NOT drop the goggles over your eyes until instructed!<ol style="line-height:1.8; margin-top:10px;"><li>Check your battery light (Is it green?)</li><li>Make sure you have enough arm room to your left and right.</li></ol></div>`
                         },
                         {
-                            title: '📝 Assessment Questions 1-5',
-                            content: '<div style="text-align:center; padding:30px;"><h3 style="color:#667eea;font-size:2rem;">The Test is Active</h3><p style="font-size:1.2rem;margin-top:20px;">Teacher: Navigate through the digital assessment portal to review scores.</p></div>'
+                            title: `🎯 Objectives & Vocabulary`,
+                            content: `<div style="line-height:1.8;"><strong>📋 By the end of this lesson, you will be able to:</strong><ol><li>Experience wave interactions in a fully immersive 3D environment.</li><li>Have fun!</li></ol></div><div class="journal-box" style="margin-top:20px; border-left-color:#9c27b0; background:rgba(156,39,176,0.15);"><strong>🛰️ Mission Context:</strong> You successfully deployed the emergency signaling system. The world is safe! Your reward is pure exploration.</div>`,
+                            vocabulary: []
+                        },
+                        {
+                            title: `📜 Perspective: What is VR?`,
+                            content: `<div style="line-height:1.7;">Have you ever thought about how Virtual Reality works?</div><div class="journal-box" style="border-left-color:#ffeb3b; background:rgba(255,235,59,0.1);">It is a masterpiece of wave physics! Two tiny digital screens are strapped to your face. They shoot <strong>Light Waves</strong> through a special curved <strong>Lens</strong> in the headset. That lens bends the light (Refraction) so precisely that your brain is tricked into thinking the 2D screen is actually a giant 3D world surrounding you!</div>`
+                        },
+                        {
+                            title: `🔍 Discovery: The Guardian System`,
+                            content: `<div style="line-height:1.7;">How does the headset know where your hands are?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 Does it use magic?</div><div class="reveal-content">It uses invisible waves! The cameras on the headset shoot out invisible Infrared Light beams that bounce off your hands and the walls. The computer calculates the time it takes the light to bounce back to know exactly where you are in the room!</div></div>`
+                        },
+                        {
+                            title: `🤔 What If Scenario: Stepping Out`,
+                            content: `<div class="what-if-box"><strong>What If:</strong> You get so excited trying to catch a virtual butterfly that you walk right into your teacher's desk?</div><div class="reveal-box" onclick="this.classList.toggle(\'revealed\')"><div class="reveal-hint">🔍 How does VR stop you?</div><div class="reveal-content">The "Guardian boundary" will appear as a glowing digital wall in your vision! If you see the blue grid pop up, STOP walking immediately, or you are going to bump into reality!</div></div>`
+                        },
+                        {
+                            title: `🛰️ Mission Connection: Enjoy the Silence`,
+                            content: `<div style="line-height:1.7;">There is no test at the end of this!</div><div class="journal-box" style="border-left-color:#00bcd4; background:rgba(0,188,212,0.15);">Explore the ocean depths, bounce lasers in space, or build giant towers. Just remember to use the wrist straps!</div>`
+                        },
+                        {
+                            title: `🔬 STEM Interactive: VR Pre-Flight Check`,
+                            content: `<div style="margin-bottom:15px;"><strong>Wait for the Green Light!</strong> Watch the safety check below to make sure your space is clear before you plug in!</div><div id="threejs-container-l54" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim('l54')">🛠️ Debug</button><button class="btn-slow" onclick="runGuardianCheck()">✅ Run System Check</button></div>`
+                        },
+                        {
+                            title: `🚪 Exit Ticket & Power Down`,
+                            content: `<div class="journal-box"><strong>🧹 MINUTE 40: CLEANUP</strong><ol><li>Hold the power button for 3 seconds to shut off the headset.</li><li>Wipe the face cushion with a sanitation wipe.</li><li>Plug the headset back into the charging cart perfectly straight!</li></ol></div><div style="margin-top:20px;padding:20px;background:rgba(40,167,69,0.2);border-radius:10px;border:2px solid #28a745;"><strong>📓 EXIT TICKET:</strong> High five your partner on the way out!</div>`
                         }
                     ]
                 }
@@ -8892,6 +9234,141 @@
             }
         }
     </script>
+<script>
+// Custom Bundle 4 STEM Simulators
+let b4Sim = {
+    renderer: null, scene: null, camera: null, animationId: null,
+    cubes: [], speeds: [], speed: 1, isPlaying: false, frame: 0, uniforms: { amp: 2, freq: 0.5 },
+    currentLesson: null
+};
+
+window.initSim = function(lessonId) {
+    b4Sim.currentLesson = lessonId;
+    let container = document.getElementById("threejs-container-" + lessonId);
+    if (!container) return;
+    
+    if (b4Sim.renderer) {
+        cancelAnimationFrame(b4Sim.animationId);
+        container.innerHTML = '';
+    }
+    
+    b4Sim.scene = new THREE.Scene();
+    b4Sim.scene.background = new THREE.Color(0x1a1a2e);
+    b4Sim.camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    b4Sim.renderer = new THREE.WebGLRenderer({ antialias: true });
+    b4Sim.renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(b4Sim.renderer.domElement);
+    
+    b4Sim.scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    let dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(10, 20, 10);
+    b4Sim.scene.add(dirLight);
+
+    b4Sim.cubes = [];
+    b4Sim.speeds = [];
+    b4Sim.frame = 0;
+    b4Sim.isPlaying = false;
+    b4Sim.speed = 1;
+
+    if (lessonId === 'l39' || lessonId === 'l40') {
+        setupWave(lessonId);
+    } else if (lessonId === 'l42') {
+        setupRace();
+    } else {
+        setupGenericOrbit();
+    }
+    
+    function animate() {
+        b4Sim.animationId = requestAnimationFrame(animate);
+        if (b4Sim.isPlaying) {
+            b4Sim.frame += 0.05 * b4Sim.speed;
+        }
+        updateSim(lessonId);
+        b4Sim.renderer.render(b4Sim.scene, b4Sim.camera);
+    }
+    animate();
+};
+
+function setupWave(id) {
+    b4Sim.camera.position.z = 15;
+    let geo = new THREE.SphereGeometry(0.3, 16, 16);
+    let mat = new THREE.MeshPhongMaterial({ color: 0x00d4aa });
+    let highlight = new THREE.MeshPhongMaterial({ color: 0xff4444 });
+    for(let i = 0; i < 40; i++) {
+        let mesh = new THREE.Mesh(geo, i === 20 ? highlight : mat);
+        mesh.position.x = -10 + i * 0.5;
+        b4Sim.scene.add(mesh);
+        b4Sim.cubes.push(mesh);
+    }
+}
+
+function setupRace() {
+    b4Sim.camera.position.z = 20;
+    let geo = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+    let mats = [
+        new THREE.MeshPhongMaterial({ color: 0xff4444 }), // Gas
+        new THREE.MeshPhongMaterial({ color: 0x4444ff }), // Liquid
+        new THREE.MeshPhongMaterial({ color: 0x44ff44 })  // Solid
+    ];
+    for (let i=0; i<3; i++) {
+        let m = new THREE.Mesh(geo, mats[i]);
+        m.position.set(-10, 5 - i*5, 0);
+        b4Sim.scene.add(m);
+        b4Sim.cubes.push(m);
+    }
+    b4Sim.speeds = [0.1, 0.8, 4.0]; // Slow (Gas), Medium (Liquid), Fast (Solid)
+}
+
+function setupGenericOrbit() {
+    b4Sim.camera.position.z = 12;
+    let geo = new THREE.TorusGeometry(3, 0.5, 16, 100);
+    let mat = new THREE.MeshPhongMaterial({ color: 0x667eea, wireframe: true });
+    let m = new THREE.Mesh(geo, mat);
+    b4Sim.scene.add(m);
+    b4Sim.cubes.push(m);
+}
+
+function updateSim(id) {
+    if (!b4Sim.scene) return;
+    if (id === 'l39' || id === 'l40') {
+        b4Sim.cubes.forEach((cube, i) => {
+            cube.position.y = Math.sin(b4Sim.frame - i * b4Sim.uniforms.freq) * b4Sim.uniforms.amp;
+        });
+    } else if (id === 'l42') {
+        b4Sim.cubes.forEach((cube, i) => {
+            let p = -10 + b4Sim.frame * b4Sim.speeds[i];
+            cube.position.x = Math.min(10, p);
+        });
+    } else {
+        if (b4Sim.cubes.length) {
+            b4Sim.cubes[0].rotation.x += 0.01 * b4Sim.speed;
+            b4Sim.cubes[0].rotation.y += 0.02 * b4Sim.speed;
+        }
+    }
+}
+
+// Rope Wave Global Hooks
+window.startRopeWave = function() { b4Sim.isPlaying = true; b4Sim.speed = 1; };
+window.pauseRopeWave = function() { b4Sim.isPlaying = false; };
+window.slowMoRopeWave = function() { b4Sim.isPlaying = true; b4Sim.speed = 0.2; };
+
+// Amplitude Hooks
+window.waveIncAmp = function() { b4Sim.uniforms.amp = Math.min(5, b4Sim.uniforms.amp + 0.5); };
+window.waveDecAmp = function() { b4Sim.uniforms.amp = Math.max(0.5, b4Sim.uniforms.amp - 0.5); };
+window.waveIncLength = function() { b4Sim.uniforms.freq = Math.max(0.1, b4Sim.uniforms.freq - 0.1); };
+window.waveDecLength = function() { b4Sim.uniforms.freq = Math.min(2.0, b4Sim.uniforms.freq + 0.1); };
+
+// Sound Race Hooks
+window.startSoundRace = function() { b4Sim.isPlaying = true; b4Sim.frame = 0; };
+window.pauseSoundRace = function() { b4Sim.isPlaying = false; };
+window.resetSoundRace = function() { b4Sim.isPlaying = false; b4Sim.frame = 0; if(b4Sim.currentLesson) updateSim(b4Sim.currentLesson); };
+
+// Catchalls for the rest
+window.startZenWave = function() { b4Sim.isPlaying = true; };
+window.pauseZenWave = function() { b4Sim.isPlaying = false; };
+window.resetLightScene = function() { b4Sim.isPlaying = false; b4Sim.frame = 0; };
+
+</script>
 </body>
 
 </html>
