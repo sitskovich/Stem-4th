@@ -36,7 +36,7 @@ def get_lessons_js():
                         },
                         {
                             title: `🔬 STEM Interactive: Timeline Explorer`,
-                            content: `<div style="margin-bottom:15px;"><strong>Explore the Tech:</strong> Spin the globe to different eras to see how humanity connected the world!</div><div id="threejs-container-l51" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l51\')">🛠️ Debug</button><button class="btn-drop" onclick="setEra(1800)">1800s: The Carrier</button><button class="btn-drop" onclick="setEra(1900)">1900s: The Wire</button><button class="btn-drop" onclick="setEra(2000)">2000s: The Web</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Explore the Tech:</strong> Spin the globe to different eras to see how humanity connected the world!</div><div id="threejs-container-l51" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l51\')">🛠️ Debug</button><button class="btn-debug" onclick="initSim(\'l51\')">🛠️ Debug</button><button class="btn-drop" onclick="setEra(1800)">1800s: The Carrier</button><button class="btn-drop" onclick="setEra(1900)">1900s: The Wire</button><button class="btn-drop" onclick="setEra(2000)">2000s: The Web</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -74,7 +74,7 @@ def get_lessons_js():
                         },
                         {
                             title: `🔬 STEM Interactive: Free Practice`,
-                            content: `<div style="margin-bottom:15px;"><strong>Choose Your Drill:</strong> Use the remaining time to practice the skill you feel weakest on!</div><div id="threejs-container-l52" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l52\')">🛠️ Debug</button><button class="btn-drop" onclick="loadMode(\\\'waves\\\')">🌊 Waves</button><button class="btn-drop" onclick="loadMode(\\\'optics\\\')">🔍 Optics</button><button class="btn-drop" onclick="loadMode(\\\'binary\\\')">📻 Binary</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Choose Your Drill:</strong> Use the remaining time to practice the skill you feel weakest on!</div><div id="threejs-container-l52" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l52\')">🛠️ Debug</button><button class="btn-debug" onclick="initSim(\'l52\')">🛠️ Debug</button><button class="btn-drop" onclick="loadMode(\\\'waves\\\')">🌊 Waves</button><button class="btn-drop" onclick="loadMode(\\\'optics\\\')">🔍 Optics</button><button class="btn-drop" onclick="loadMode(\\\'binary\\\')">📻 Binary</button></div>`
                         },
                         {
                             title: `🚪 Dismissal & Setup`,
@@ -112,7 +112,7 @@ def get_lessons_js():
                         },
                         {
                             title: `🔬 STEM Interactive: The Brain Break`,
-                            content: `<div style="margin-bottom:15px;"><strong>Zone Out:</strong> Breathe deeply and watch the gentle sine wave below to clear your mind before the test begins.</div><div id="threejs-container-l53" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l53\')">🛠️ Debug</button><button class="btn-slow" onclick="startZenWave()">🌊 Begin Zen Mode</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Zone Out:</strong> Breathe deeply and watch the gentle sine wave below to clear your mind before the test begins.</div><div id="threejs-container-l53" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l53\')">🛠️ Debug</button><button class="btn-debug" onclick="initSim(\'l53\')">🛠️ Debug</button><button class="btn-slow" onclick="startZenWave()">🌊 Begin Zen Mode</button></div>`
                         },
                         {
                             title: `🚪 Begin the Assessment!`,
@@ -150,7 +150,7 @@ def get_lessons_js():
                         },
                         {
                             title: `🔬 STEM Interactive: VR Pre-Flight Check`,
-                            content: `<div style="margin-bottom:15px;"><strong>Wait for the Green Light!</strong> Watch the safety check below to make sure your space is clear before you plug in!</div><div id="threejs-container-l54" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l54\')">🛠️ Debug</button><button class="btn-slow" onclick="runGuardianCheck()">✅ Run System Check</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Wait for the Green Light!</strong> Watch the safety check below to make sure your space is clear before you plug in!</div><div id="threejs-container-l54" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l54\')">🛠️ Debug</button><button class="btn-debug" onclick="initSim(\'l54\')">🛠️ Debug</button><button class="btn-slow" onclick="runGuardianCheck()">✅ Run System Check</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket & Power Down`,

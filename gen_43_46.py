@@ -36,7 +36,7 @@ def get_lessons_js():
                         },
                         {
                             title: `🔬 STEM Interactive: Light Beams & Shadows`,
-                            content: `<div style="margin-bottom:15px;"><strong>Test the Light Beam:</strong> Drag the objects in front of the laser. Notice the sharp shadows formed because light cannot curve!</div><div id="threejs-container-l43" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l43\')">🛠️ Debug</button><button class="btn-drop" onclick="spawnBlock()">🧱 Spawn Wall</button><button class="btn-drop" onclick="spawnGlass()">🥃 Spawn Glass</button><button class="btn-reset" onclick="resetLightScene()">🔄 Clear Room</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Test the Light Beam:</strong> Drag the objects in front of the laser. Notice the sharp shadows formed because light cannot curve!</div><div id="threejs-container-l43" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l43\')">🛠️ Debug</button><button class="btn-debug" onclick="initSim(\'l43\')">🛠️ Debug</button><button class="btn-drop" onclick="spawnBlock()">🧱 Spawn Wall</button><button class="btn-drop" onclick="spawnGlass()">🥃 Spawn Glass</button><button class="btn-reset" onclick="resetLightScene()">🔄 Clear Room</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -79,7 +79,7 @@ def get_lessons_js():
                         },
                         {
                             title: `🔬 STEM Interactive: The Optics Bench`,
-                            content: `<div style="margin-bottom:15px;"><strong>Bend & Bounce the Laser:</strong> Drag mirrors and glass blocks to hit the target!</div><div id="threejs-container-l44" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l44\')">🛠️ Debug</button><button class="btn-drop" onclick="spawnMirror()">🪞 Add Mirror</button><button class="btn-slow" onclick="rotateMirror()">🔄 Rotate</button><button class="btn-drop" onclick="spawnPrism()">💎 Add Glass Prism</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Bend & Bounce the Laser:</strong> Drag mirrors and glass blocks to hit the target!</div><div id="threejs-container-l44" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l44\')">🛠️ Debug</button><button class="btn-debug" onclick="initSim(\'l44\')">🛠️ Debug</button><button class="btn-drop" onclick="spawnMirror()">🪞 Add Mirror</button><button class="btn-slow" onclick="rotateMirror()">🔄 Rotate</button><button class="btn-drop" onclick="spawnPrism()">💎 Add Glass Prism</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -158,7 +158,7 @@ def get_lessons_js():
                         },
                         {
                             title: `🔬 STEM Interactive: The Code Breaker`,
-                            content: `<div style="margin-bottom:15px;"><strong>Decode the Message:</strong> Watch the light flash. Use the codebook to decipher the secret word!</div><div id="threejs-container-l46" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l46\')">🛠️ Debug</button><button class="btn-drop" onclick="playSecretFlash(\\\'easy\\\')">🟢 Easy Pattern</button><button class="btn-drop" onclick="playSecretFlash(\\\'hard\\\')">🔴 Hard Pattern</button><button class="btn-slow" onclick="showCodebook()">📖 View Codebook</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Decode the Message:</strong> Watch the light flash. Use the codebook to decipher the secret word!</div><div id="threejs-container-l46" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l46\')">🛠️ Debug</button><button class="btn-debug" onclick="initSim(\'l46\')">🛠️ Debug</button><button class="btn-drop" onclick="playSecretFlash(\\\'easy\\\')">🟢 Easy Pattern</button><button class="btn-drop" onclick="playSecretFlash(\\\'hard\\\')">🔴 Hard Pattern</button><button class="btn-slow" onclick="showCodebook()">📖 View Codebook</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,

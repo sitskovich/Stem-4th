@@ -37,7 +37,7 @@ def get_lessons_js():
                         },
                         {
                             title: `🔬 STEM Interactive: The Telegraph Machine`,
-                            content: `<div style="margin-bottom:15px;"><strong>Transmit a Message:</strong> Use the telegraph key. A quick tap is a dot, a long hold is a dash. Try spelling your name using the chart!</div><div id="threejs-container-l47" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l47\')">🛠️ Debug</button><button class="btn-drop" onmousedown="telegraphKeyOn()" onmouseup="telegraphKeyOff()">📻 TAP KEY</button><button class="btn-slow" onclick="playSOS()">🚨 Auto-Play SOS</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Transmit a Message:</strong> Use the telegraph key. A quick tap is a dot, a long hold is a dash. Try spelling your name using the chart!</div><div id="threejs-container-l47" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l47\')">🛠️ Debug</button><button class="btn-debug" onclick="initSim(\'l47\')">🛠️ Debug</button><button class="btn-drop" onmousedown="telegraphKeyOn()" onmouseup="telegraphKeyOff()">📻 TAP KEY</button><button class="btn-slow" onclick="playSOS()">🚨 Auto-Play SOS</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -80,7 +80,7 @@ def get_lessons_js():
                         },
                         {
                             title: `🔬 STEM Interactive: The Binary Byte Builder`,
-                            content: `<div style="margin-bottom:15px;"><strong>Flip the Switches:</strong> Try to match the 8-bit pattern on the screen to unlock the secret data! Remember, 0 is light OFF, 1 is light ON.</div><div id="threejs-container-l48" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l48\')">🛠️ Debug</button><button class="btn-drop" onclick="randomizeBinaryTarget()">🔢 New Target</button><button class="btn-slow" onclick="checkBinaryCode()">✅ Submit</button></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Flip the Switches:</strong> Try to match the 8-bit pattern on the screen to unlock the secret data! Remember, 0 is light OFF, 1 is light ON.</div><div id="threejs-container-l48" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l48\')">🛠️ Debug</button><button class="btn-debug" onclick="initSim(\'l48\')">🛠️ Debug</button><button class="btn-drop" onclick="randomizeBinaryTarget()">🔢 New Target</button><button class="btn-slow" onclick="checkBinaryCode()">✅ Submit</button></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
@@ -159,7 +159,7 @@ def get_lessons_js():
                         },
                         {
                             title: `🔬 STEM Interactive: Focus the Camera Lens`,
-                            content: `<div style="margin-bottom:15px;"><strong>Adjust the Focal Length:</strong> Slide the lens back and forth. Can you get the criss-crossing light beams to perfectly focus right on the camera sensor?</div><div id="threejs-container-l50" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l50\')">🛠️ Debug</button><input type="range" min="1" max="100" value="50" oninput="moveCameraLens(this.value)" style="width:70%; margin:20px;"></div>`
+                            content: `<div style="margin-bottom:15px;"><strong>Adjust the Focal Length:</strong> Slide the lens back and forth. Can you get the criss-crossing light beams to perfectly focus right on the camera sensor?</div><div id="threejs-container-l50" style="width:100%; height:450px; background:rgba(0,0,0,0.2); border-radius:15px; margin:15px 0; position:relative; overflow:hidden;"></div><div class="energy-controls"><button class="btn-debug" onclick="initSim(\'l50\')">🛠️ Debug</button><button class="btn-debug" onclick="initSim(\'l50\')">🛠️ Debug</button><input type="range" min="1" max="100" value="50" oninput="moveCameraLens(this.value)" style="width:70%; margin:20px;"></div>`
                         },
                         {
                             title: `🚪 Exit Ticket`,
