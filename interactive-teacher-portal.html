@@ -7894,7 +7894,7 @@ window.L40 = {
             if (document.getElementById('lessonModal').classList.contains('active')) {
 
                 touchStartX = event.changedTouches[0].screenX;
-
+                isSwipingActive = true;
             }
 
         });
@@ -7903,13 +7903,12 @@ window.L40 = {
 
         document.addEventListener('touchend', function (event) {
 
-            if (document.getElementById('lessonModal').classList.contains('active')) {
-
+            if (document.getElementById('lessonModal').classList.contains('active') && isSwipingActive) {
                 touchEndX = event.changedTouches[0].screenX;
 
                 handleSwipe();
-
             }
+            isSwipingActive = false;
 
         });
 
